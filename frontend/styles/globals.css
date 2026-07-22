@@ -20,33 +20,21 @@ body {
   selection-color: #a5f3fc;
 }
 
-/* Neural Grid Animation */
-.bg-neural-grid {
-  background-size: 40px 40px;
-  background-image: 
-    radial-gradient(circle, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
-    linear-gradient(to right, rgba(15, 23, 42, 0.6) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.6) 1px, transparent 1px);
-}
-
-.bg-animated-neural {
-  animation: neuralShift 30s linear infinite;
-}
-
-@keyframes neuralShift {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 80px 80px;
-  }
+/* Vibrant Ambient Theme Background Mesh Glow (No Square Grid Patterns) */
+.bg-glow-ambient {
+  background: 
+    radial-gradient(circle at 20% 15%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 25%, rgba(139, 92, 246, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 50% 60%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 75% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 40%),
+    #020617;
 }
 
 /* Premium Glassmorphic Cards */
 .glass-card-premium {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(3, 7, 18, 0.85) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 
     0 10px 30px -10px rgba(0, 0, 0, 0.8),

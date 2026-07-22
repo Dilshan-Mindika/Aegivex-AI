@@ -128,12 +128,63 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative bg-neural-grid bg-animated-neural">
+    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative bg-glow-ambient">
       
-      {/* Ambient Glow Spotlights */}
-      <div className="absolute top-0 left-1/4 w-[750px] h-[750px] bg-blue-600/15 blur-[180px] rounded-full pointer-events-none" />
-      <div className="absolute top-36 right-1/4 w-[750px] h-[750px] bg-purple-600/15 blur-[180px] rounded-full pointer-events-none" />
-      <div className="absolute top-[650px] left-1/3 w-[850px] h-[650px] bg-cyan-500/10 blur-[200px] rounded-full pointer-events-none" />
+      {/* Dynamic Animated Appearing & Disappearing Background Glowing Orbs */}
+      <motion.div 
+        animate={{
+          opacity: [0.1, 0.65, 0.2, 0.7, 0.1],
+          scale: [0.9, 1.3, 0.95, 1.35, 0.9],
+          x: [0, 90, -70, 50, 0],
+          y: [0, -70, 60, -40, 0],
+        }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-10 left-1/5 w-[650px] h-[650px] bg-cyan-500/25 blur-[180px] rounded-full pointer-events-none z-0"
+      />
+
+      <motion.div 
+        animate={{
+          opacity: [0.2, 0.7, 0.1, 0.6, 0.2],
+          scale: [1, 0.85, 1.35, 0.9, 1],
+          x: [0, -80, 60, -50, 0],
+          y: [0, 70, -50, 80, 0],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        className="absolute top-48 right-1/5 w-[650px] h-[650px] bg-purple-600/25 blur-[180px] rounded-full pointer-events-none z-0"
+      />
+
+      <motion.div 
+        animate={{
+          opacity: [0.05, 0.6, 0.15, 0.5, 0.05],
+          scale: [0.85, 1.25, 0.9, 1.4, 0.85],
+          x: [0, 100, -90, 60, 0],
+          y: [0, -80, 70, -50, 0],
+        }}
+        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+        className="absolute top-[600px] left-1/3 w-[750px] h-[600px] bg-blue-600/22 blur-[200px] rounded-full pointer-events-none z-0"
+      />
+
+      <motion.div 
+        animate={{
+          opacity: [0.1, 0.55, 0.05, 0.65, 0.1],
+          scale: [1.1, 0.8, 1.3, 0.9, 1.1],
+          x: [0, -70, 80, -60, 0],
+          y: [0, 60, -70, 50, 0],
+        }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut', delay: 6 }}
+        className="absolute top-[1100px] right-1/4 w-[700px] h-[550px] bg-emerald-500/22 blur-[190px] rounded-full pointer-events-none z-0"
+      />
+
+      <motion.div 
+        animate={{
+          opacity: [0.0, 0.5, 0.1, 0.6, 0.0],
+          scale: [0.8, 1.35, 0.85, 1.25, 0.8],
+          x: [0, 70, -80, 50, 0],
+          y: [0, -60, 70, -40, 0],
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 8 }}
+        className="absolute top-[1600px] left-1/4 w-[750px] h-[600px] bg-cyan-400/20 blur-[200px] rounded-full pointer-events-none z-0"
+      />
 
       {/* Floating Modern Fixed Navigation Bar (Centered, Non Full-Width, High Visibility Logo) */}
       <div className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6 max-w-5xl mx-auto w-full pointer-events-auto">
@@ -170,11 +221,6 @@ export default function LandingPage() {
             <Link href="/dashboard" className="hover:text-cyan-400 transition">Dashboard</Link>
             <Link href="/chat" className="hover:text-purple-400 transition">AI Chat</Link>
             <Link href="/history" className="hover:text-cyan-400 transition">Scan History</Link>
-            
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-[11px] font-mono text-slate-300">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-emerald-400 font-bold">Network Shield</span>
-            </div>
           </div>
 
           {/* Action CTAs */}
