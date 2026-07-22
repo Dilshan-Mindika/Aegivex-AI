@@ -20,6 +20,8 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';
+import LiveSupportChat from '@/components/LiveSupportChat';
+
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({
@@ -253,6 +255,10 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Floating Live Support Chat Widget */}
+      <LiveSupportChat />
     </div>
   );
 }
+

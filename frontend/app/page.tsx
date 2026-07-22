@@ -35,6 +35,8 @@ import {
   FileText,
   LockKeyhole
 } from 'lucide-react';
+import LiveSupportChat from '@/components/LiveSupportChat';
+
 
 const targetPhrases = [
   "WALLET ADDRESSES",
@@ -691,7 +693,7 @@ export default function LandingPage() {
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
@@ -717,7 +719,7 @@ export default function LandingPage() {
                   key={i}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   whileHover={{ y: -8, scale: 1.03 }}
                   className="relative p-[2px] rounded-2xl border-running-glow shadow-glow-cyan overflow-hidden h-full group transition duration-300"
@@ -747,7 +749,7 @@ export default function LandingPage() {
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.25 }}
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
@@ -808,7 +810,7 @@ export default function LandingPage() {
                   key={i}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.25 }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   whileHover={{ y: -8, scale: 1.02 }}
                   className="relative p-[2px] rounded-2xl border-running-glow shadow-glow-cyan overflow-hidden h-full group"
@@ -1042,6 +1044,10 @@ export default function LandingPage() {
         )}
       </AnimatePresence>
 
+      {/* Floating Live Support Chat Widget */}
+      <LiveSupportChat />
+
     </div>
   );
 }
+

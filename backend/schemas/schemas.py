@@ -165,3 +165,21 @@ class NotificationResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# Live Support Chat Schemas
+class LiveChatMessageCreate(BaseModel):
+    message: str
+    user_id: Optional[str] = None  # If admin is sending message to a specific user
+
+class LiveChatMessageResponse(BaseModel):
+    id: str
+    user_id: str
+    sender_name: str
+    sender_role: str
+    message: str
+    is_admin_reply: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+

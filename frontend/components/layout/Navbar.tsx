@@ -153,6 +153,16 @@ export const Navbar: React.FC = () => {
                 <button
                   onClick={() => {
                     setShowUserMenu(false);
+                    router.push('/admin/dashboard');
+                  }}
+                  className="w-full text-left px-3 py-2 text-xs text-purple-300 hover:bg-purple-500/20 rounded-lg flex items-center gap-2"
+                >
+                  <ShieldAlert className="w-3.5 h-3.5 text-purple-400" />
+                  Admin Control Center
+                </button>
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
                     router.push('/settings');
                   }}
                   className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-lg flex items-center gap-2"
@@ -175,3 +185,4 @@ export const Navbar: React.FC = () => {
     </div>
   );
 };
+

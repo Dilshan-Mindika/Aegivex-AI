@@ -30,6 +30,7 @@ class User(Base):
     scan_history = relationship("ScanHistory", back_populates="user", cascade="all, delete-orphan")
     notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
     audit_logs = relationship("AuditLog", back_populates="user", cascade="all, delete-orphan")
+    live_messages = relationship("LiveChatMessage", back_populates="user", cascade="all, delete-orphan")
 
 
 class UserSession(Base):
@@ -182,3 +183,18 @@ class AuditLog(Base):
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
     user = relationship("User", back_populates="audit_logs")
+
+
+class LiveChatMessage(Base):
+    __tablename__ = "live_chat_messages"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False, index=True)
+    sender_name = Column(String, nullable=False)
+    sender_role = Column(String, default="User")  # "User" or "Admin"
+    message = Column(Text, nullable=False)
+    is_admin_reply = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+    user = relationship("User", back_populates="live_messages")
+

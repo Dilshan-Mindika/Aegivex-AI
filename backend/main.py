@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 from database.database import engine, Base
-from routers import auth, ai, scans, history, dashboard, notifications, profile
+from routers import auth, ai, scans, history, dashboard, notifications, profile, live_chat, admin
 
 # Initialize database tables
 Base.metadata.create_all(bind=engine)
@@ -44,6 +44,9 @@ app.include_router(history.router, prefix=settings.API_V1_STR)
 app.include_router(dashboard.router, prefix=settings.API_V1_STR)
 app.include_router(notifications.router, prefix=settings.API_V1_STR)
 app.include_router(profile.router, prefix=settings.API_V1_STR)
+app.include_router(live_chat.router, prefix=settings.API_V1_STR)
+app.include_router(admin.router, prefix=settings.API_V1_STR)
+
 
 @app.get("/")
 def root():
