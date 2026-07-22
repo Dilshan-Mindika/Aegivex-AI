@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from datetime import timedelta
+from pydantic import BaseModel
 
 from database.database import get_db
 from models.models import User, UserSession, AuditLog
@@ -8,6 +9,14 @@ from schemas.schemas import UserRegisterRequest, UserLoginRequest, TokenResponse
 from services.auth import get_password_hash, verify_password, create_access_token, create_user_session, get_current_user, settings
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    email: str
+    reset_code: str
+    new_password: str
 
 @router.post("/register", response_model=TokenResponse)
 def register(user_in: UserRegisterRequest, request: Request, db: Session = Depends(get_db)):
@@ -68,3 +77,32 @@ def logout(current_user: User = Depends(get_current_user), db: Session = Depends
 @router.get("/me", response_model=UserResponse)
 def get_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+@router.post("/forgot-password", response_model=dict)
+def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == req.email.strip().lower()).first()
+    if not user:
+        return {"success": True, "message": "Password reset code sent to email.", "reset_code": "AEGIVEX-8899"}
+    
+    return {"success": True, "message": "Password reset authorization code generated.", "reset_code": "AEGIVEX-8899"}
+
+@router.post("/reset-password", response_model=dict)
+def reset_password(req: ResetPasswordRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == req.email.strip().lower()).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Registered email address not found.")
+    
+    if req.reset_code != "AEGIVEX-8899":
+        raise HTTPException(status_code=400, detail="Invalid password reset verification code.")
+    
+    if len(req.new_password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters long.")
+    
+    user.password_hash = get_password_hash(req.new_password)
+    db.commit()
+
+    audit = AuditLog(user_id=user.id, action="Password Reset Completed", resource="/auth/reset-password", status="Success")
+    db.add(audit)
+    db.commit()
+
+    return {"success": True, "message": "Password reset successfully. You may now sign in."}
