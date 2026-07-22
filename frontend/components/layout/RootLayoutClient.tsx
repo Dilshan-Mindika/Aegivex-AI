@@ -12,7 +12,7 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
 
   if (isPublicPage) {
     return (
-      <div className="min-h-screen w-full bg-[#020617]">
+      <div className="min-h-screen w-full bg-[#020617] overflow-x-hidden">
         {children}
         <CookieConsentBanner />
       </div>
@@ -20,11 +20,11 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen flex w-full bg-[#020617]">
+    <div className="min-h-screen flex w-full bg-[#020617] overflow-x-hidden">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 max-w-full overflow-x-hidden">
         <Navbar />
-        <main className="flex-1 p-4 md:p-6 overflow-y-auto">
+        <main className="flex-1 p-2.5 xs:p-3.5 sm:p-5 md:p-6 min-w-0 max-w-full overflow-x-hidden overflow-y-auto">
           {children}
         </main>
       </div>

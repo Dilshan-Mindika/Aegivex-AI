@@ -18,7 +18,7 @@ import {
   Sparkles
 } from 'lucide-react';
 
-const navItems = [
+export const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { name: 'AI Security Chat', path: '/chat', icon: Bot, highlight: true },
   { name: 'Wallet Risk Scanner', path: '/scanners/wallet', icon: Wallet },
@@ -37,7 +37,7 @@ export const Sidebar: React.FC = () => {
   if (pathname === '/' || pathname === '/login' || pathname === '/register') return null;
 
   return (
-    <aside className="w-64 bg-surface border-r border-slate-800 flex flex-col justify-between h-screen sticky top-0 z-40">
+    <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-slate-800 justify-between h-screen sticky top-0 z-40 shrink-0">
       <div>
         {/* Brand Header with Animated Running Glow Logo */}
         <Link href="/dashboard" className="p-5 flex items-center gap-3 border-b border-slate-800/80 group">

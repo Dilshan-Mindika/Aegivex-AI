@@ -67,21 +67,21 @@ export default function DashboardPage() {
 
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {/* Top Banner */}
-      <div className="glass-card p-6 rounded-3xl border border-blue-500/20 bg-gradient-to-r from-blue-900/30 via-slate-900 to-purple-900/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-blue-500/20 bg-gradient-to-r from-blue-900/30 via-slate-900 to-purple-900/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <span className="text-[11px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
               OKX.AI Genesis Copilot Active
             </span>
             <span className="text-xs text-slate-400 font-mono">Status: Protected</span>
           </div>
-          <h2 className="text-2xl font-black text-white">Security Command Center</h2>
+          <h2 className="text-xl sm:text-2xl font-black text-white">Security Command Center</h2>
           <p className="text-xs text-slate-400 mt-1">Real-time Web3 threat detection and automated AI safety scores.</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <button
             onClick={fetchStats}
             className="p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition"
@@ -91,7 +91,7 @@ export default function DashboardPage() {
           </button>
           <Link
             href="/chat"
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-xs shadow-glow-purple flex items-center gap-2 hover:opacity-90 transition"
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-xs shadow-glow-purple flex items-center gap-2 hover:opacity-90 transition shrink-0"
           >
             <Bot className="w-4 h-4" />
             Ask AI Copilot
@@ -100,50 +100,50 @@ export default function DashboardPage() {
       </div>
 
       {/* Metrics Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-card p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+        <div className="glass-card p-4 sm:p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
           <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-2">
             <span>AI SECURITY SCORE</span>
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-black text-emerald-400">{stats.ai_security_score}/100</span>
+            <span className="text-2xl sm:text-3xl font-black text-emerald-400">{stats.ai_security_score}/100</span>
             <span className="text-xs font-semibold text-emerald-500">EXCELLENT</span>
           </div>
           <p className="text-[11px] text-slate-500 mt-2">Overall Web3 activity risk rating</p>
         </div>
 
-        <div className="glass-card p-5 rounded-2xl border border-slate-800">
+        <div className="glass-card p-4 sm:p-5 rounded-2xl border border-slate-800">
           <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-2">
             <span>TOTAL SCANS RUN</span>
             <Activity className="w-4 h-4 text-blue-400" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-black text-white">{stats.total_scans}</span>
+            <span className="text-2xl sm:text-3xl font-black text-white">{stats.total_scans}</span>
             <span className="text-xs text-blue-400 font-mono">+6 today</span>
           </div>
           <p className="text-[11px] text-slate-500 mt-2">Wallets, contracts, tokens & websites</p>
         </div>
 
-        <div className="glass-card p-5 rounded-2xl border border-slate-800">
+        <div className="glass-card p-4 sm:p-5 rounded-2xl border border-slate-800">
           <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-2">
             <span>ACTIVE THREAT ALERTS</span>
             <ShieldAlert className="w-4 h-4 text-amber-400" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-black text-amber-400">{stats.active_threats_count}</span>
+            <span className="text-2xl sm:text-3xl font-black text-amber-400">{stats.active_threats_count}</span>
             <span className="text-xs text-amber-500 font-semibold">ACTION NEEDED</span>
           </div>
           <p className="text-[11px] text-slate-500 mt-2">Unresolved drainer/honeypot warnings</p>
         </div>
 
-        <div className="glass-card p-5 rounded-2xl border border-slate-800">
+        <div className="glass-card p-4 sm:p-5 rounded-2xl border border-slate-800">
           <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-2">
             <span>AVG RESPONSE TIME</span>
             <Zap className="w-4 h-4 text-cyan-400" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-black text-cyan-400">1.4s</span>
+            <span className="text-2xl sm:text-3xl font-black text-cyan-400">1.4s</span>
             <span className="text-xs text-cyan-500 font-mono">REALTIME</span>
           </div>
           <p className="text-[11px] text-slate-500 mt-2">Fast AI heuristic & RPC response</p>
@@ -152,8 +152,9 @@ export default function DashboardPage() {
 
       {/* Quick Scanners Launcher Grid */}
       <div>
-        <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Quick Launch Security Tools</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <h3 className="text-xs sm:text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Quick Launch Security Tools</h3>
+        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+
           {[
             { label: 'Wallet Risk', icon: Wallet, path: '/scanners/wallet', color: 'text-blue-400' },
             { label: 'Token Analyzer', icon: Coins, path: '/scanners/token', color: 'text-cyan-400' },
