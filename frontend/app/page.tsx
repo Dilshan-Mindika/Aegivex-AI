@@ -186,7 +186,7 @@ export default function LandingPage() {
         className="absolute top-[1600px] left-1/4 w-[750px] h-[600px] bg-cyan-400/20 blur-[200px] rounded-full pointer-events-none z-0"
       />
 
-      {/* Floating Modern Fixed Navigation Bar (Centered, Non Full-Width, High Visibility Logo) */}
+      {/* Floating Modern Fixed Navigation Bar */}
       <div className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6 max-w-5xl mx-auto w-full pointer-events-auto">
         <motion.header 
           initial={{ y: -20, opacity: 0 }}
@@ -198,11 +198,11 @@ export default function LandingPage() {
               : 'bg-slate-950/85 border-cyan-500/30 shadow-glow-cyan backdrop-blur-xl'
           }`}
         >
-          {/* Prominent High-Visibility Official Logo & Brand */}
+          {/* Official Logo with Running Animated Border */}
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-11 h-11 rounded-xl bg-gradient-to-tr from-blue-600 via-cyan-500 to-purple-600 p-0.5 shadow-glow-cyan group-hover:scale-105 transition duration-300">
-                <div className="w-full h-full rounded-[10px] bg-slate-950 flex items-center justify-center p-1.5">
+              <div className="relative w-11 h-11 rounded-xl p-[2px] border-running-glow shadow-glow-cyan group-hover:scale-105 transition duration-300">
+                <div className="w-full h-full rounded-[10px] bg-slate-950 flex items-center justify-center p-1.5 relative z-10">
                   <Image src="/logo.png" alt="Aegivex AI Official Logo" width={34} height={34} className="object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.9)]" />
                 </div>
               </div>
@@ -214,13 +214,6 @@ export default function LandingPage() {
                 <span className="text-[10px] text-slate-400 font-mono tracking-wider">Simple Security Assistant</span>
               </div>
             </Link>
-          </div>
-
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-300">
-            <Link href="/dashboard" className="hover:text-cyan-400 transition">Dashboard</Link>
-            <Link href="/chat" className="hover:text-purple-400 transition">AI Chat</Link>
-            <Link href="/history" className="hover:text-cyan-400 transition">Scan History</Link>
           </div>
 
           {/* Action CTAs */}
@@ -301,139 +294,142 @@ export default function LandingPage() {
           Aegivex AI checks wallet addresses, token contracts, website links, and transactions in simple English so you can avoid scams and loss of funds.
         </motion.p>
 
-        {/* INSTANT INTERACTIVE SCANNER BAR */}
+        {/* INSTANT INTERACTIVE SCANNER BAR WITH RUNNING ANIMATED BORDER */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
           className="max-w-3xl mx-auto mb-16"
         >
-          <div className="glass-card-premium border-gradient-glow p-4 sm:p-6 rounded-3xl text-left shadow-2xl relative">
-            
-            {/* Category Selector Tabs */}
-            <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
-              {[
-                { id: 'token', label: 'Token Contract', icon: Coins },
-                { id: 'wallet', label: 'Wallet Address', icon: Wallet },
-                { id: 'contract', label: 'Smart Contract', icon: FileCode2 },
-                { id: 'website', label: 'Website Link', icon: Globe },
-              ].map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => {
-                      setSelectedCategory(tab.id as any);
-                      setScanResult(null);
-                    }}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                      selectedCategory === tab.id
-                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-glow-cyan'
-                        : 'bg-slate-900/60 text-slate-400 hover:text-white border border-transparent'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Input Form */}
-            <form onSubmit={handleRunInstantScan} className="flex flex-col sm:flex-row items-center gap-3">
-              <div className="relative flex-1 w-full">
-                <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={scanInput}
-                  onChange={(e) => setScanInput(e.target.value)}
-                  placeholder={
-                    selectedCategory === 'token' ? 'Paste token contract address (0x...)' :
-                    selectedCategory === 'wallet' ? 'Paste crypto wallet address (0x...)' :
-                    selectedCategory === 'contract' ? 'Paste smart contract address (0x...)' :
-                    'Paste website URL (https://...)'
-                  }
-                  className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 transition font-mono"
-                />
+          <div className="glass-card-premium p-[2px] rounded-3xl border-running-glow shadow-glow-cyan relative text-left">
+            <div className="w-full h-full p-4 sm:p-6 rounded-[22px] bg-slate-950/90 backdrop-blur-2xl relative z-10">
+              
+              {/* Category Selector Tabs */}
+              <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
+                {[
+                  { id: 'token', label: 'Token Contract', icon: Coins },
+                  { id: 'wallet', label: 'Wallet Address', icon: Wallet },
+                  { id: 'contract', label: 'Smart Contract', icon: FileCode2 },
+                  { id: 'website', label: 'Website Link', icon: Globe },
+                ].map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setSelectedCategory(tab.id as any);
+                        setScanResult(null);
+                      }}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                        selectedCategory === tab.id
+                          ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-glow-cyan'
+                          : 'bg-slate-900/60 text-slate-400 hover:text-white border border-transparent'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {tab.label}
+                    </button>
+                  );
+                })}
               </div>
 
-              <button
-                type="submit"
-                disabled={isScanning || !scanInput.trim()}
-                className="btn-futuristic-primary w-full sm:w-auto px-7 py-3.5 rounded-2xl text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shrink-0 transition disabled:opacity-50"
-              >
-                {isScanning ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                    Scanning...
-                  </>
-                ) : (
-                  <>
-                    <ShieldCheck className="w-4 h-4" />
-                    Instant AI Check
-                  </>
-                )}
-              </button>
-            </form>
+              {/* Input Form */}
+              <form onSubmit={handleRunInstantScan} className="flex flex-col sm:flex-row items-center gap-3">
+                <div className="relative flex-1 w-full">
+                  <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={scanInput}
+                    onChange={(e) => setScanInput(e.target.value)}
+                    placeholder={
+                      selectedCategory === 'token' ? 'Paste token contract address (0x...)' :
+                      selectedCategory === 'wallet' ? 'Paste crypto wallet address (0x...)' :
+                      selectedCategory === 'contract' ? 'Paste smart contract address (0x...)' :
+                      'Paste website URL (https://...)'
+                    }
+                    className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 transition font-mono"
+                  />
+                </div>
 
-            {/* Quick Example Presets */}
-            <div className="flex items-center gap-2 mt-3 text-xs text-slate-400 overflow-x-auto">
-              <span className="font-mono text-[11px] text-slate-500 shrink-0">Try Example:</span>
-              <button
-                onClick={() => handleQuickPreset('token', '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984')}
-                className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
-              >
-                Token 0x1f98...
-              </button>
-              <button
-                onClick={() => handleQuickPreset('website', 'https://uniswap.org')}
-                className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
-              >
-                Uniswap Site
-              </button>
-              <button
-                onClick={() => handleQuickPreset('wallet', '0x71C7656EC7ab88b098defB751B7401B5f6d8976F')}
-                className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
-              >
-                Safe Wallet
-              </button>
-            </div>
+                <button
+                  type="submit"
+                  disabled={isScanning || !scanInput.trim()}
+                  className="btn-futuristic-primary w-full sm:w-auto px-7 py-3.5 rounded-2xl text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shrink-0 transition disabled:opacity-50"
+                >
+                  {isScanning ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      Scanning...
+                    </>
+                  ) : (
+                    <>
+                      <ShieldCheck className="w-4 h-4" />
+                      Instant AI Check
+                    </>
+                  )}
+                </button>
+              </form>
 
-            {/* Live Instant Result Card */}
-            {scanResult && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`mt-4 p-4 rounded-2xl border ${
-                  scanResult.isSafe 
-                    ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' 
-                    : 'bg-red-500/10 border-red-500/40 text-red-300'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    {scanResult.isSafe ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                    ) : (
-                      <AlertTriangle className="w-5 h-5 text-red-400" />
-                    )}
-                    <span className="font-bold text-sm text-white">{scanResult.type} Result</span>
-                  </div>
-                  <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
+              {/* Quick Example Presets */}
+              <div className="flex items-center gap-2 mt-3 text-xs text-slate-400 overflow-x-auto">
+                <span className="font-mono text-[11px] text-slate-500 shrink-0">Try Example:</span>
+                <button
+                  onClick={() => handleQuickPreset('token', '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984')}
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
+                >
+                  Token 0x1f98...
+                </button>
+                <button
+                  onClick={() => handleQuickPreset('website', 'https://uniswap.org')}
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
+                >
+                  Uniswap Site
+                </button>
+                <button
+                  onClick={() => handleQuickPreset('wallet', '0x71C7656EC7ab88b098defB751B7401B5f6d8976F')}
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
+                >
+                  Safe Wallet
+                </button>
+              </div>
+
+              {/* Live Instant Result Card */}
+              {scanResult && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`mt-4 p-4 rounded-2xl border ${
                     scanResult.isSafe 
-                      ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' 
-                      : 'bg-red-500/20 text-red-400 border-red-500/40'
-                  }`}>
-                    {scanResult.rating} ({scanResult.score}/100)
-                  </span>
-                </div>
-                <p className="text-xs leading-relaxed text-slate-200 mb-2">{scanResult.summary}</p>
-                <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] font-mono text-slate-300 flex items-center gap-2">
-                  <Zap className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span>AI Advice: {scanResult.recommendation}</span>
-                </div>
-              </motion.div>
-            )}
+                      ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' 
+                      : 'bg-red-500/10 border-red-500/40 text-red-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      {scanResult.isSafe ? (
+                        <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                      ) : (
+                        <AlertTriangle className="w-5 h-5 text-red-400" />
+                      )}
+                      <span className="font-bold text-sm text-white">{scanResult.type} Result</span>
+                    </div>
+                    <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
+                      scanResult.isSafe 
+                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' 
+                        : 'bg-red-500/20 text-red-400 border-red-500/40'
+                    }`}>
+                      {scanResult.rating} ({scanResult.score}/100)
+                    </span>
+                  </div>
+                  <p className="text-xs leading-relaxed text-slate-200 mb-2">{scanResult.summary}</p>
+                  <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] font-mono text-slate-300 flex items-center gap-2">
+                    <Zap className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                    <span>AI Advice: {scanResult.recommendation}</span>
+                  </div>
+                </motion.div>
+              )}
+
+            </div>
           </div>
         </motion.div>
 
@@ -457,34 +453,6 @@ export default function LandingPage() {
                 {chain.name}
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Central Official Logo Radar HUD */}
-        <div className="relative max-w-4xl mx-auto mb-16">
-          <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto mb-12 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-cyan-500/40 radar-spin-slow" />
-            <div className="absolute inset-4 rounded-full border-2 border-dotted border-purple-500/50 radar-spin-reverse" />
-            <div className="absolute inset-8 rounded-full bg-gradient-to-tr from-blue-600/40 via-cyan-500/30 to-purple-600/40 blur-2xl animate-pulse" />
-            
-            <motion.div 
-              whileHover={{ scale: 1.08 }}
-              className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-slate-900/90 border-2 border-cyan-400/60 p-4 shadow-glow-cyan flex items-center justify-center backdrop-blur-xl border-gradient-glow transition duration-300"
-            >
-              <Image src="/logo.png" alt="Aegivex AI Official Logo" width={90} height={90} className="object-contain drop-shadow-[0_0_20px_rgba(6,182,212,0.9)]" />
-            </motion.div>
-
-            <div className="absolute -top-2 -left-8 sm:-left-12 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/40 text-emerald-400 text-xs font-mono font-bold shadow-glow-cyan animate-float-slow flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5" /> Drainer Blocked
-            </div>
-
-            <div className="absolute top-1/2 -right-8 sm:-right-16 -translate-y-1/2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-red-500/40 text-red-400 text-xs font-mono font-bold shadow-glow-red animate-float-delayed flex items-center gap-1.5">
-              <AlertTriangle className="w-3.5 h-3.5" /> High Risk Alert
-            </div>
-
-            <div className="absolute -bottom-2 -left-4 sm:-left-8 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold shadow-glow-purple animate-float-slow flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" /> Assistant Active
-            </div>
           </div>
         </div>
 

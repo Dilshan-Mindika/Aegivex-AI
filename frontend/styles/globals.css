@@ -30,9 +30,40 @@ body {
     #020617;
 }
 
+/* Running Animated Rotating Gradient Border Frame */
+.border-running-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.border-running-glow::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    #06b6d4 90deg,
+    #8b5cf6 180deg,
+    #3b82f6 270deg,
+    transparent 360deg
+  );
+  animation: borderRotate 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes borderRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* Premium Glassmorphic Cards */
 .glass-card-premium {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.08);

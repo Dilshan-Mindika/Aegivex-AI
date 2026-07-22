@@ -12,8 +12,7 @@ import {
   ChevronDown, 
   CheckCircle2, 
   Activity,
-  Layers,
-  Sparkles
+  Layers
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -22,7 +21,8 @@ export const Navbar: React.FC = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
-  if (pathname === '/') return null;
+  // Hide Navbar on public landing page and auth pages
+  if (pathname === '/' || pathname === '/login' || pathname === '/register') return null;
 
   const getPageTitle = (path: string) => {
     switch (path) {

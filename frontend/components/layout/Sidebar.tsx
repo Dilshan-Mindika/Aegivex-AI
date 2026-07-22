@@ -15,7 +15,6 @@ import {
   History, 
   Settings, 
   ShieldCheck,
-  ExternalLink,
   Sparkles
 } from 'lucide-react';
 
@@ -34,8 +33,8 @@ const navItems = [
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
 
-  // Hide sidebar on public landing page or auth pages if desired, or keep navigation clean
-  if (pathname === '/') return null;
+  // Hide sidebar on public landing page and auth pages for a full-screen layout
+  if (pathname === '/' || pathname === '/login' || pathname === '/register') return null;
 
   return (
     <aside className="w-64 bg-surface border-r border-slate-800 flex flex-col justify-between h-screen sticky top-0 z-40">
@@ -54,7 +53,7 @@ export const Sidebar: React.FC = () => {
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-lg text-white tracking-tight">AEGIVEX</span>
-              <span className="text-xs px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold border border-blue-500/30">AI</span>
+              <span className="text-xs px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold border border-blue-500/30 font-mono">AI</span>
             </div>
             <p className="text-[10px] text-slate-400 font-medium">Web3 Security Copilot</p>
           </div>

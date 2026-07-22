@@ -19,13 +19,29 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Helper for local mock responses if backend is restarting or offline
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('aegivex_token');
+        // If not already on login/register/landing, redirect to login
+        if (!['/', '/login', '/register'].includes(window.location.pathname)) {
+          window.location.href = '/login';
+        }
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Helper for local mock responses if backend is restarting, offline, or demo mode
 export const handleApiCall = async <T = any>(apiPromise: Promise<any>, fallbackData: T): Promise<T> => {
   try {
     const response: any = await apiPromise;
     return response.data || response;
   } catch (error) {
-    console.warn("Backend API unavailable or error occurred, operating with responsive engine fallback:", error);
+    console.warn("Backend API unavailable or unauthenticated, operating with fallback:", error);
     return fallbackData;
   }
 };
