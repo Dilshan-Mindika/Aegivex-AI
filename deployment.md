@@ -79,13 +79,23 @@ Hugging Face Spaces allows you to host Dockerized FastAPI containers **100% free
 
 ## 💻 FRONTEND DEPLOYMENT: Deploy Next.js to Vercel (100% Free)
 
+Now that your Backend API is **LIVE & ONLINE** at:
+`https://aegivex-ai.vercel.app`
+
+Follow these quick steps to deploy your Next.js Frontend UI:
+
 1. Go to **[Vercel Dashboard](https://vercel.com/dashboard)** -> Click **Add New...** -> **Project**.
 2. Select your GitHub repository (`Aegivex-AI`).
-3. Set **Root Directory**: `frontend`.
-4. Add Environment Variables:
-   - `NEXT_PUBLIC_API_URL`: Your deployed backend URL + `/api/v1` (e.g. `https://aegivex-api.vercel.app/api/v1` or `https://aegivex-api.koyeb.app/api/v1`)
-   - `NEXT_PUBLIC_APP_NAME`: `Aegivex AI`
-5. Click **Deploy**.
+3. Name your project (e.g. `aegivex-ui` or `aegivex-web`).
+4. Set **Root Directory**: Click **Edit** and select `frontend`.
+5. Add Environment Variables:
+
+   | Variable Key | Value |
+   | :--- | :--- |
+   | `NEXT_PUBLIC_API_URL` | `https://aegivex-ai.vercel.app/api/v1` |
+   | `NEXT_PUBLIC_APP_NAME` | `Aegivex AI` |
+
+6. Click **Deploy**. Vercel will compile and host your complete Next.js frontend application!
 
 ---
 
