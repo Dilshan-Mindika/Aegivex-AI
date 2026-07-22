@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str = ""
 
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    ETHERSCAN_API_KEY: str = os.getenv("ETHERSCAN_API_KEY", "MV5HHIUSX25KSCAXPIXZAG6X6E9X6BP7Y9")
+
 
     def __init__(self, **values):
         super().__init__(**values)

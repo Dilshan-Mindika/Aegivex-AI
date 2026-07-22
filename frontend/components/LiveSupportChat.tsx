@@ -174,7 +174,8 @@ export default function LiveSupportChat() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="glass-card-premium border-gradient-glow w-[340px] sm:w-[380px] h-[500px] rounded-3xl border border-cyan-500/40 shadow-2xl overflow-hidden flex flex-col justify-between mb-4 bg-slate-950/95 backdrop-blur-2xl text-left"
+            className="glass-card-premium border-gradient-glow w-[calc(100vw-24px)] max-w-[380px] h-[calc(100vh-100px)] max-h-[500px] rounded-3xl border border-cyan-500/40 shadow-2xl overflow-hidden flex flex-col justify-between mb-4 bg-slate-950/95 backdrop-blur-2xl text-left"
+
           >
             {/* Simple Clean Header */}
             <div className="px-5 py-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
