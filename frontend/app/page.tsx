@@ -78,11 +78,9 @@ function AnimatedMetricCounter({
       const easedProgress = 1 - Math.pow(1 - progress, 3);
 
       if (isCountdown) {
-        // Count down from 3.0 to targetValue (e.g. 0.4s)
         const computed = 3.0 - (3.0 - targetValue) * easedProgress;
         setCurrentVal(computed);
       } else {
-        // Count up from 0 to targetValue
         const computed = targetValue * easedProgress;
         setCurrentVal(computed);
       }
@@ -683,7 +681,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* How It Works Section (WITH RUNNING ANIMATED GRADIENT BORDER AROUND CARDS) */}
       <section className="px-6 py-20 bg-slate-950/40 border-t border-slate-800/80 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div 
@@ -704,10 +702,10 @@ export default function LandingPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { step: '01', title: 'Session Authentication', desc: 'Initialize secure platform session with cryptographic token validation.', icon: UserCheck, color: 'text-blue-400', border: 'border-blue-500/30' },
-              { step: '02', title: 'Target Vector Input', desc: 'Specify contract address, wallet identifier, dApp URL, or transaction payload.', icon: Search, color: 'text-cyan-400', border: 'border-cyan-500/30' },
-              { step: '03', title: 'Neural Analysis', desc: 'Execute deep neural evaluation against known threat vectors and opcode heuristics.', icon: Cpu, color: 'text-purple-400', border: 'border-purple-500/30' },
-              { step: '04', title: 'Threat Intelligence Report', desc: 'Receive standardized risk score (0-100), vulnerability breakdown, and directive.', icon: Shield, color: 'text-emerald-400', border: 'border-emerald-500/30' },
+              { step: '01', title: 'Session Authentication', desc: 'Initialize secure platform session with cryptographic token validation.', icon: UserCheck, color: 'text-blue-400' },
+              { step: '02', title: 'Target Vector Input', desc: 'Specify contract address, wallet identifier, dApp URL, or transaction payload.', icon: Search, color: 'text-cyan-400' },
+              { step: '03', title: 'Neural Analysis', desc: 'Execute deep neural evaluation against known threat vectors and opcode heuristics.', icon: Cpu, color: 'text-purple-400' },
+              { step: '04', title: 'Threat Intelligence Report', desc: 'Receive standardized risk score (0-100), vulnerability breakdown, and directive.', icon: Shield, color: 'text-emerald-400' },
             ].map((s, i) => {
               const Icon = s.icon;
               return (
@@ -718,16 +716,20 @@ export default function LandingPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   whileHover={{ y: -8, scale: 1.03 }}
-                  className={`glass-card-premium border-gradient-glow p-6 rounded-2xl border ${s.border} relative group transition duration-300`}
+                  className="relative p-[2px] rounded-2xl border-running-glow shadow-glow-cyan overflow-hidden h-full group transition duration-300"
                 >
-                  <span className="text-4xl font-black text-slate-800 absolute top-4 right-4 font-mono group-hover:text-cyan-500/20 transition">
-                    {s.step}
-                  </span>
-                  <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                    <Icon className={`w-6 h-6 ${s.color}`} />
+                  <div className="w-full h-full p-6 rounded-[14px] bg-slate-950/90 backdrop-blur-2xl relative z-10 flex flex-col justify-between">
+                    <div>
+                      <span className="text-4xl font-black text-slate-800 absolute top-4 right-4 font-mono group-hover:text-cyan-500/20 transition">
+                        {s.step}
+                      </span>
+                      <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <Icon className={`w-6 h-6 ${s.color}`} />
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
+                      <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
                 </motion.div>
               );
             })}
@@ -735,7 +737,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 6 Core Security Tools Showcase */}
+      {/* 6 Core Security Tools Showcase (WITH RUNNING ANIMATED BORDERS AROUND TOOL CARDS) */}
       <section className="px-6 py-20 bg-slate-950/60 border-t border-slate-800">
         <div className="max-w-6xl mx-auto">
           <motion.div 
@@ -758,7 +760,6 @@ export default function LandingPage() {
                 desc: 'Interact with our conversational AI security agent to evaluate smart contracts, verify wallet integrity, and audit Web3 URLs.',
                 icon: Bot,
                 color: 'text-purple-400',
-                border: 'border-purple-500/30',
                 link: '/chat'
               },
               {
@@ -766,7 +767,6 @@ export default function LandingPage() {
                 desc: 'Perform deep-chain analysis on public wallet addresses to flag drainer authorization patterns and illicit counterparty risks.',
                 icon: Wallet,
                 color: 'text-blue-400',
-                border: 'border-blue-500/30',
                 link: '/scanners/wallet'
               },
               {
@@ -774,7 +774,6 @@ export default function LandingPage() {
                 desc: 'Audit token bytecode for tax manipulation, liquidity lock mechanisms, blacklist restrictions, and hidden mint functions.',
                 icon: Coins,
                 color: 'text-cyan-400',
-                border: 'border-cyan-500/30',
                 link: '/scanners/token'
               },
               {
@@ -782,7 +781,6 @@ export default function LandingPage() {
                 desc: 'Examine contract AST and opcode logic for reentrancy vectors, access control flaws, and unverified upgradeability keys.',
                 icon: FileCode2,
                 color: 'text-emerald-400',
-                border: 'border-emerald-500/30',
                 link: '/scanners/contract'
               },
               {
@@ -790,7 +788,6 @@ export default function LandingPage() {
                 desc: 'Validate dApp domain signatures, SSL authority credentials, typosquatting vectors, and malicious script injection payloads.',
                 icon: Globe,
                 color: 'text-amber-400',
-                border: 'border-amber-500/30',
                 link: '/scanners/website'
               },
               {
@@ -798,7 +795,6 @@ export default function LandingPage() {
                 desc: 'Decode complex ABI calldata, Permit2 signature approvals, and multi-call state modifications into clear risk audits.',
                 icon: Receipt,
                 color: 'text-rose-400',
-                border: 'border-rose-500/30',
                 link: '/scanners/transaction'
               },
             ].map((f, i) => {
@@ -811,19 +807,22 @@ export default function LandingPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   whileHover={{ y: -8, scale: 1.02 }}
+                  className="relative p-[2px] rounded-2xl border-running-glow shadow-glow-cyan overflow-hidden h-full group"
                 >
                   <Link 
                     href={f.link}
-                    className={`glass-card-premium border-gradient-glow p-6 rounded-2xl border ${f.border} block group h-full`}
+                    className="w-full h-full p-6 rounded-[14px] bg-slate-950/90 backdrop-blur-2xl relative z-10 block h-full flex flex-col justify-between"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                      <Icon className={`w-6 h-6 ${f.color}`} />
+                    <div>
+                      <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <Icon className={`w-6 h-6 ${f.color}`} />
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-400 transition flex items-center justify-between">
+                        {f.title}
+                        <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-1 transition" />
+                      </h3>
+                      <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-400 transition flex items-center justify-between">
-                      {f.title}
-                      <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-1 transition" />
-                    </h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
                   </Link>
                 </motion.div>
               );
