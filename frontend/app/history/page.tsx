@@ -35,6 +35,11 @@ export default function HistoryPage() {
     return matchesType && matchesSearch;
   });
 
+  const handleDeleteHistory = async (id: string) => {
+    await handleApiCall(apiClient.delete(`/history/${id}`), {});
+    setHistory(prev => prev.filter(item => item.id !== id));
+  };
+
   return (
     <div className="space-y-6">
       <div className="glass-card p-6 rounded-3xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -94,34 +99,44 @@ export default function HistoryPage() {
                 <th className="p-4 font-semibold">Scan Target</th>
                 <th className="p-4 font-semibold">Scan Type</th>
                 <th className="p-4 font-semibold">Risk Rating</th>
-                <th className="p-4 font-semibold text-right">Timestamp</th>
+                <th className="p-4 font-semibold">Timestamp</th>
+                <th className="p-4 font-semibold text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
               {filteredItems.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-slate-500">
+                  <td colSpan={5} className="p-8 text-center text-slate-500">
                     No scan records match your filter criteria.
                   </td>
                 </tr>
               ) : (
                 filteredItems.map((row) => (
                   <tr key={row.id} className="hover:bg-slate-800/40 transition">
-                    <td className="p-4 font-mono font-semibold text-slate-200">{row.target}</td>
+                    <td className="p-4 font-mono font-semibold text-slate-200">{row.target || row.reference_id || 'Security Scan'}</td>
                     <td className="p-4 text-slate-400 capitalize font-medium">{row.scan_type}</td>
                     <td className="p-4">
                       <span className={`px-2.5 py-0.5 rounded text-[11px] font-bold border ${
-                        row.risk_level === 'High'
+                        row.risk_level === 'High' || (row.risk_score && row.risk_score > 60)
                           ? 'bg-red-500/10 text-red-400 border-red-500/20'
-                          : row.risk_level === 'Medium'
+                          : row.risk_level === 'Medium' || (row.risk_score && row.risk_score > 40)
                           ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
                           : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                       }`}>
-                        {row.risk_level} ({row.risk_score}/100)
+                        {row.risk_level || 'Safe'} ({row.risk_score !== undefined ? row.risk_score : 15}/100)
                       </span>
                     </td>
-                    <td className="p-4 text-right text-slate-500 font-mono">
+                    <td className="p-4 text-slate-500 font-mono">
                       {new Date(row.created_at || Date.now()).toLocaleDateString()}
+                    </td>
+                    <td className="p-4 text-right">
+                      <button
+                        onClick={() => handleDeleteHistory(row.id)}
+                        className="px-2.5 py-1 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition text-[11px] font-semibold"
+                        title="Remove record from history database"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -133,3 +148,4 @@ export default function HistoryPage() {
     </div>
   );
 }
+

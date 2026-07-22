@@ -19,3 +19,14 @@ def get_history(current_user: User = Depends(get_current_user), db: Session = De
         .all()
     )
     return scans
+
+@router.delete("/{history_id}")
+def delete_history(history_id: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    record = db.query(ScanHistory).filter(ScanHistory.id == history_id, ScanHistory.user_id == current_user.id).first()
+    if not record:
+        return {"success": False, "message": "History item not found."}
+    
+    db.delete(record)
+    db.commit()
+    return {"success": True, "message": "Scan history item removed successfully."}
+
