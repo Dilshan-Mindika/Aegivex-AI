@@ -1,148 +1,97 @@
-# 🚀 Aegivex AI — 100% Free Production Deployment Guide
+# 🚀 Aegivex AI — 100% Free Production Deployment Guide (NO Credit Card Required)
 
-This guide provides a comprehensive, step-by-step walkthrough to deploy **Aegivex AI** (Frontend, Backend, Database, and Multi-Provider AI Engine) completely **100% FREE** using production-grade cloud platforms.
+This guide provides 3 top solutions to deploy **Aegivex AI** completely **100% FREE without entering any credit card or payment details**.
 
 ---
 
-## 📋 100% Free Cloud Infrastructure Architecture
+## 📋 Zero Credit Card Cloud Infrastructure Options
 
-| Layer | Platform | Free Tier Specifications | Cost |
+| Layer | Recommended Platform | Free Tier Benefits | Credit Card Required? |
 | :--- | :--- | :--- | :---: |
-| **Frontend UI** | **[Vercel](https://vercel.com)** | Unlimited Next.js 14 Deploys, Global CDN, SSL Certificates, Custom Domains | **$0.00** |
-| **Backend API** | **[Render.com](https://render.com)** or **[Koyeb](https://koyeb.com)** | Free Web Service Tier, Automatic HTTPS, Continuous Git Deployment | **$0.00** |
-| **Cloud Database** | **[Neon.tech](https://neon.tech)** or **[Supabase](https://supabase.com)** | Managed PostgreSQL 16, 0.5 GiB Storage, SSL Connections, Point-in-Time Recovery | **$0.00** |
-| **AI LLM Engine** | **[Groq Cloud](https://console.groq.com)** & **[OpenRouter](https://openrouter.ai)** | Free Tier Llama 3 & OpenRouter Free Models (Zero credit card required) | **$0.00** |
+| **Frontend UI** | **[Vercel](https://vercel.com)** | Next.js 14 Web Hosting, Global CDN, SSL | **NO ❌** |
+| **Backend API (Option 1)**| **[Vercel Python](https://vercel.com)** | Serverless Python FastAPI Functions | **NO ❌** |
+| **Backend API (Option 2)**| **[Koyeb](https://koyeb.com)** | Free Web Service Instance, Docker/Buildpack | **NO ❌** |
+| **Backend API (Option 3)**| **[Hugging Face Spaces](https://huggingface.co)** | Free Docker Web Container | **NO ❌** |
+| **Cloud Database** | **[Neon.tech](https://neon.tech)** | Serverless PostgreSQL 16 (Connected & Seeded) | **NO ❌** |
 
 ---
 
-## 🛠️ Step 1: Git Repository Setup & GitHub Push
+## 🌟 BACKEND SOLUTION 1: Deploy Backend to Vercel (100% Free - NO Credit Card Required)
 
-1. Open your terminal in the project root folder:
-   ```bash
-   cd "d:\Projects\Aegivex AI"
-   ```
+Since Vercel requires **ZERO credit card details**, you can deploy the FastAPI backend directly on Vercel as a Python Serverless Web Service!
 
-2. Initialize and push the repository to GitHub:
+### Steps:
+1. Push your repository to GitHub:
    ```bash
-   git init
    git add .
-   git commit -m "feat: complete production release for Aegivex AI"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_GITHUB_USERNAME/Aegivex-AI.git
-   git push -u origin main
+   git commit -m "feat: configure Vercel and Koyeb zero-card backend deployments"
+   git push origin main
    ```
+2. Go to **[Vercel Dashboard](https://vercel.com/dashboard)** -> Click **Add New...** -> **Project**.
+3. Select your GitHub repository (`Aegivex-AI`).
+4. Set **Root Directory**: Select `backend`.
+5. Expand **Environment Variables** and add:
 
----
-
-## 🗄️ Step 2: Provision Free PostgreSQL Database (Neon.tech or Supabase)
-
-### Option A: Neon.tech (Recommended - 100% Free Serverless Postgres)
-1. Go to **[Neon.tech](https://neon.tech)** and sign up for a free account.
-2. Click **Create Project** -> Project Name: `aegivex-db` -> Postgres Version: `16`.
-3. Copy your Connection String from the dashboard dashboard (Connection Details):
-   ```
-   postgresql://aegivex_owner:YOUR_PASSWORD@ep-sample-123456.us-east-2.aws.neon.tech/aegivex-db?sslmode=require
-   ```
-
-### Option B: Supabase (Alternative Free Managed Postgres)
-1. Sign up at **[Supabase.com](https://supabase.com)**.
-2. Create project `aegivex-db` and copy the URI under **Settings -> Database -> Connection String (Transaction Pooler)**.
-
----
-
-## ⚙️ Step 3: Deploy FastAPI Backend Web Service (Render.com / Koyeb)
-
-### Deploying on Render.com (100% Free)
-1. Go to **[Render.com Dashboard](https://dashboard.render.com)** and click **New +** -> **Web Service**.
-2. Connect your GitHub repository (`Aegivex-AI`).
-3. Configure the deployment settings:
-   - **Name**: `aegivex-api`
-   - **Region**: Select nearest region (e.g. Frankfurt / Oregon)
-   - **Root Directory**: `backend`
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-4. Add the **Environment Variables** under the **Environment** tab:
-
-   | Variable Key | Value / Example |
+   | Variable Key | Value |
    | :--- | :--- |
-   | `DATABASE_URL` | `postgresql://aegivex_owner:YOUR_PASSWORD@ep-sample-123456.us-east-2.aws.neon.tech/aegivex-db?sslmode=require` |
+   | `DATABASE_URL` | `postgresql://neondb_owner:npg_AHzFiXh8QK3m@ep-nameless-tooth-azlinshz-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require` |
    | `GROQ_API_KEY` | `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` |
    | `OPENROUTER_API_KEY` | `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` |
    | `JWT_SECRET` | `aegivex_super_secret_jwt_key_998877665544332211` |
-   | `JWT_ALGORITHM` | `HS256` |
-   | `ACCESS_TOKEN_EXPIRE_MINUTES` | `10080` |
-   | `CORS_ORIGINS` | `*` |
 
-5. Click **Create Web Service**. Render will build and deploy your API automatically!
-6. Copy your deployed backend API URL (e.g. `https://aegivex-api.onrender.com`).
+6. Click **Deploy**. Vercel will deploy your FastAPI backend with automatic HTTPS (e.g., `https://aegivex-api.vercel.app`) without asking for a credit card!
 
 ---
 
-## 💻 Step 4: Deploy Next.js 14 Frontend (Vercel)
+## 🌟 BACKEND SOLUTION 2: Deploy Backend to Koyeb (100% Free - NO Credit Card Required)
 
-1. Go to **[Vercel Dashboard](https://vercel.com/dashboard)** and click **Add New...** -> **Project**.
-2. Import your GitHub repository (`Aegivex-AI`).
-3. Configure the deployment settings:
-   - **Framework Preset**: `Next.js`
-   - **Root Directory**: Click **Edit** and select `frontend`.
-   - **Build Command**: `next build`
-   - **Output Directory**: `.next`
-4. Expand **Environment Variables** and add:
+Koyeb offers a dedicated 100% free web service tier that does **not** prompt for billing details or credit card verification!
 
-   | Variable Key | Value / Example |
-   | :--- | :--- |
-   | `NEXT_PUBLIC_API_URL` | `https://aegivex-api.onrender.com/api/v1` |
-   | `NEXT_PUBLIC_APP_NAME` | `Aegivex AI` |
-
-5. Click **Deploy**. Vercel will compile Next.js and generate your production URL (e.g., `https://aegivex-ai.vercel.app`).
-
----
-
-## 🗄️ Step 5: Database Seeding & Pre-Configured Accounts Setup
-
-Once your backend API is deployed on Render/Koyeb and connected to Neon/Supabase PostgreSQL, run the seeding script to create the pre-configured Admin and User accounts in cloud production:
-
-```bash
-cd backend
-# Set DATABASE_URL to your production Postgres URL temporarily:
-set DATABASE_URL=postgresql://aegivex_owner:YOUR_PASSWORD@ep-sample-123456.us-east-2.aws.neon.tech/aegivex-db?sslmode=require
-python seed.py
-```
-
-### 🔑 Production Pre-Seeded Accounts Summary
-
-| User Account Role | Email Address | Default Password | Access Scope |
-| :--- | :--- | :--- | :--- |
-| **System Administrator** ⭐ | `admin@aegivex.ai` | `AdminPassword123!` | Super Admin Control Center (`/admin/dashboard`), Live Support Desk Inbox, User Role Management. |
-| **Regular User** 🛡️ | `user@aegivex.ai` | `UserPassword123!` | Dashboard (`/dashboard`), AI Chat (`/chat`), Scanners (`/scanners/*`), Scan History (`/history`). |
+### Steps:
+1. Go to **[Koyeb.com](https://www.koyeb.com)** and sign up with GitHub.
+2. Click **Create Service** -> Select **GitHub**.
+3. Choose repository `Aegivex-AI`.
+4. Configure service settings:
+   - **Root Directory**: `backend`
+   - **Builder**: `Dockerfile` (or Buildpack)
+   - **Port**: `8000`
+5. Add Environment Variables:
+   - `DATABASE_URL`: `postgresql://neondb_owner:npg_AHzFiXh8QK3m@ep-nameless-tooth-azlinshz-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require`
+   - `GROQ_API_KEY`: `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`
+   - `OPENROUTER_API_KEY`: `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`
+   - `JWT_SECRET`: `aegivex_super_secret_jwt_key_998877665544332211`
+6. Click **Deploy**. Your backend will be live at `https://<your-app-name>.koyeb.app`.
 
 ---
 
-## 🧪 Step 6: Production Health Check & Verification
+## 🌟 BACKEND SOLUTION 3: Deploy Backend to Hugging Face Spaces (100% Free - NO Credit Card Required)
 
-1. Open your browser and navigate to your production URL:
-   `https://aegivex-ai.vercel.app`
-2. Test authentication:
-   - Click **Sign In** and enter `user@aegivex.ai` / `UserPassword123!`.
-   - Verify redirection to `/dashboard`.
-3. Test Web3 Scanners:
-   - Open **Wallet Risk Scanner** -> Enter `0x71C7656EC7ab88b098defB751B7401B5f6d8976F` -> Verify instant risk score generation.
-4. Test AI Copilot Chat:
-   - Open **AI Security Chat** -> Ask *"Is this contract safe?"* -> Verify multi-provider response from Groq/OpenRouter.
-5. Test Password Recovery:
-   - Go to `/forgot-password` -> Request reset code -> Enter `AEGIVEX-8899` -> Verify password update.
+Hugging Face Spaces allows you to host Dockerized FastAPI containers **100% free forever** with zero payment verification.
+
+### Steps:
+1. Go to **[HuggingFace.co](https://huggingface.co)** and sign up.
+2. Click **New Space** -> Space Name: `aegivex-api` -> SDK: Select **Docker** -> Blank.
+3. Push the contents of the `backend/` folder into your Hugging Face Space repository.
+4. Go to **Settings -> Variables and secrets** and add `DATABASE_URL`, `GROQ_API_KEY`, `OPENROUTER_API_KEY`, and `JWT_SECRET`.
+5. Hugging Face will automatically run your FastAPI Docker container!
 
 ---
 
-## 📜 Summary of Free Cloud Resources
+## 💻 FRONTEND DEPLOYMENT: Deploy Next.js to Vercel (100% Free)
 
-```mermaid
-graph TD
-  User([User Web Browser]) -->|HTTPS Requests| Vercel[Vercel - Next.js Frontend\nhttps://aegivex-ai.vercel.app]
-  Vercel -->|REST API Calls| Render[Render / Koyeb - FastAPI Backend\nhttps://aegivex-api.onrender.com]
-  Render -->|SQL Queries| Neon[Neon.tech / Supabase - PostgreSQL 16]
-  Render -->|LLM Requests| Groq[Groq Cloud API & OpenRouter LLM]
-```
+1. Go to **[Vercel Dashboard](https://vercel.com/dashboard)** -> Click **Add New...** -> **Project**.
+2. Select your GitHub repository (`Aegivex-AI`).
+3. Set **Root Directory**: `frontend`.
+4. Add Environment Variables:
+   - `NEXT_PUBLIC_API_URL`: Your deployed backend URL + `/api/v1` (e.g. `https://aegivex-api.vercel.app/api/v1` or `https://aegivex-api.koyeb.app/api/v1`)
+   - `NEXT_PUBLIC_APP_NAME`: `Aegivex AI`
+5. Click **Deploy**.
 
-🎉 **Congratulations! Your Aegivex AI Web3 Security Copilot platform is now live and deployed 100% FREE!**
+---
+
+## 🗄️ Database Status: Neon PostgreSQL (100% Connected & Seeded)
+
+Your cloud database is already 100% configured and seeded:
+- **Connection URI**: `postgresql://neondb_owner:npg_AHzFiXh8QK3m@ep-nameless-tooth-azlinshz-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require`
+- **Admin Login**: `admin@aegivex.ai` / `AdminPassword123!`
+- **User Login**: `user@aegivex.ai` / `UserPassword123!`

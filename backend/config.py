@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     DB_USER: str = os.getenv("DB_USER", "postgres")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "")
 
-    DATABASE_URL: str = ""
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
@@ -27,15 +27,13 @@ class Settings(BaseSettings):
     AI_PROVIDER: str = os.getenv("AI_PROVIDER", "auto")
     ETHERSCAN_API_KEY: str = os.getenv("ETHERSCAN_API_KEY", "MV5HHIUSX25KSCAXPIXZAG6X6E9X6BP7Y9")
 
-
-
     def __init__(self, **values):
         super().__init__(**values)
-        if not self.DATABASE_URL:
-            raw_url = os.getenv("DATABASE_URL")
-            if raw_url:
-                self.DATABASE_URL = raw_url
-            elif self.DB_ENGINE.lower() in ["postgres", "postgresql"]:
+        raw_url = os.getenv("DATABASE_URL")
+        if raw_url and raw_url.strip():
+            self.DATABASE_URL = raw_url.strip()
+        elif not self.DATABASE_URL:
+            if self.DB_ENGINE.lower() in ["postgres", "postgresql"]:
                 encoded_password = quote_plus(self.DB_PASSWORD) if self.DB_PASSWORD else ""
                 user_pass = f"{self.DB_USER}:{encoded_password}@" if self.DB_USER else ""
                 self.DATABASE_URL = f"postgresql://{user_pass}{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
