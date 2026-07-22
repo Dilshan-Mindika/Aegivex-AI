@@ -165,11 +165,12 @@ export default function RegisterPage() {
         </Link>
       </div>
 
-      {/* Main Registration Card Wrapper with Navbar Animated Running Glow Border */}
+      {/* Main Registration Card Wrapper with Futuristic Cyber Glow Animation */}
       <motion.div 
-        initial={{ opacity: 0, scale: 0.96, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        initial={{ opacity: 0, scale: 0.94, y: 15, filter: 'blur(6px)' }}
+        animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
+        exit={{ opacity: 0, scale: 0.94, y: -15, filter: 'blur(6px)' }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         className="w-full max-w-xl p-[2px] sm:p-[2.5px] rounded-[26px] sm:rounded-[34px] border-running-glow shadow-glow-cyan relative z-10"
       >
         <div className="w-full h-full glass-card-premium p-5 sm:p-10 rounded-[24px] sm:rounded-[32px] bg-slate-950/95 backdrop-blur-2xl relative z-10 text-left">
