@@ -11,32 +11,22 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
-*, *::before, *::after {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  box-sizing: border-box;
-}
-
-html, body {
+body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
   selection-background-color: rgba(6, 182, 212, 0.3);
   selection-color: #a5f3fc;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  transform: translate3d(0, 0, 0);
 }
 
 /* Vibrant Ambient Theme Background Mesh Glow (No Square Grid Patterns) */
 .bg-glow-ambient {
   background: 
-    radial-gradient(circle at 20% 15%, rgba(6, 182, 212, 0.22) 0%, transparent 45%),
-    radial-gradient(circle at 80% 25%, rgba(139, 92, 246, 0.25) 0%, transparent 50%),
-    radial-gradient(circle at 50% 60%, rgba(59, 130, 246, 0.20) 0%, transparent 55%),
-    radial-gradient(circle at 75% 85%, rgba(16, 185, 129, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 20% 15%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 25%, rgba(139, 92, 246, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 50% 60%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 75% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 40%),
     #020617;
 }
 
@@ -59,23 +49,19 @@ html, body {
 .animate-chain-glow-5 { animation: chainTextGlow 3s ease-in-out infinite; animation-delay: 2s; }
 .animate-chain-glow-6 { animation: chainTextGlow 3s ease-in-out infinite; animation-delay: 2.5s; }
 
-/* Smooth 144Hz/60Hz Running Light Beam Animated Gradient Border Frame */
+/* Clean Theme-Aligned Running Animated Gradient Border Frame (Electric Cyan & Cyber Purple Only) - Restored from Git 2329227 */
 .border-running-glow {
   position: relative;
   overflow: hidden;
-  border-radius: inherit;
-  isolation: isolate;
-  transform: translate3d(0, 0, 0);
-  will-change: transform;
 }
 
 .border-running-glow::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: -150%;
+  left: -150%;
+  width: 400%;
+  height: 400%;
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
@@ -84,55 +70,40 @@ html, body {
     #06b6d4 270deg,
     transparent 360deg
   );
-  animation: borderRunningRotate 4s linear infinite;
+  animation: borderRotate 4s linear infinite;
   pointer-events: none;
   z-index: 0;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
 }
 
-@keyframes borderRunningRotate {
-  0% {
-    transform: translate3d(0, 0, 0) rotate(0deg);
-  }
-  100% {
-    transform: translate3d(0, 0, 0) rotate(360deg);
-  }
+@keyframes borderRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Premium Glassmorphic Cards with Safari iOS & Mobile GPU Hardware Acceleration */
+/* Premium Glassmorphic Cards */
 .glass-card-premium {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(3, 7, 18, 0.98) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 
-    0 10px 30px -10px rgba(0, 0, 0, 0.85),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translate3d(0, 0, 0);
-  will-change: transform, box-shadow;
-  contain: paint layout;
-  isolation: isolate;
+    0 10px 30px -10px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card-premium:hover {
-  border-color: rgba(6, 182, 212, 0.45);
+  border-color: rgba(6, 182, 212, 0.4);
   box-shadow: 
-    0 20px 40px -15px rgba(6, 182, 212, 0.3),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
-  transform: translate3d(0, -2px, 0);
+    0 20px 40px -15px rgba(6, 182, 212, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
 }
 
 .glass-card {
   background: rgba(15, 23, 42, 0.90);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transform: translate3d(0, 0, 0);
-  contain: paint layout;
-  isolation: isolate;
 }
 
 /* Glowing Border Frame */
@@ -152,7 +123,7 @@ html, body {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  opacity: 0.75;
+  opacity: 0.7;
   transition: opacity 0.3s ease;
 }
 
@@ -168,14 +139,12 @@ html, body {
   background-size: 200% 200%;
   animation: gradientShift 6s ease infinite;
   box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.5);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translate3d(0, 0, 0);
-  will-change: transform, box-shadow;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-futuristic-primary:hover {
   box-shadow: 0 0 40px 5px rgba(6, 182, 212, 0.8);
-  transform: translate3d(0, -2px, 0) scale(1.02);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .btn-futuristic-primary::before {
@@ -209,12 +178,10 @@ html, body {
 /* Revolving HUD Animations */
 .radar-spin-slow {
   animation: spinSlow 18s linear infinite;
-  will-change: transform;
 }
 
 .radar-spin-reverse {
   animation: spinReverse 24s linear infinite;
-  will-change: transform;
 }
 
 @keyframes spinSlow {
@@ -229,23 +196,23 @@ html, body {
 
 /* Neon Text Glow Utilities */
 .neon-glow-cyan {
-  text-shadow: 0 0 15px rgba(6, 182, 212, 0.8), 0 0 30px rgba(6, 182, 212, 0.4);
+  text-shadow: 0 0 6px rgba(6, 182, 212, 0.4);
 }
 
 .neon-glow-purple {
-  text-shadow: 0 0 15px rgba(139, 92, 246, 0.8), 0 0 30px rgba(139, 92, 246, 0.4);
+  text-shadow: 0 0 6px rgba(139, 92, 246, 0.4);
 }
 
 .shadow-glow-cyan {
-  box-shadow: 0 0 25px rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);
 }
 
 .shadow-glow-purple {
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.35);
 }
 
 .shadow-glow-red {
-  box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.35);
 }
 
 /* Custom Scrollbar */
@@ -265,31 +232,6 @@ html, body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
-}
-
-/* Mobile Production Zero-Flicker GPU Hardware Layering & 144Hz Optimization */
-@media (max-width: 768px) {
-  .bg-glow-ambient {
-    background: 
-      radial-gradient(circle at 20% 15%, rgba(6, 182, 212, 0.28) 0%, transparent 55%),
-      radial-gradient(circle at 80% 25%, rgba(139, 92, 246, 0.30) 0%, transparent 60%),
-      radial-gradient(circle at 50% 60%, rgba(59, 130, 246, 0.24) 0%, transparent 65%),
-      #020617;
-  }
-
-  /* Completely disable backdrop-filter on mobile to eliminate WebKit/Chromium border-radius flickering bugs */
-  .glass-card-premium {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(3, 7, 18, 0.99) 100%) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-color: rgba(6, 182, 212, 0.3) !important;
-  }
-
-  .glass-card {
-    background: rgba(15, 23, 42, 0.96) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
 }
 
 /* Smartwatch & Ultra-Small Micro-Device Responsiveness (Sub-380px Viewports) */

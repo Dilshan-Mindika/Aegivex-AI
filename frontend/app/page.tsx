@@ -269,7 +269,7 @@ export default function LandingPage() {
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="font-black text-base sm:text-xl tracking-tight text-white group-hover:text-cyan-300 transition">AEGIVEX</span>
-                  <span className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 neon-glow-cyan font-mono">AI</span>
+                  <span className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 font-mono">AI</span>
                 </div>
                 <span className="text-[9px] sm:text-[10px] text-slate-400 font-mono tracking-wider font-semibold hidden md:block">Web3 AI Security Intelligence Copilot</span>
               </div>
@@ -342,7 +342,7 @@ export default function LandingPage() {
                 className="px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-2xl bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-purple-500/20 border border-cyan-400/50 shadow-glow-cyan inline-flex items-center gap-2 sm:gap-3 max-w-full"
               >
                 <ShieldCheck className="w-5 h-5 sm:w-8 sm:h-8 text-cyan-400 animate-pulse shrink-0" />
-                <span className="text-base xs:text-2xl sm:text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-400 neon-glow-cyan font-mono truncate">
+                <span className="text-base xs:text-2xl sm:text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-cyan-200 to-purple-300 font-mono tracking-wide truncate">
                   {targetPhrases[phraseIndex]}
                 </span>
               </motion.div>
