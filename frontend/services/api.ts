@@ -35,13 +35,14 @@ apiClient.interceptors.response.use(
   }
 );
 
-// Helper for local mock responses if backend is restarting, offline, or demo mode
+// Strictly execute API calls against backend database
 export const handleApiCall = async <T = any>(apiPromise: Promise<any>, fallbackData: T): Promise<T> => {
   try {
     const response: any = await apiPromise;
-    return response.data || response;
+    return response.data !== undefined ? response.data : response;
   } catch (error) {
-    console.warn("Backend API unavailable or unauthenticated, operating with fallback:", error);
+    console.error("Live Database API Call Failed:", error);
     return fallbackData;
   }
 };
+

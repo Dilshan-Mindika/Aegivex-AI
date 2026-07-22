@@ -4,13 +4,19 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
+import CookieConsentBanner from '../CookieConsentBanner';
 
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isPublicPage = pathname === '/' || pathname === '/login' || pathname === '/register';
 
   if (isPublicPage) {
-    return <div className="min-h-screen w-full bg-[#020617]">{children}</div>;
+    return (
+      <div className="min-h-screen w-full bg-[#020617]">
+        {children}
+        <CookieConsentBanner />
+      </div>
+    );
   }
 
   return (
@@ -22,6 +28,7 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
+      <CookieConsentBanner />
     </div>
   );
 }
