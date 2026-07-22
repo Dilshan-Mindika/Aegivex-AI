@@ -40,7 +40,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden bg-glow-ambient selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-center p-3 xs:p-4 sm:p-6 py-6 sm:py-12 relative overflow-x-hidden bg-glow-ambient selection:bg-cyan-500/30 selection:text-cyan-200">
       
       {/* Background Glowing Orbs */}
       <motion.div 
@@ -49,23 +49,26 @@ export default function LoginPage() {
           scale: [0.9, 1.3, 0.95, 1.35, 0.9],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-10 left-1/5 w-[650px] h-[650px] bg-cyan-500/25 blur-[180px] rounded-full pointer-events-none z-0"
+        className="absolute top-10 left-1/5 w-[300px] sm:w-[650px] h-[300px] sm:h-[650px] bg-cyan-500/25 blur-[120px] sm:blur-[180px] rounded-full pointer-events-none z-0"
       />
 
-      <Link 
-        href="/" 
-        className="absolute top-6 left-6 z-20 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 text-xs font-semibold text-slate-300 hover:text-white transition backdrop-blur-md"
-      >
-        <ArrowLeft className="w-4 h-4 text-cyan-400" />
-        Back to Home
-      </Link>
+      {/* Top Back Navigation Bar - Positioned cleanly above card */}
+      <div className="w-full max-w-md flex items-center justify-start mb-3 sm:mb-4 relative z-20">
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 text-xs font-semibold text-slate-300 hover:text-white transition backdrop-blur-md shadow-md"
+        >
+          <ArrowLeft className="w-4 h-4 text-cyan-400" />
+          Back to Home
+        </Link>
+      </div>
 
       {/* Main Login Card Wrapper with Navbar Animated Running Glow Border */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md p-[2px] sm:p-[2.5px] rounded-[26px] sm:rounded-[34px] border-running-glow shadow-glow-cyan relative z-10 my-auto"
+        className="w-full max-w-md p-[2px] sm:p-[2.5px] rounded-[26px] sm:rounded-[34px] border-running-glow shadow-glow-cyan relative z-10"
       >
         <div className="w-full h-full glass-card-premium p-8 sm:p-10 rounded-[24px] sm:rounded-[32px] bg-slate-950/95 backdrop-blur-2xl relative z-10 text-left">
           
