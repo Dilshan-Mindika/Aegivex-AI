@@ -5,13 +5,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Lock, Mail, ArrowRight, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, ArrowLeft } from 'lucide-react';
 import { apiClient } from '../../services/api';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -59,73 +60,89 @@ export default function LoginPage() {
         Back to Home
       </Link>
 
+      {/* Main Login Card Wrapper with Navbar Animated Running Glow Border */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md glass-card-premium border-gradient-glow p-8 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl relative z-10 text-left"
+        className="w-full max-w-md p-[2px] sm:p-[2.5px] rounded-[26px] sm:rounded-[34px] border-running-glow shadow-glow-cyan relative z-10 my-auto"
       >
-        <div className="text-center mb-8">
-          <div className="inline-flex w-14 h-14 rounded-2xl bg-slate-900 p-2.5 border border-cyan-500/40 items-center justify-center shadow-glow-cyan mb-3">
-            <Image src="/logo.png" alt="Aegivex AI" width={42} height={42} className="object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.9)]" />
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Sign In to Aegivex AI</h1>
-          <p className="text-xs text-slate-400 mt-1.5 font-medium">Enter your registered database account credentials</p>
-        </div>
-
-        {error && (
-          <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Email Address</label>
-            <div className="relative">
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-200 text-sm focus:outline-none focus:border-cyan-500 transition font-mono"
-              />
+        <div className="w-full h-full glass-card-premium p-8 sm:p-10 rounded-[24px] sm:rounded-[32px] bg-slate-950/95 backdrop-blur-2xl relative z-10 text-left">
+          
+          {/* Header Logo Badge with Running Glow Border */}
+          <div className="text-center mb-8">
+            <div className="relative w-14 h-14 rounded-2xl p-[2px] border-running-glow shadow-glow-cyan shrink-0 mx-auto mb-3">
+              <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center p-2 relative z-10">
+                <Image src="/logo.png" alt="Aegivex AI" width={42} height={42} className="object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.9)]" />
+              </div>
             </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Sign In to Aegivex AI</h1>
+            <p className="text-xs text-slate-400 mt-1.5 font-medium">Enter your registered database account credentials</p>
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
-            <div className="relative">
-              <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••••••"
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-200 text-sm focus:outline-none focus:border-cyan-500 transition"
-              />
+          {error && (
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{error}</span>
             </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Email Address</label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your registered email address"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-200 text-sm focus:outline-none focus:border-cyan-500 transition font-mono placeholder:text-slate-600 placeholder:text-xs"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
+              <div className="relative">
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your account password"
+                  className="w-full pl-10 pr-10 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-200 text-sm focus:outline-none focus:border-cyan-500 transition placeholder:text-slate-600 placeholder:text-xs"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200 transition focus:outline-none"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-futuristic-primary w-full py-3.5 px-4 rounded-xl text-white font-bold text-sm shadow-glow-cyan flex items-center justify-center gap-2 transition cursor-pointer"
+            >
+              {loading ? 'Authenticating Credentials...' : 'Sign In'}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+
+          <div className="mt-6 text-center text-xs text-slate-400">
+            Don't have an account?{' '}
+            <Link href="/register" className="text-cyan-400 font-bold hover:underline">
+              Create Account
+            </Link>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-futuristic-primary w-full py-3.5 px-4 rounded-xl text-white font-bold text-sm shadow-glow-cyan flex items-center justify-center gap-2 transition cursor-pointer"
-          >
-            {loading ? 'Authenticating Credentials...' : 'Sign In'}
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-xs text-slate-400">
-          Don't have an account?{' '}
-          <Link href="/register" className="text-cyan-400 font-bold hover:underline">
-            Create Account
-          </Link>
         </div>
       </motion.div>
     </div>
