@@ -22,7 +22,11 @@ class Settings(BaseSettings):
     DATABASE_URL: str = ""
 
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
+    AI_PROVIDER: str = os.getenv("AI_PROVIDER", "auto")
     ETHERSCAN_API_KEY: str = os.getenv("ETHERSCAN_API_KEY", "MV5HHIUSX25KSCAXPIXZAG6X6E9X6BP7Y9")
+
 
 
     def __init__(self, **values):

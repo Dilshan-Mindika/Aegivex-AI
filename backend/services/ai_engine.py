@@ -1,13 +1,16 @@
 import hashlib
 import random
+import json
+import urllib.request
 from typing import Dict, Any, Tuple
+from config import settings
 from services.etherscan_service import etherscan_service
 
 class AISecurityEngine:
     """
     AI Security Engine for Web3 Copilot risk analysis, scam detection,
     contract verification, website safety inspection, and natural language explanations.
-    Integrated with real-time Etherscan V2 API telemetry.
+    Integrated with real-time Etherscan V2 API telemetry, Groq Cloud API, and OpenRouter Free Models.
     """
 
     @staticmethod
@@ -178,8 +181,58 @@ class AISecurityEngine:
 
     @staticmethod
     def chat_copilot(prompt: str) -> Tuple[str, int, int]:
-        prompt_lower = prompt.lower()
+        # 1. Try Groq API if GROQ_API_KEY is present
+        if settings.GROQ_API_KEY:
+            try:
+                url = "https://api.groq.com/openai/v1/chat/completions"
+                headers = {
+                    "Authorization": f"Bearer {settings.GROQ_API_KEY.strip()}",
+                    "Content-Type": "application/json"
+                }
+                payload = {
+                    "model": "llama-3.3-70b-versatile",
+                    "messages": [
+                        {"role": "system", "content": "You are Aegivex AI, an autonomous Web3 AI security copilot. Provide concise, expert security analysis for Web3 smart contracts, wallet addresses, token honeypots, domain safety, and transaction approvals."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    "temperature": 0.4,
+                    "max_tokens": 512
+                }
+                req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    res_data = json.loads(response.read().decode('utf-8'))
+                    ans = res_data['choices'][0]['message']['content']
+                    return ans, 10, 99
+            except Exception as e:
+                print(f"[Aegivex AI] Groq API call failed or timed out: {e}")
 
+        # 2. Try OpenRouter API if OPENROUTER_API_KEY is present
+        if settings.OPENROUTER_API_KEY:
+            try:
+                url = "https://openrouter.ai/api/v1/chat/completions"
+                headers = {
+                    "Authorization": f"Bearer {settings.OPENROUTER_API_KEY.strip()}",
+                    "HTTP-Referer": "https://aegivex.ai",
+                    "X-Title": "Aegivex AI",
+                    "Content-Type": "application/json"
+                }
+                payload = {
+                    "model": "meta-llama/llama-3-8b-instruct:free",
+                    "messages": [
+                        {"role": "system", "content": "You are Aegivex AI, an autonomous Web3 AI security copilot. Provide concise, expert security analysis for Web3 smart contracts, wallet addresses, token honeypots, domain safety, and transaction approvals."},
+                        {"role": "user", "content": prompt}
+                    ]
+                }
+                req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    res_data = json.loads(response.read().decode('utf-8'))
+                    ans = res_data['choices'][0]['message']['content']
+                    return ans, 12, 98
+            except Exception as e:
+                print(f"[Aegivex AI] OpenRouter API call failed or timed out: {e}")
+
+        # 3. Fallback to internal Aegivex AI Heuristic Engine
+        prompt_lower = prompt.lower()
         if "wallet" in prompt_lower or "address" in prompt_lower:
             ans = "When checking a Web3 wallet address, Aegivex AI queries Etherscan V2 ledger telemetry to analyze native balances, historical transaction counts, and drainer contract permits. Always verify the address on block explorers before sending assets."
             return ans, 15, 96
