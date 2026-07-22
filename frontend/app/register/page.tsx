@@ -176,7 +176,7 @@ export default function RegisterPage() {
           
           {/* Header Logo Badge with Running Glow Border */}
           <div className="text-center mb-6 sm:mb-8">
-            <div className="relative w-13 h-13 sm:w-16 sm:h-16 rounded-2xl p-[2px] border-running-glow shadow-glow-cyan shrink-0 mx-auto mb-3">
+            <div className="relative w-14 h-14 rounded-2xl p-[2px] border-running-glow shadow-glow-cyan shrink-0 mx-auto mb-3">
               <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center p-2 relative z-10">
                 <Image src="/logo.png" alt="Aegivex AI" width={42} height={42} className="object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.9)]" />
               </div>

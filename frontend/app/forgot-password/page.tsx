@@ -110,11 +110,11 @@ export default function ForgotPasswordPage() {
       <div className="w-full max-w-md relative z-10">
         {/* Animated Card Frame */}
         <div className="glass-card p-8 rounded-3xl border-running-glow shadow-glow-cyan relative overflow-hidden bg-slate-950/90 backdrop-blur-xl">
-          {/* Header */}
+          {/* Header Logo Badge with Running Glow Border */}
           <div className="text-center mb-6">
-            <div className="w-14 h-14 rounded-2xl bg-slate-900 border-running-glow p-0.5 mx-auto mb-3 flex items-center justify-center shadow-glow-cyan">
-              <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center p-1.5">
-                <Image src="/logo.png" alt="Aegivex AI" width={34} height={34} className="object-contain" />
+            <div className="relative w-14 h-14 rounded-2xl p-[2px] border-running-glow shadow-glow-cyan shrink-0 mx-auto mb-3">
+              <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center p-2 relative z-10">
+                <Image src="/logo.png" alt="Aegivex AI" width={42} height={42} className="object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.9)]" />
               </div>
             </div>
             <h1 className="text-2xl font-black tracking-tight text-white">Reset Account Password</h1>
