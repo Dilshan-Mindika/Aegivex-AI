@@ -27,6 +27,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  transform: translate3d(0, 0, 0);
 }
 
 /* Vibrant Ambient Theme Background Mesh Glow (No Square Grid Patterns) */
@@ -69,6 +70,8 @@ html, body {
   will-change: transform, box-shadow;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  contain: paint layout;
+  isolation: isolate;
 }
 
 @keyframes cyberBorderPulse {
@@ -95,6 +98,8 @@ html, body {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translate3d(0, 0, 0);
   will-change: transform, box-shadow;
+  contain: paint layout;
+  isolation: isolate;
 }
 
 .glass-card-premium:hover {
@@ -110,6 +115,8 @@ html, body {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transform: translate3d(0, 0, 0);
+  contain: paint layout;
+  isolation: isolate;
 }
 
 /* Glowing Border Frame */
@@ -244,7 +251,7 @@ html, body {
   background: #334155;
 }
 
-/* Mobile GPU Hardware Acceleration & Smooth 60FPS-144FPS Frame Rate Optimization */
+/* Mobile Production Zero-Flicker GPU Hardware Layering & 144Hz Optimization */
 @media (max-width: 768px) {
   .bg-glow-ambient {
     background: 
@@ -254,10 +261,18 @@ html, body {
       #020617;
   }
 
+  /* Completely disable backdrop-filter on mobile to eliminate WebKit/Chromium border-radius flickering bugs */
   .glass-card-premium {
-    background: rgba(10, 16, 31, 0.96) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(3, 7, 18, 0.99) 100%) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-color: rgba(6, 182, 212, 0.3) !important;
+  }
+
+  .glass-card {
+    background: rgba(15, 23, 42, 0.96) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
 

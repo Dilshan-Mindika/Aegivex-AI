@@ -23,6 +23,7 @@ import {
   X
 } from 'lucide-react';
 import { apiClient } from '../../services/api';
+import FuturisticBackgroundWorker from '../../components/FuturisticBackgroundWorker';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -143,6 +144,9 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-center p-3 xs:p-4 sm:p-6 py-6 sm:py-12 relative overflow-x-hidden bg-glow-ambient selection:bg-cyan-500/30 selection:text-cyan-200">
+      
+      {/* Offscreen Web Worker Particle Acceleration */}
+      <FuturisticBackgroundWorker />
       
       {/* Background Glowing Orbs - Optimized for Mobile GPUs */}
       <motion.div 
