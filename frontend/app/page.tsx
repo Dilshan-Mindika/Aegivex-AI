@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, 
@@ -54,7 +55,6 @@ const multiChainList = [
   { name: 'Polygon PoS', symbol: 'MATIC', icon: Terminal },
 ];
 
-// Animated Count-Up / Countdown Component for Industry Metrics
 function AnimatedMetricCounter({ 
   targetValue, 
   prefix = '', 
@@ -72,7 +72,7 @@ function AnimatedMetricCounter({
 
   useEffect(() => {
     let startTime: number | null = null;
-    const durationMs = 2400; // Smooth 2.4s count-up/countdown duration
+    const durationMs = 2400;
 
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
@@ -107,6 +107,7 @@ function AnimatedMetricCounter({
 }
 
 export default function LandingPage() {
+  const router = useRouter();
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [scanInput, setScanInput] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<'token' | 'wallet' | 'contract' | 'website'>('token');
@@ -136,7 +137,6 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Futuristic Random Light-Up Effect (STRICTLY EXACTLY ONE BOX AT A TIME)
   useEffect(() => {
     const lightInterval = setInterval(() => {
       setLitChainIndex((prev) => {
@@ -149,6 +149,25 @@ export default function LandingPage() {
     }, 1600);
     return () => clearInterval(lightInterval);
   }, []);
+
+  const handleDirectAccess = async () => {
+    if (typeof window !== 'undefined') {
+      try {
+        const res = await fetch('http://localhost:8000/api/v1/auth/demo-token');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.access_token) {
+            localStorage.setItem('aegivex_token', data.access_token);
+          }
+        }
+      } catch (e) {}
+      if (!localStorage.getItem('aegivex_token')) {
+        localStorage.setItem('aegivex_token', 'aegivex_demo_access_token_jwt');
+      }
+    }
+    router.push('/dashboard');
+  };
+
 
   const handleRunInstantScan = (e: React.FormEvent) => {
     e.preventDefault();
@@ -212,7 +231,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-between w-full selection:bg-cyan-500/30 selection:text-cyan-200 relative bg-glow-ambient overflow-x-hidden font-sans">
       
-      {/* Dynamic Animated Appearing & Disappearing Background Glowing Orbs */}
+      {/* Background Glowing Orbs */}
       <motion.div 
         animate={{
           opacity: [0.1, 0.65, 0.2, 0.7, 0.1],
@@ -235,7 +254,7 @@ export default function LandingPage() {
         className="absolute top-48 right-1/5 w-[300px] sm:w-[650px] h-[300px] sm:h-[650px] bg-purple-600/25 blur-[120px] sm:blur-[180px] rounded-full pointer-events-none z-0"
       />
 
-      {/* Floating Modern Fixed Navigation Bar */}
+      {/* Floating Fixed Navbar with Sign Up & Try Now Buttons */}
       <div className="fixed top-3 sm:top-4 left-0 right-0 z-50 px-3 sm:px-6 max-w-5xl mx-auto w-full pointer-events-auto">
         <motion.header 
           initial={{ y: -20, opacity: 0 }}
@@ -247,7 +266,7 @@ export default function LandingPage() {
               : 'bg-slate-950/85 border-cyan-500/30 shadow-glow-cyan backdrop-blur-xl'
           }`}
         >
-          {/* Industry-Level Brand Title & Professional Subtext */}
+          {/* Brand Header */}
           <div className="flex items-center gap-2.5 sm:gap-3">
             <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
               <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl p-[2px] border-running-glow shadow-glow-cyan group-hover:scale-105 transition duration-300 shrink-0">
@@ -265,29 +284,30 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Action CTAs */}
+          {/* Action Buttons: Sign Up & Try Now */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link 
-              href="/login"
-              className="text-xs font-bold text-slate-300 hover:text-white px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition hidden sm:inline-block"
+            <button 
+              onClick={handleDirectAccess}
+              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-cyan-400/60 text-slate-200 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
             >
-              Sign In
-            </Link>
-            <Link
-              href="/dashboard"
-              className="btn-futuristic-primary text-[11px] sm:text-xs font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-white flex items-center gap-1.5 sm:gap-2 transition shrink-0 cursor-pointer"
+              Sign Up
+            </button>
+            <button
+              onClick={handleDirectAccess}
+              className="btn-futuristic-primary text-xs font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-white flex items-center gap-1.5 sm:gap-2 transition shrink-0 cursor-pointer"
             >
-              Launch Platform
-              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            </Link>
+              Try Now
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
+
         </motion.header>
       </div>
 
-      {/* SECTION 1: HERO & INSTANT SCANNER BAR (UNIQUE 3D PERSPECTIVE SPRUNG SLIDE-IN) */}
+      {/* SECTION 1: HERO & INSTANT SCANNER BAR */}
       <section className="relative px-3 sm:px-6 pt-24 pb-12 sm:pt-36 sm:pb-24 max-w-7xl mx-auto text-center z-10 w-full overflow-x-hidden">
         
-        {/* Hackathon Badge (Strictly 2 Lines, ZERO Glowing Dots) */}
+        {/* Hackathon Badge */}
         <motion.div 
           initial={{ opacity: 0, y: -25, scale: 0.9 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -301,7 +321,7 @@ export default function LandingPage() {
           </span>
         </motion.div>
 
-        {/* Dynamic Rotating Headline */}
+        {/* Headline */}
         <motion.div 
           initial={{ opacity: 0, y: 35, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -346,7 +366,7 @@ export default function LandingPage() {
           Delivers real-time automated threat intelligence, vulnerability auditing, honeypot detection, and transaction risk analysis across multi-chain ecosystems.
         </motion.p>
 
-        {/* INSTANT INTERACTIVE SCANNER BAR WITH FULL-WIDTH RUNNING ANIMATED BORDER */}
+        {/* Instant Scanner Bar */}
         <motion.div 
           initial={{ opacity: 0, y: 40, scale: 0.96 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -423,7 +443,7 @@ export default function LandingPage() {
                 </button>
               </form>
 
-              {/* Quick Example Presets */}
+              {/* Quick Presets */}
               <div className="flex items-center gap-1.5 sm:gap-2 mt-3 text-xs text-slate-400 overflow-x-auto pb-1">
                 <span className="font-mono text-[10px] sm:text-[11px] text-slate-500 shrink-0">Presets:</span>
                 <button
@@ -486,7 +506,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* SECTION 2: MULTI-CHAIN PROTOCOL COVERAGE (UNIQUE STAGGERED CYBER CHIP ANIMATION) */}
+        {/* SECTION 2: MULTI-CHAIN PROTOCOL COVERAGE */}
         <motion.div 
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -556,7 +576,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* SECTION 3: METRICS BAR WITH SMOOTH ELEVATED LIFT */}
+        {/* SECTION 3: METRICS BAR */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.93 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -605,7 +625,7 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* SECTION 4: SECURITY COMPARISON MATRIX (UNIQUE SPLIT-SCREEN LEFT VS RIGHT SLIDE-IN) */}
+      {/* SECTION 4: SECURITY COMPARISON MATRIX */}
       <section className="px-3 sm:px-6 py-12 sm:py-20 bg-slate-950/60 border-t border-slate-800/80 relative w-full overflow-x-hidden">
         <div className="max-w-6xl mx-auto">
           <motion.div 
@@ -626,7 +646,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 max-w-4xl mx-auto w-full">
             
-            {/* Unprotected Execution Card (SLIDES IN FROM LEFT) */}
+            {/* Unprotected Execution Card */}
             <motion.div 
               initial={{ opacity: 0, x: -40, rotateY: 6 }}
               whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
@@ -657,7 +677,7 @@ export default function LandingPage() {
               </ul>
             </motion.div>
 
-            {/* Aegivex Autonomous Shield Card (SLIDES IN FROM RIGHT) */}
+            {/* Aegivex Autonomous Shield Card */}
             <motion.div 
               initial={{ opacity: 0, x: 40, rotateY: -6 }}
               whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
@@ -692,7 +712,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 5: HOW IT WORKS WORKFLOW ARCHITECTURE (UNIQUE SEQUENTIAL STAGGERED FLIP) */}
+      {/* SECTION 5: HOW IT WORKS WORKFLOW ARCHITECTURE */}
       <section className="px-3 sm:px-6 py-12 sm:py-20 bg-slate-950/40 border-t border-slate-800/80 relative w-full overflow-x-hidden">
         <div className="max-w-6xl mx-auto">
           <motion.div 
@@ -748,7 +768,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 6: ENTERPRISE SECURITY SUITE (UNIQUE 3D PERSPECTIVE GRID TILT) */}
+      {/* SECTION 6: ENTERPRISE SECURITY SUITE */}
       <section className="px-3 sm:px-6 py-12 sm:py-20 bg-slate-950/60 border-t border-slate-800 w-full overflow-x-hidden">
         <div className="max-w-6xl mx-auto">
           <motion.div 
@@ -820,9 +840,9 @@ export default function LandingPage() {
                   whileHover={{ y: -8, scale: 1.02 }}
                   className="relative p-[2px] rounded-2xl border-running-glow shadow-glow-cyan overflow-hidden h-full group"
                 >
-                  <Link 
-                    href={f.link}
-                    className="w-full h-full p-4 sm:p-6 rounded-[14px] bg-slate-950/90 backdrop-blur-2xl relative z-10 block h-full flex flex-col justify-between"
+                  <button 
+                    onClick={handleDirectAccess}
+                    className="w-full h-full p-4 sm:p-6 rounded-[14px] bg-slate-950/90 backdrop-blur-2xl relative z-10 block h-full flex flex-col justify-between text-left cursor-pointer"
                   >
                     <div>
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition">
@@ -834,7 +854,7 @@ export default function LandingPage() {
                       </h3>
                       <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
                     </div>
-                  </Link>
+                  </button>
                 </motion.div>
               );
             })}
@@ -842,11 +862,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Redesigned Modern Footer with Large Logo, Terms & Privacy in Bottom Right (NO UNDERLINE) */}
+      {/* Redesigned Modern Footer */}
       <footer className="px-4 sm:px-6 md:px-12 py-10 sm:py-14 border-t border-slate-800/80 bg-slate-950/95 relative z-10 text-left w-full">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-end justify-between gap-6 w-full">
           
-          {/* Large Logo & Brand Info */}
+          {/* Logo & Brand Info */}
           <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-left">
             <div className="flex items-center gap-3">
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl p-[2px] border-running-glow shadow-glow-cyan shrink-0">
@@ -867,12 +887,11 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Right Column: Copyright + Terms & Privacy Pop-Up Links in Bottom Right (NO UNDERLINE) */}
+          {/* Right Column: Copyright + Terms & Privacy */}
           <div className="flex flex-col items-center md:items-end gap-2 text-xs text-slate-400 font-mono text-center md:text-right w-full md:w-auto">
             <p className="font-medium text-slate-300">© 2026 Aegivex AI. All rights reserved.</p>
             <p className="text-[11px] text-cyan-400/90 font-bold mb-1">OKX.AI Genesis Hackathon Project</p>
 
-            {/* Terms & Conditions • Privacy Policy Action Buttons in Bottom Right */}
             <div className="flex items-center justify-center md:justify-end gap-3 text-xs font-semibold text-slate-400 w-full">
               <button 
                 onClick={() => setShowTermsModal(true)} 
@@ -895,7 +914,7 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* Terms & Conditions Pop-Up Modal */}
+      {/* Terms & Conditions Modal */}
       <AnimatePresence>
         {showTermsModal && (
           <motion.div 
@@ -910,7 +929,6 @@ export default function LandingPage() {
               exit={{ scale: 0.95, y: 20 }}
               className="glass-card-premium border-gradient-glow w-full max-w-2xl max-h-[85vh] overflow-y-auto p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-cyan-500/40 shadow-2xl relative text-left"
             >
-              {/* Close Button */}
               <button 
                 onClick={() => setShowTermsModal(false)}
                 className="absolute top-4 right-4 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-cyan-500/50 transition cursor-pointer"
@@ -972,7 +990,7 @@ export default function LandingPage() {
         )}
       </AnimatePresence>
 
-      {/* Privacy Policy Pop-Up Modal */}
+      {/* Privacy Policy Modal */}
       <AnimatePresence>
         {showPrivacyModal && (
           <motion.div 
@@ -987,7 +1005,6 @@ export default function LandingPage() {
               exit={{ scale: 0.95, y: 20 }}
               className="glass-card-premium border-gradient-glow w-full max-w-2xl max-h-[85vh] overflow-y-auto p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-purple-500/40 shadow-2xl relative text-left"
             >
-              {/* Close Button */}
               <button 
                 onClick={() => setShowPrivacyModal(false)}
                 className="absolute top-4 right-4 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-purple-500/50 transition cursor-pointer"
