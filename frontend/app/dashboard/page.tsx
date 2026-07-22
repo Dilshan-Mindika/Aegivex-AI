@@ -46,10 +46,13 @@ export default function DashboardPage() {
     const data = await handleApiCall(apiClient.get('/dashboard'), stats);
     if (data) setStats(data);
 
-    const historyData = await handleApiCall(apiClient.get('/history'), { history: [] });
-    if (historyData && historyData.history) {
+    const historyData = await handleApiCall(apiClient.get('/history'), []);
+    if (Array.isArray(historyData)) {
+      setRecentScans(historyData.slice(0, 5));
+    } else if (historyData && Array.isArray(historyData.history)) {
       setRecentScans(historyData.history.slice(0, 5));
     }
+
     setLoading(false);
   };
 
