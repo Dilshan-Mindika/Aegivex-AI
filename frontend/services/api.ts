@@ -20,7 +20,7 @@ apiClient.interceptors.request.use((config) => {
 });
 
 // Helper for local mock responses if backend is restarting or offline
-export const handleApiCall = async <T>(apiPromise: Promise<T>, fallbackData: T): Promise<T> => {
+export const handleApiCall = async <T = any>(apiPromise: Promise<any>, fallbackData: T): Promise<T> => {
   try {
     const response: any = await apiPromise;
     return response.data || response;

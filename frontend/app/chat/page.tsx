@@ -8,8 +8,8 @@ interface Message {
   id: string;
   sender: 'user' | 'ai';
   text: string;
-  riskScore?: int;
-  confidence?: int;
+  riskScore?: number;
+  confidence?: number;
   timestamp: string;
 }
 

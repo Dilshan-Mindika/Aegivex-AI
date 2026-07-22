@@ -22,6 +22,11 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
+from middleware.logging_middleware import SecurityLoggingMiddleware
+
+# Security & Logging Middleware
+app.add_middleware(SecurityLoggingMiddleware)
+
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,

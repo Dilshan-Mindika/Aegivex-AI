@@ -1,0 +1,25 @@
+# Environment Files
+.env
+*.env
+!.env.example
+
+# Python Cache & Bytecode
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+aegivex.db
+
+# Logs
+*.log
