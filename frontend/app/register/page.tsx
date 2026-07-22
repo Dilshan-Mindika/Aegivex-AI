@@ -144,14 +144,14 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col items-center justify-center p-3 xs:p-4 sm:p-6 py-6 sm:py-12 relative overflow-x-hidden bg-glow-ambient selection:bg-cyan-500/30 selection:text-cyan-200">
       
-      {/* Background Glowing Orbs */}
+      {/* Background Glowing Orbs - Optimized for Mobile GPUs */}
       <motion.div 
         animate={{
-          opacity: [0.1, 0.65, 0.2, 0.7, 0.1],
-          scale: [0.9, 1.3, 0.95, 1.35, 0.9],
+          opacity: [0.2, 0.6, 0.3, 0.65, 0.2],
+          scale: [0.95, 1.2, 0.98, 1.25, 0.95],
         }}
         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-10 left-1/5 w-[300px] sm:w-[650px] h-[300px] sm:h-[650px] bg-cyan-500/25 blur-[120px] sm:blur-[180px] rounded-full pointer-events-none z-0"
+        className="hidden sm:block absolute top-10 left-1/5 w-[650px] h-[650px] bg-cyan-500/20 blur-[180px] rounded-full pointer-events-none z-0"
       />
 
       {/* Top Back Navigation Bar - Positioned cleanly above card */}
