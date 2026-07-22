@@ -290,14 +290,15 @@ export default function LandingPage() {
             >
               Sign Up
             </Link>
-            <button
-              onClick={() => handleProtectedNavigation('/dashboard')}
+            <Link
+              href="/register"
               className="btn-futuristic-primary text-xs font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-white flex items-center gap-1.5 sm:gap-2 transition shrink-0 cursor-pointer"
             >
               Try Now
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
+
         </motion.header>
       </div>
 

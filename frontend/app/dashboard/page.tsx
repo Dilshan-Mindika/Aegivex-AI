@@ -23,30 +23,48 @@ import { apiClient, handleApiCall } from '../../services/api';
 import LiveSupportChat from '@/components/LiveSupportChat';
 
 
+import { useRouter } from 'next/navigation';
+
 export default function DashboardPage() {
+  const router = useRouter();
   const [stats, setStats] = useState({
-    total_scans: 28,
-    wallet_scans: 10,
-    token_scans: 8,
-    contract_scans: 5,
-    website_scans: 3,
-    transaction_scans: 2,
-    average_risk_score: 16,
-    ai_security_score: 84,
-    active_threats_count: 2
+    total_scans: 0,
+    wallet_scans: 0,
+    token_scans: 0,
+    contract_scans: 0,
+    website_scans: 0,
+    transaction_scans: 0,
+    average_risk_score: 0,
+    ai_security_score: 100,
+    active_threats_count: 0
   });
+  const [recentScans, setRecentScans] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchStats = async () => {
     setLoading(true);
     const data = await handleApiCall(apiClient.get('/dashboard'), stats);
     if (data) setStats(data);
+
+    const historyData = await handleApiCall(apiClient.get('/history'), { history: [] });
+    if (historyData && historyData.history) {
+      setRecentScans(historyData.history.slice(0, 5));
+    }
     setLoading(false);
   };
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('aegivex_token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+    }
     fetchStats();
   }, []);
+
+
 
   return (
     <div className="space-y-6">
@@ -186,30 +204,37 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
-                {[
-                  { target: '0x71C7656EC7...976F', type: 'Wallet', level: 'Low', score: 12, time: '5m ago' },
-                  { target: '0x1f9840a85d...f984', type: 'Token', level: 'High', score: 92, time: '22m ago' },
-                  { target: 'https://uniswap.org', type: 'Website', level: 'Low', score: 5, time: '1h ago' },
-                  { target: '0x7a250d5630...2488D', type: 'Contract', level: 'Medium', score: 45, time: '2h ago' },
-                  { target: '0x9876543210...abcdef', type: 'Transaction', level: 'High', score: 88, time: '4h ago' },
-                ].map((row, i) => (
-                  <tr key={i} className="hover:bg-slate-800/40 transition">
-                    <td className="py-2.5 font-mono text-slate-300">{row.target}</td>
-                    <td className="py-2.5 text-slate-400">{row.type}</td>
-                    <td className="py-2.5">
-                      <span className={`px-2 py-0.5 rounded text-[11px] font-bold border ${
-                        row.level === 'High' 
-                          ? 'bg-red-500/10 text-red-400 border-red-500/20' 
-                          : row.level === 'Medium'
-                          ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                          : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                      }`}>
-                        {row.level} ({row.score})
-                      </span>
+                {recentScans.length > 0 ? (
+                  recentScans.map((row, i) => (
+                    <tr key={i} className="hover:bg-slate-800/40 transition">
+                      <td className="py-2.5 font-mono text-slate-300">
+                        {row.target ? (row.target.length > 22 ? `${row.target.substring(0, 10)}...${row.target.substring(row.target.length - 6)}` : row.target) : 'N/A'}
+                      </td>
+                      <td className="py-2.5 text-slate-400 capitalize">{row.scan_type}</td>
+                      <td className="py-2.5">
+                        <span className={`px-2 py-0.5 rounded text-[11px] font-bold border ${
+                          row.risk_level === 'High' || row.risk_level === 'Critical'
+                            ? 'bg-red-500/10 text-red-400 border-red-500/20' 
+                            : row.risk_level === 'Medium'
+                            ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                        }`}>
+                          {row.risk_level} ({row.risk_score})
+                        </span>
+                      </td>
+                      <td className="py-2.5 text-right text-slate-500 font-mono">
+                        {new Date(row.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="py-6 text-center text-slate-500 italic">
+                      No security scans recorded yet. Run a scanner to generate telemetry.
                     </td>
-                    <td className="py-2.5 text-right text-slate-500">{row.time}</td>
                   </tr>
-                ))}
+                )}
+
               </tbody>
             </table>
           </div>

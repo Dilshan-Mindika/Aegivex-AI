@@ -10,7 +10,26 @@
 
 ---
 
+## 🔑 Pre-Seeded Database Accounts & Demo Credentials
+
+The database comes pre-seeded with pre-configured accounts (Admin and Regular User) and sample security telemetry:
+
+| User Account Role | Email Address | Default Password | Access Scope & Permissions |
+| :--- | :--- | :--- | :--- |
+| **System Administrator** ⭐ | `admin@aegivex.ai` | `AdminPassword123!` | Full Admin Control (`/admin`), Session Logs, System Audits, and User Management. |
+| **Regular User** 🛡️ | `user@aegivex.ai` | `UserPassword123!` | Security Dashboard (`/dashboard`), AI Copilot Chat (`/chat`), Scanners (`/scanners/*`), and Scan History (`/history`). |
+
+### 🛠️ Re-Seeding Database Accounts & Telemetry
+To re-run the database seeder script and reset pre-seeded accounts:
+```bash
+cd backend
+python seed.py
+```
+
+---
+
 ## 📋 Table of Contents
+
 
 1. [Introduction](#1-introduction)
    - [1.1 Purpose](#11-purpose)
