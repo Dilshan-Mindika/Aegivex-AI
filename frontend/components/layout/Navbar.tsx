@@ -1,0 +1,149 @@
+'use client';
+
+import React, { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { 
+  Bell, 
+  ShieldAlert, 
+  User as UserIcon, 
+  LogOut, 
+  ChevronDown, 
+  CheckCircle2, 
+  Activity,
+  Layers
+} from 'lucide-react';
+
+export const Navbar: React.FC = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  if (pathname === '/') return null;
+
+  const getPageTitle = (path: string) => {
+    switch (path) {
+      case '/dashboard': return 'Security Command Dashboard';
+      case '/chat': return 'AI Security Copilot Chat';
+      case '/scanners/wallet': return 'Wallet Risk & Drainer Scanner';
+      case '/scanners/token': return 'Token Honeypot & Liquidity Analyzer';
+      case '/scanners/contract': return 'Smart Contract Code Auditor';
+      case '/scanners/website': return 'dApp & Website Safety Scanner';
+      case '/scanners/transaction': return 'Blockchain Transaction Explainer';
+      case '/history': return 'Security Scan History & Audit Log';
+      case '/settings': return 'User Security Preferences';
+      default: return 'Aegivex AI Security';
+    }
+  };
+
+  const notificationsMock = [
+    { id: '1', title: 'Phishing Website Alert', msg: 'Website claim-airdrop-okx.xyz was flagged with High Risk.', time: '10m ago', type: 'high' },
+    { id: '2', title: 'Unlimited Approval Warning', msg: 'Spender 0x7a2... requested unlimited WETH spending.', time: '1h ago', type: 'warn' },
+    { id: '3', title: 'Token Honeypot Blocked', msg: 'PEPE-Fake token code contains 100% sell fee blacklist.', time: '3h ago', type: 'high' },
+  ];
+
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('aegivex_token');
+    }
+    router.push('/login');
+  };
+
+  return (
+    <header className="h-16 border-b border-slate-800 bg-surface/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
+      {/* Left Title & Status */}
+      <div className="flex items-center gap-3">
+        <h1 className="text-base font-bold text-white tracking-wide">
+          {getPageTitle(pathname)}
+        </h1>
+        <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs border border-emerald-500/20 font-medium">
+          <Activity className="w-3 h-3 animate-pulse" />
+          AI Engine Online
+        </div>
+      </div>
+
+      {/* Right Tools & Profile */}
+      <div className="flex items-center gap-4">
+        {/* Network Selector Pill */}
+        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300">
+          <Layers className="w-3.5 h-3.5 text-blue-400" />
+          <span>OKX X Layer / EVM</span>
+        </div>
+
+        {/* Notifications Bell */}
+        <div className="relative">
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition relative"
+            title="Threat Notifications"
+          >
+            <Bell className="w-4 h-4" />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 animate-ping" />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500" />
+          </button>
+
+          {/* Notifications Dropdown */}
+          {showNotifications && (
+            <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-3 z-50">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <ShieldAlert className="w-3.5 h-3.5 text-red-400" />
+                  Live Threat Alerts
+                </span>
+                <span className="text-[10px] text-slate-500 font-mono">3 Unread</span>
+              </div>
+              <div className="space-y-2">
+                {notificationsMock.map((n) => (
+                  <div key={n.id} className="p-2 rounded-lg bg-slate-800/60 border border-slate-700/50 text-xs">
+                    <div className="flex items-center justify-between text-slate-200 font-semibold mb-0.5">
+                      <span>{n.title}</span>
+                      <span className="text-[10px] text-slate-400">{n.time}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-tight">{n.msg}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* User Account Pill */}
+        <div className="relative">
+          <button
+            onClick={() => setShowUserMenu(!showUserMenu)}
+            className="flex items-center gap-2.5 p-1.5 pr-3 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 transition"
+          >
+            <div className="w-7 h-7 rounded-md bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white text-xs font-bold shadow-glow-blue">
+              US
+            </div>
+            <span className="text-xs font-medium text-slate-200 hidden sm:inline">Web3 User</span>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+          </button>
+
+          {showUserMenu && (
+            <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-1.5 z-50">
+              <div className="px-3 py-2 border-b border-slate-800 mb-1">
+                <p className="text-xs font-semibold text-white">Signed in User</p>
+                <p className="text-[11px] text-slate-400 truncate">user@aegivex.ai</p>
+              </div>
+              <button
+                onClick={() => router.push('/settings')}
+                className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-lg flex items-center gap-2"
+              >
+                <UserIcon className="w-3.5 h-3.5 text-slate-400" />
+                Account Settings
+              </button>
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded-lg flex items-center gap-2 mt-1"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                Sign Out
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+};
