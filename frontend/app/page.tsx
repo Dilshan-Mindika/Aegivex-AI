@@ -285,7 +285,7 @@ export default function LandingPage() {
               Sign In
             </Link>
             <Link 
-              href="/register"
+              href="/login"
               className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-cyan-400/60 text-slate-200 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
             >
               Sign Up
