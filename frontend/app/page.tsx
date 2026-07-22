@@ -30,7 +30,10 @@ import {
   ShieldAlert,
   XCircle,
   RefreshCw,
-  Layers
+  Layers,
+  X,
+  FileText,
+  LockKeyhole
 } from 'lucide-react';
 
 const targetPhrases = [
@@ -74,7 +77,6 @@ function AnimatedMetricCounter({
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / durationMs, 1);
       
-      // Smooth cubic ease-out formula
       const easedProgress = 1 - Math.pow(1 - progress, 3);
 
       if (isCountdown) {
@@ -111,6 +113,8 @@ export default function LandingPage() {
   const [scanResult, setScanResult] = useState<any>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [litChainIndex, setLitChainIndex] = useState<number>(0);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -831,17 +835,213 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 md:px-12 py-10 border-t border-slate-800/80 text-center text-xs text-slate-500 flex flex-col items-center justify-center gap-3 bg-slate-950/90">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-blue-600/20 p-1 border border-blue-500/30 flex items-center justify-center shadow-glow-blue">
-            <Image src="/logo.png" alt="Aegivex AI Logo" width={20} height={20} className="object-contain" />
+      {/* Redesigned Modern Footer with Large Logo, Terms & Privacy in Bottom Right (NO UNDERLINE) */}
+      <footer className="px-6 md:px-12 py-14 border-t border-slate-800/80 bg-slate-950/95 relative z-10 text-left">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
+          
+          {/* Large Logo & Brand Info */}
+          <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-left">
+            <div className="flex items-center gap-3.5">
+              <div className="relative w-14 h-14 rounded-2xl p-[2px] border-running-glow shadow-glow-cyan shrink-0">
+                <div className="w-full h-full rounded-[14px] bg-slate-950 flex items-center justify-center p-2 relative z-10">
+                  <Image src="/logo.png" alt="Aegivex AI Official Logo" width={48} height={48} className="object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.9)]" />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="font-black text-2xl tracking-tight text-white">AEGIVEX</span>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 neon-glow-cyan font-mono">AI</span>
+                </div>
+                <span className="text-xs text-slate-400 font-mono tracking-wider font-semibold">Autonomous Web3 Security Intelligence Engine</span>
+              </div>
+            </div>
+            <p className="text-xs text-slate-400 max-w-md leading-relaxed font-normal">
+              Pre-execution risk assessment engine for tokens, smart contracts, wallets, and dApp endpoints across multi-chain protocols.
+            </p>
           </div>
-          <span className="font-black text-sm text-slate-200 tracking-tight">AEGIVEX AI</span>
+
+          {/* Right Column: Copyright + Terms & Privacy Pop-Up Links in Bottom Right (NO UNDERLINE) */}
+          <div className="flex flex-col items-center md:items-end gap-2 text-xs text-slate-400 font-mono text-center md:text-right">
+            <p className="font-medium text-slate-300">© 2026 Aegivex AI. All rights reserved.</p>
+            <p className="text-[11px] text-cyan-400/90 font-bold mb-1">OKX.AI Genesis Hackathon Project</p>
+
+            {/* Terms & Conditions • Privacy Policy Action Buttons in Bottom Right */}
+            <div className="flex items-center gap-3 text-xs font-semibold text-slate-400">
+              <button 
+                onClick={() => setShowTermsModal(true)} 
+                className="hover:text-cyan-400 transition flex items-center gap-1.5 cursor-pointer no-underline focus:outline-none"
+              >
+                <FileText className="w-3.5 h-3.5 text-cyan-400" />
+                Terms & Conditions
+              </button>
+              <span className="text-slate-700">•</span>
+              <button 
+                onClick={() => setShowPrivacyModal(true)} 
+                className="hover:text-purple-400 transition flex items-center gap-1.5 cursor-pointer no-underline focus:outline-none"
+              >
+                <LockKeyhole className="w-3.5 h-3.5 text-purple-400" />
+                Privacy Policy
+              </button>
+            </div>
+          </div>
+
         </div>
-        <p>Aegivex AI — Built for OKX.AI Genesis Hackathon</p>
-        <p className="text-[11px] text-slate-600 font-mono">Autonomous Web3 Security Intelligence Engine</p>
       </footer>
+
+      {/* Terms & Conditions Pop-Up Modal */}
+      <AnimatePresence>
+        {showTermsModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="glass-card-premium border-gradient-glow w-full max-w-2xl max-h-[80vh] overflow-y-auto p-6 sm:p-8 rounded-3xl border border-cyan-500/40 shadow-2xl relative text-left"
+            >
+              {/* Close Button */}
+              <button 
+                onClick={() => setShowTermsModal(false)}
+                className="absolute top-5 right-5 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-cyan-500/50 transition cursor-pointer"
+                aria-label="Close Modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
+                <div className="p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 shadow-glow-cyan">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Terms & Conditions</h3>
+                  <p className="text-xs text-slate-400 font-mono">Platform Usage & Legal Guidelines</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <div>
+                  <h4 className="font-bold text-sm text-cyan-300 mb-1">1. Autonomous Threat Intelligence Scope</h4>
+                  <p>
+                    Aegivex AI operates as an automated pre-execution risk assessment engine. Security evaluation scores (0-100), threat classification signatures, and vulnerability reports are derived from static bytecode analysis, opcode heuristics, and public ledger telemetry.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-sm text-cyan-300 mb-1">2. Non-Custodial Security Infrastructure</h4>
+                  <p>
+                    Aegivex AI operates under a non-custodial architecture. The platform never requests, stores, or accesses private keys, seed phrases, or custodial fund balances.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-sm text-cyan-300 mb-1">3. Automated Risk Analysis Disclaimer</h4>
+                  <p>
+                    Security intelligence reports provide pre-execution risk indicators to mitigate honeypot tokens, malicious approval drainers, and typosquatted dApp phishing endpoints. Users remain solely responsible for validating contract interactions prior to transaction submission.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-sm text-cyan-300 mb-1">4. Acceptable Platform Usage</h4>
+                  <p>
+                    Reverse-engineering, automated scraping, or denial-of-service attempts against Aegivex neural analysis endpoints are strictly prohibited.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-slate-800 flex justify-end">
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className="btn-futuristic-primary px-6 py-2.5 rounded-xl text-xs font-bold text-white"
+                >
+                  Close Document
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Privacy Policy Pop-Up Modal */}
+      <AnimatePresence>
+        {showPrivacyModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-xl"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="glass-card-premium border-gradient-glow w-full max-w-2xl max-h-[80vh] overflow-y-auto p-6 sm:p-8 rounded-3xl border border-purple-500/40 shadow-2xl relative text-left"
+            >
+              {/* Close Button */}
+              <button 
+                onClick={() => setShowPrivacyModal(false)}
+                className="absolute top-5 right-5 p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-purple-500/50 transition cursor-pointer"
+                aria-label="Close Modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
+                <div className="p-2.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-400 shadow-glow-purple">
+                  <LockKeyhole className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Privacy Policy</h3>
+                  <p className="text-xs text-slate-400 font-mono">Cryptographic Data Protection Standard</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 text-xs text-slate-300 leading-relaxed">
+                <div>
+                  <h4 className="font-bold text-sm text-purple-300 mb-1">1. Zero Personally Identifiable Information (PII)</h4>
+                  <p>
+                    Aegivex AI adheres to a strict privacy framework. The platform does not collect, store, or sell user real-world names, physical addresses, email databases, or IP address tracking logs.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-sm text-purple-300 mb-1">2. On-Chain Target Telemetry Processing</h4>
+                  <p>
+                    Public wallet addresses, token contract identifiers, smart contract bytecode, and dApp URL endpoints submitted for security auditing are processed transiently to perform real-time neural threat evaluation.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-sm text-purple-300 mb-1">3. End-to-End Cryptographic Security</h4>
+                  <p>
+                    All communication between client browsers and Aegivex threat intelligence APIs is protected via TLS 1.3 encryption protocol standards.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="font-bold text-sm text-purple-300 mb-1">4. Data Sharing & Third-Party Non-Disclosure</h4>
+                  <p>
+                    Aegivex AI maintains complete data independence and does not share, monetize, or transmit telemetry search parameters to third-party data aggregators.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-slate-800 flex justify-end">
+                <button
+                  onClick={() => setShowPrivacyModal(false)}
+                  className="btn-futuristic-primary px-6 py-2.5 rounded-xl text-xs font-bold text-white"
+                >
+                  Close Document
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }
