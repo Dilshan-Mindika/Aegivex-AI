@@ -21,7 +21,6 @@ import {
   Search,
   Cpu,
   Shield,
-  Radio,
   ChevronRight,
   Terminal,
   Activity,
@@ -30,7 +29,8 @@ import {
   Flame,
   ShieldAlert,
   XCircle,
-  RefreshCw
+  RefreshCw,
+  Layers
 } from 'lucide-react';
 
 const targetPhrases = [
@@ -41,6 +41,15 @@ const targetPhrases = [
   "CRYPTO TRANSFERS"
 ];
 
+const multiChainList = [
+  { name: 'OKX X Layer', symbol: 'XLAYER', icon: Cpu },
+  { name: 'Ethereum Mainnet', symbol: 'ETH', icon: Layers },
+  { name: 'Solana Network', symbol: 'SOL', icon: Zap },
+  { name: 'Arbitrum One', symbol: 'ARB', icon: Activity },
+  { name: 'Base Network', symbol: 'BASE', icon: Shield },
+  { name: 'Polygon PoS', symbol: 'MATIC', icon: Terminal },
+];
+
 export default function LandingPage() {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [scanInput, setScanInput] = useState('');
@@ -48,6 +57,7 @@ export default function LandingPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState<any>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [litChainIndex, setLitChainIndex] = useState<number>(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -66,6 +76,20 @@ export default function LandingPage() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Futuristic Random Light-Up Effect (STRICTLY EXACTLY ONE BOX AT A TIME)
+  useEffect(() => {
+    const lightInterval = setInterval(() => {
+      setLitChainIndex((prev) => {
+        let nextIdx = Math.floor(Math.random() * multiChainList.length);
+        while (nextIdx === prev) {
+          nextIdx = Math.floor(Math.random() * multiChainList.length);
+        }
+        return nextIdx;
+      });
+    }, 1600);
+    return () => clearInterval(lightInterval);
   }, []);
 
   const handleRunInstantScan = (e: React.FormEvent) => {
@@ -238,17 +262,17 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="relative px-6 pt-28 pb-16 md:pt-36 md:pb-24 max-w-7xl mx-auto text-center z-10">
         
-        {/* Hackathon Badge */}
+        {/* Hackathon Badge (Strictly 2 Lines, ZERO Glowing Dots) */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-8 shadow-glow-cyan backdrop-blur-md"
+          className="inline-flex flex-col items-center gap-1 px-5 py-2.5 rounded-2xl bg-slate-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-8 shadow-glow-cyan backdrop-blur-md"
         >
-          <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <span>OKX.AI Genesis Hackathon Project</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <span className="font-mono text-[11px] text-purple-300">Autonomous Threat Intelligence</span>
+          <span className="font-bold text-white tracking-wide">OKX.AI Genesis Hackathon Project</span>
+          <span className="font-mono text-[11px] text-purple-300 tracking-wider font-semibold">
+            Autonomous Threat Intelligence
+          </span>
         </motion.div>
 
         {/* Dynamic Rotating Headline */}
@@ -433,26 +457,66 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Supported Blockchains Bar */}
-        <div className="max-w-4xl mx-auto mb-16">
+        {/* Futuristic Multi-Chain Protocol Coverage Grid (STRICTLY ONE BOX LIGHTS UP AT ONCE) */}
+        <div className="max-w-5xl mx-auto mb-16">
           <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">Multi-Chain Protocol Coverage</p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {[
-              { name: 'OKX X Layer', color: 'border-emerald-500/40 text-emerald-400' },
-              { name: 'Ethereum Mainnet', color: 'border-blue-500/40 text-blue-400' },
-              { name: 'Solana Network', color: 'border-purple-500/40 text-purple-400' },
-              { name: 'Arbitrum One', color: 'border-cyan-500/40 text-cyan-400' },
-              { name: 'Base Network', color: 'border-blue-400/40 text-blue-300' },
-              { name: 'Polygon PoS', color: 'border-purple-400/40 text-purple-300' },
-            ].map((chain, i) => (
-              <div 
-                key={i}
-                className={`px-4 py-2 rounded-xl bg-slate-900/80 border ${chain.color} text-xs font-mono font-bold flex items-center gap-2 shadow-glow-cyan`}
-              >
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                {chain.name}
-              </div>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3.5">
+            {multiChainList.map((chain, i) => {
+              const isLit = litChainIndex === i;
+              const Icon = chain.icon;
+
+              return (
+                <motion.div
+                  key={i}
+                  animate={{
+                    scale: isLit ? 1.05 : 1,
+                    y: isLit ? -4 : 0,
+                  }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  className={`relative p-3.5 rounded-2xl border transition-all duration-500 overflow-hidden cursor-default group ${
+                    isLit 
+                      ? 'bg-gradient-to-br from-cyan-950/90 via-slate-900 to-purple-950/90 border-cyan-400/80 shadow-[0_0_30px_rgba(6,182,212,0.5)]' 
+                      : 'bg-slate-950/80 border-slate-800/90 hover:border-slate-700 shadow-lg'
+                  }`}
+                >
+                  {/* Futuristic Corner Tech Bracket Accents */}
+                  <div className={`absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 transition-colors duration-500 ${isLit ? 'border-cyan-400' : 'border-slate-700/50'}`} />
+                  <div className={`absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 transition-colors duration-500 ${isLit ? 'border-purple-400' : 'border-slate-700/50'}`} />
+
+                  {/* Ambient Glowing Light Pulse Node */}
+                  {isLit && (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: [0.4, 0.85, 0.4], scale: [0.8, 1.25, 0.8] }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                      className="absolute -top-6 -right-6 w-20 h-20 bg-cyan-400/30 blur-xl rounded-full pointer-events-none"
+                    />
+                  )}
+
+                  <div className="flex flex-col items-center justify-center gap-1.5 relative z-10">
+                    <div className={`p-2 rounded-xl border transition-colors duration-500 ${
+                      isLit 
+                        ? 'bg-cyan-500/20 border-cyan-400/60 text-cyan-300 shadow-glow-cyan' 
+                        : 'bg-slate-900 border-slate-800 text-slate-400 group-hover:text-slate-200'
+                    }`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+
+                    <span className={`text-xs font-mono font-bold tracking-tight text-center transition-colors duration-500 ${
+                      isLit ? 'text-white neon-glow-cyan' : 'text-slate-300 group-hover:text-white'
+                    }`}>
+                      {chain.name}
+                    </span>
+
+                    <span className={`text-[10px] font-mono transition-colors duration-500 ${
+                      isLit ? 'text-cyan-300 font-bold' : 'text-slate-500'
+                    }`}>
+                      {chain.symbol}
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 

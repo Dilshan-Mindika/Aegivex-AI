@@ -30,6 +30,25 @@ body {
     #020617;
 }
 
+/* Multi-Chain Protocol Glowing Text Animation */
+@keyframes chainTextGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(6, 182, 212, 0.3));
+    opacity: 0.85;
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.95)) drop-shadow(0 0 22px rgba(139, 92, 246, 0.8));
+    opacity: 1;
+  }
+}
+
+.animate-chain-glow-1 { animation: chainTextGlow 3s ease-in-out infinite; animation-delay: 0s; }
+.animate-chain-glow-2 { animation: chainTextGlow 3s ease-in-out infinite; animation-delay: 0.5s; }
+.animate-chain-glow-3 { animation: chainTextGlow 3s ease-in-out infinite; animation-delay: 1s; }
+.animate-chain-glow-4 { animation: chainTextGlow 3s ease-in-out infinite; animation-delay: 1.5s; }
+.animate-chain-glow-5 { animation: chainTextGlow 3s ease-in-out infinite; animation-delay: 2s; }
+.animate-chain-glow-6 { animation: chainTextGlow 3s ease-in-out infinite; animation-delay: 2.5s; }
+
 /* Clean Theme-Aligned Running Animated Gradient Border Frame (Electric Cyan & Cyber Purple Only) */
 .border-running-glow {
   position: relative;
