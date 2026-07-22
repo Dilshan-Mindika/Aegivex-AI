@@ -39,25 +39,27 @@ export const Sidebar: React.FC = () => {
   return (
     <aside className="w-64 bg-surface border-r border-slate-800 flex flex-col justify-between h-screen sticky top-0 z-40">
       <div>
-        {/* Brand Header */}
-        <div className="p-5 flex items-center gap-3 border-b border-slate-800/80">
-          <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-blue-600/20 p-1 border border-blue-500/30 flex items-center justify-center shadow-glow-blue">
-            <Image 
-              src="/logo.png" 
-              alt="Aegivex AI Logo" 
-              width={32} 
-              height={32} 
-              className="object-contain"
-            />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-lg text-white tracking-tight">AEGIVEX</span>
-              <span className="text-xs px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold border border-blue-500/30 font-mono">AI</span>
+        {/* Brand Header with Animated Running Glow Logo */}
+        <Link href="/dashboard" className="p-5 flex items-center gap-3 border-b border-slate-800/80 group">
+          <div className="relative w-10 h-10 rounded-xl p-[2px] border-running-glow shadow-glow-cyan group-hover:scale-105 transition duration-300 shrink-0">
+            <div className="w-full h-full rounded-[10px] bg-slate-950 flex items-center justify-center p-1 relative z-10">
+              <Image 
+                src="/logo.png" 
+                alt="Aegivex AI Logo" 
+                width={28} 
+                height={28} 
+                className="object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]"
+              />
             </div>
-            <p className="text-[10px] text-slate-400 font-medium">Web3 Security Copilot</p>
           </div>
-        </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5">
+              <span className="font-extrabold text-lg text-white tracking-tight group-hover:text-cyan-300 transition">AEGIVEX</span>
+              <span className="text-xs px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 font-mono">AI</span>
+            </div>
+            <p className="text-[10px] text-slate-400 font-mono tracking-wider">Web3 Security Copilot</p>
+          </div>
+        </Link>
 
         {/* Navigation Items */}
         <nav className="p-3 space-y-1 mt-2">

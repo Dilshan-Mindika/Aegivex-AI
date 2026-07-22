@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
   Bell, 
@@ -80,26 +79,10 @@ export const Navbar: React.FC = () => {
   return (
     <div className="sticky top-3 z-30 px-4 sm:px-6 max-w-7xl mx-auto w-full">
       <header className="h-16 rounded-2xl border border-slate-800/80 bg-slate-950/85 backdrop-blur-xl px-5 flex items-center justify-between shadow-2xl transition duration-300">
-        {/* Left Title & Prominent Official Logo Mark */}
+        {/* Left Title Only (Logo Removed from Top Navbar) */}
         <div className="flex items-center gap-3">
-          <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-cyan-500 to-purple-600 p-0.5 shadow-glow-cyan group-hover:scale-105 transition duration-300">
-              <div className="w-full h-full rounded-[10px] bg-slate-950 flex items-center justify-center p-1">
-                <Image src="/logo.png" alt="Aegivex AI" width={28} height={28} className="object-contain drop-shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
-              </div>
-            </div>
-            <div className="hidden sm:flex flex-col">
-              <div className="flex items-center gap-1">
-                <span className="font-extrabold text-sm tracking-tight text-white group-hover:text-cyan-300 transition">AEGIVEX</span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 font-mono">AI</span>
-              </div>
-              <span className="text-[9px] text-slate-400 font-mono tracking-wider">Security Intelligence</span>
-            </div>
-          </Link>
-
-          <span className="text-slate-700 hidden md:inline">/</span>
-
-          <h1 className="text-xs md:text-sm font-bold text-slate-200 tracking-wide">
+          <h1 className="text-xs md:text-sm font-bold text-slate-200 tracking-wide flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
             {getPageTitle(pathname)}
           </h1>
 
