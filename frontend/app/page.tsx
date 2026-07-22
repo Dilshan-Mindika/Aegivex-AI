@@ -150,24 +150,16 @@ export default function LandingPage() {
     return () => clearInterval(lightInterval);
   }, []);
 
-  const handleDirectAccess = async () => {
+  const handleProtectedNavigation = (targetPath: string = '/dashboard') => {
     if (typeof window !== 'undefined') {
-      try {
-        const res = await fetch('http://localhost:8000/api/v1/auth/demo-token');
-        if (res.ok) {
-          const data = await res.json();
-          if (data.access_token) {
-            localStorage.setItem('aegivex_token', data.access_token);
-          }
-        }
-      } catch (e) {}
-      if (!localStorage.getItem('aegivex_token')) {
-        localStorage.setItem('aegivex_token', 'aegivex_demo_access_token_jwt');
+      const token = localStorage.getItem('aegivex_token');
+      if (token) {
+        router.push(targetPath);
+        return;
       }
     }
-    router.push('/dashboard');
+    router.push('/login');
   };
-
 
   const handleRunInstantScan = (e: React.FormEvent) => {
     e.preventDefault();
@@ -254,7 +246,7 @@ export default function LandingPage() {
         className="absolute top-48 right-1/5 w-[300px] sm:w-[650px] h-[300px] sm:h-[650px] bg-purple-600/25 blur-[120px] sm:blur-[180px] rounded-full pointer-events-none z-0"
       />
 
-      {/* Floating Fixed Navbar with Sign Up & Try Now Buttons */}
+      {/* Floating Fixed Navbar with Sign In, Sign Up, and Try Now Buttons */}
       <div className="fixed top-3 sm:top-4 left-0 right-0 z-50 px-3 sm:px-6 max-w-5xl mx-auto w-full pointer-events-auto">
         <motion.header 
           initial={{ y: -20, opacity: 0 }}
@@ -284,23 +276,28 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Action Buttons: Sign Up & Try Now */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button 
-              onClick={handleDirectAccess}
+          {/* Action Buttons: Sign In, Sign Up & Try Now */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            <Link
+              href="/login"
+              className="text-xs font-bold text-slate-300 hover:text-white px-2 sm:px-3 py-1.5 sm:py-2 transition hidden xs:inline-block cursor-pointer"
+            >
+              Sign In
+            </Link>
+            <Link 
+              href="/register"
               className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-cyan-400/60 text-slate-200 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
             >
               Sign Up
-            </button>
+            </Link>
             <button
-              onClick={handleDirectAccess}
+              onClick={() => handleProtectedNavigation('/dashboard')}
               className="btn-futuristic-primary text-xs font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-white flex items-center gap-1.5 sm:gap-2 transition shrink-0 cursor-pointer"
             >
               Try Now
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
-
         </motion.header>
       </div>
 
@@ -841,7 +838,7 @@ export default function LandingPage() {
                   className="relative p-[2px] rounded-2xl border-running-glow shadow-glow-cyan overflow-hidden h-full group"
                 >
                   <button 
-                    onClick={handleDirectAccess}
+                    onClick={() => handleProtectedNavigation(f.link)}
                     className="w-full h-full p-4 sm:p-6 rounded-[14px] bg-slate-950/90 backdrop-blur-2xl relative z-10 block h-full flex flex-col justify-between text-left cursor-pointer"
                   >
                     <div>

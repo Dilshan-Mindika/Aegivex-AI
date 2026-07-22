@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { User, Mail, Lock, ArrowRight, Zap, ArrowLeft } from 'lucide-react';
+import { User, Mail, Lock, ArrowRight, AlertCircle, ArrowLeft } from 'lucide-react';
 import { apiClient } from '../../services/api';
 
 export default function RegisterPage() {
@@ -14,30 +14,35 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const handleRegisterSuccess = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('aegivex_token', 'aegivex_demo_access_token_jwt');
-      localStorage.setItem('user_role', 'user');
-    }
-    router.push('/dashboard');
-  };
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name || !email || !password) return;
+
     setLoading(true);
+    setError('');
+
     try {
-      await apiClient.post('/auth/register', { name, email, password });
+      const res = await apiClient.post('/auth/register', { name, email, password });
+      if (res.data && res.data.access_token) {
+        localStorage.setItem('aegivex_token', res.data.access_token);
+        router.push('/dashboard');
+      } else {
+        setError('Failed to create account in database.');
+      }
     } catch (err: any) {
+      const msg = err.response?.data?.detail || 'Registration failed. Email may already be registered.';
+      setError(msg);
     } finally {
-      handleRegisterSuccess();
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden bg-glow-ambient selection:bg-cyan-500/30 selection:text-cyan-200">
       
-      {/* Background Orbs */}
+      {/* Background Glowing Orbs */}
       <motion.div 
         animate={{
           opacity: [0.1, 0.65, 0.2, 0.7, 0.1],
@@ -66,8 +71,15 @@ export default function RegisterPage() {
             <Image src="/logo.png" alt="Aegivex AI" width={42} height={42} className="object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.9)]" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Create Aegivex Account</h1>
-          <p className="text-xs text-slate-400 mt-1.5 font-medium">Start protecting your Web3 assets with AI Copilot</p>
+          <p className="text-xs text-slate-400 mt-1.5 font-medium">Register user credentials in database</p>
         </div>
+
+        {error && (
+          <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -120,25 +132,10 @@ export default function RegisterPage() {
             disabled={loading}
             className="btn-futuristic-primary w-full py-3.5 px-4 rounded-xl text-white font-bold text-sm shadow-glow-cyan flex items-center justify-center gap-2 transition cursor-pointer"
           >
-            {loading ? 'Creating Account...' : 'Create Account & Enter Dashboard'}
+            {loading ? 'Creating Account...' : 'Register Account'}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
-
-        <div className="my-5 flex items-center gap-3">
-          <div className="flex-1 h-[1px] bg-slate-800" />
-          <span className="text-[10px] text-slate-500 font-mono uppercase">or quick access</span>
-          <div className="flex-1 h-[1px] bg-slate-800" />
-        </div>
-
-        <button
-          onClick={handleRegisterSuccess}
-          type="button"
-          className="w-full py-3 px-4 rounded-xl bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 font-bold text-xs shadow-glow-cyan flex items-center justify-center gap-2 transition cursor-pointer"
-        >
-          <Zap className="w-4 h-4 text-cyan-400" />
-          1-Click Instant Access
-        </button>
 
         <div className="mt-6 text-center text-xs text-slate-400">
           Already have an account?{' '}

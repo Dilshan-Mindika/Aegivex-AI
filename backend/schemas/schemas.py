@@ -7,6 +7,10 @@ class UserRegisterRequest(BaseModel):
     name: str = Field(..., example="John Doe")
     email: str = Field(..., example="john@example.com")
     password: str = Field(..., example="StrongPassword123")
+    account_type: Optional[str] = Field("Researcher", example="Researcher")
+    organization: Optional[str] = Field(None, example="Aegivex Labs")
+    primary_chain: Optional[str] = Field("OKX X Layer", example="OKX X Layer")
+
 
 class UserLoginRequest(BaseModel):
     email: str = Field(..., example="john@example.com")
