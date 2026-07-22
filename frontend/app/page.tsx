@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, 
   Bot, 
@@ -26,17 +27,34 @@ import {
   Layers,
   ChevronRight,
   ShieldAlert,
-  Flame,
-  Terminal
+  Terminal,
+  Check,
+  Eye
 } from 'lucide-react';
 
+const changingPhrases = [
+  "Wallet Addresses",
+  "Tokens & Coins",
+  "Smart Contracts",
+  "Web Links & Sites",
+  "Crypto Transactions"
+];
+
 export default function LandingPage() {
-  const [activeTab, setActiveTab] = useState<'wallet' | 'token' | 'contract' | 'website'>('token');
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState<'token' | 'wallet' | 'contract' | 'website'>('token');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhraseIndex((prev) => (prev + 1) % changingPhrases.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-white flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative overflow-hidden bg-cyber-grid bg-animated-grid">
       
-      {/* Ambient Multi-layer Futuristic Spotlight Glows */}
+      {/* Background Lighting Elements */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/15 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute top-40 right-1/4 w-[500px] h-[500px] bg-purple-600/15 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute top-96 left-1/3 w-[600px] h-[400px] bg-cyan-500/10 blur-[180px] rounded-full pointer-events-none" />
@@ -52,14 +70,14 @@ export default function LandingPage() {
               <span className="font-black text-xl tracking-tight text-white">AEGIVEX</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40 neon-glow-cyan">AI</span>
             </div>
-            <span className="text-[10px] text-slate-400 font-mono tracking-wider">Web3 Security Copilot</span>
+            <span className="text-[10px] text-slate-400 font-mono tracking-wider">Simple Security Assistant</span>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
           <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 text-xs font-mono text-slate-300">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-emerald-400 font-bold">OKX X Layer</span> Live Protect
+            <span className="text-emerald-400 font-bold">Network Monitor</span> Active
           </div>
 
           <Link 
@@ -72,43 +90,76 @@ export default function LandingPage() {
             href="/dashboard"
             className="btn-futuristic-primary text-xs font-bold px-5 py-2.5 rounded-xl text-white flex items-center gap-2 transition"
           >
-            Launch Copilot
+            Start Check
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </header>
 
-      {/* Futuristic Hero Section */}
+      {/* Hero Section with Framer Motion */}
       <section className="relative px-6 pt-16 pb-20 md:pt-24 md:pb-28 max-w-7xl mx-auto text-center z-10">
         
         {/* Hackathon Badge */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-8 shadow-glow-cyan backdrop-blur-md animate-float-slow">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-8 shadow-glow-cyan backdrop-blur-md"
+        >
           <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <span>OKX.AI Genesis Hackathon Project</span>
+          <span>OKX.AI Genesis Project</span>
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <span className="font-mono text-[11px] text-purple-300">v1.0 Copilot Engine</span>
-        </div>
+          <span className="font-mono text-[11px] text-purple-300">Simple Security Protection</span>
+        </motion.div>
 
-        {/* Hero Title */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.1] max-w-5xl mx-auto mb-6">
-          AI-POWERED <br />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 neon-glow-cyan">
-            WEB3 SECURITY COPILOT
+        {/* Hero Title with Dynamic Rotating Changing Text */}
+        <motion.h1 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7 }}
+          className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.1] max-w-5xl mx-auto mb-6"
+        >
+          CHECK IF YOUR <br />
+          <span className="relative inline-block min-w-[280px] sm:min-w-[420px]">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={phraseIndex}
+                initial={{ opacity: 0, y: 20, rotateX: -90 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                exit={{ opacity: 0, y: -20, rotateX: 90 }}
+                transition={{ duration: 0.5 }}
+                className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 neon-glow-cyan inline-block"
+              >
+                {changingPhrases[phraseIndex]}
+              </motion.span>
+            </AnimatePresence>
           </span>
-        </h1>
+          <br />
+          ARE SAFE BEFORE YOU SIGN
+        </motion.h1>
 
-        <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10 font-normal">
-          Next-generation AI security intelligence protecting your crypto assets. Identify wallet drainers, token honeypots, malicious smart contracts, and phishing domains <span className="text-cyan-400 font-semibold">before you sign</span>.
-        </p>
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10 font-normal"
+        >
+          Aegivex AI checks wallet addresses, token contracts, website links, and transactions in simple English so you can avoid scams and loss of funds.
+        </motion.p>
 
         {/* Futuristic CTA Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20"
+        >
           <Link
             href="/dashboard"
             className="btn-futuristic-primary w-full sm:w-auto px-8 py-4 rounded-2xl text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 transition"
           >
             <ShieldCheck className="w-5 h-5 text-cyan-300" />
-            Launch Security Dashboard
+            Open Security Dashboard
           </Link>
           
           <Link
@@ -116,42 +167,39 @@ export default function LandingPage() {
             className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-900/90 border border-purple-500/40 hover:border-purple-400 text-purple-300 hover:text-white font-bold text-sm shadow-glow-purple flex items-center justify-center gap-3 transition backdrop-blur-md group"
           >
             <Bot className="w-5 h-5 text-purple-400 group-hover:scale-110 transition" />
-            Ask AI Copilot Chat
+            Ask AI Assistant
             <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
           </Link>
-        </div>
+        </motion.div>
 
-        {/* 3D-Style AI Security HUD Radar & Central Official Logo */}
-        <div className="relative max-w-4xl mx-auto mb-16">
-          
+        {/* 3D HUD Central Logo Radar & Interactive Console */}
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative max-w-4xl mx-auto mb-16"
+        >
           {/* Central Logo Radar Orb */}
           <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto mb-12 flex items-center justify-center">
-            
-            {/* Outer Revolving Radar Ring 1 */}
             <div className="absolute inset-0 rounded-full border-2 border-dashed border-cyan-500/30 radar-spin-slow" />
-            
-            {/* Inner Revolving Radar Ring 2 */}
             <div className="absolute inset-4 rounded-full border-2 border-dotted border-purple-500/40 radar-spin-reverse" />
-            
-            {/* Glow Core */}
             <div className="absolute inset-10 rounded-full bg-gradient-to-tr from-blue-600/40 via-cyan-500/30 to-purple-600/40 blur-xl animate-pulse" />
             
-            {/* Center Official Logo Card */}
             <div className="relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-slate-900/90 border-2 border-cyan-400/60 p-4 shadow-glow-cyan flex items-center justify-center backdrop-blur-xl">
               <Image src="/logo.png" alt="Aegivex AI Official Logo" width={80} height={80} className="object-contain drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]" />
             </div>
 
-            {/* Floating Live Badges around Radar */}
             <div className="absolute -top-2 -left-8 sm:-left-12 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/40 text-emerald-400 text-xs font-mono font-bold shadow-glow-cyan animate-float-slow flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5" /> Drainer Blocked
             </div>
 
             <div className="absolute top-1/2 -right-8 sm:-right-16 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-red-500/40 text-red-400 text-xs font-mono font-bold shadow-glow-red animate-float-delayed flex items-center gap-1.5">
-              <Flame className="w-3.5 h-3.5" /> Honeypot 0% Tax
+              <AlertTriangle className="w-3.5 h-3.5" /> High Risk Alert
             </div>
 
             <div className="absolute -bottom-2 -left-4 sm:-left-8 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold shadow-glow-purple animate-float-slow flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" /> AI Engine Active
+              <Sparkles className="w-3.5 h-3.5" /> Assistant Ready
             </div>
           </div>
 
@@ -160,10 +208,9 @@ export default function LandingPage() {
             <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
               <div className="flex items-center gap-3">
                 <Terminal className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs font-mono text-slate-300 font-bold">Aegivex AI Security Inspector Console</span>
+                <span className="text-xs font-mono text-slate-300 font-bold">Live AI Security Scanner Demo</span>
               </div>
 
-              {/* Console Tab Switches */}
               <div className="flex items-center gap-2 text-xs">
                 {(['token', 'wallet', 'contract', 'website'] as const).map((tab) => (
                   <button
@@ -181,36 +228,36 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Console Body Display */}
+            {/* Console Content */}
             {activeTab === 'token' && (
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-red-500/40 shadow-glow-red">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Token Honeypot Audit</span>
-                    <span className="text-xs font-bold text-red-400 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/30">High Risk (92/100)</span>
+                    <span className="text-xs font-bold text-slate-400">Token Scam Check</span>
+                    <span className="text-xs font-bold text-red-400 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/30">High Risk</span>
                   </div>
                   <p className="text-xs font-mono text-slate-200 truncate">0x1f9840a85d5af5bf1d1762f925bdaddc4201f984</p>
                   <p className="text-[11px] text-red-300 mt-2 leading-relaxed">
-                    HONEYPOT ALERT! Sell tax set to 100%. Buyer wallet address blacklist function detected in bytecode.
+                    SCAM ALERT: Sell fee is set to 100%. You will not be able to sell this token after buying.
                   </p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Liquidity Verification</span>
-                    <span className="text-xs font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">Verified</span>
+                    <span className="text-xs font-bold text-slate-400">Money Pool Status</span>
+                    <span className="text-xs font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">Safe</span>
                   </div>
                   <p className="text-sm font-bold text-white">$12,450,000 USD</p>
-                  <p className="text-[11px] text-slate-400 mt-2">Ownership renounced. LP tokens locked for 365 days.</p>
+                  <p className="text-[11px] text-slate-400 mt-2">Money pool locked for 365 days.</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">AI Recommendation</span>
+                    <span className="text-xs font-bold text-slate-400">AI Advice</span>
                     <Zap className="w-4 h-4 text-cyan-400" />
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed mt-1">
-                    DO NOT BUY. High risk of total capital loss. Use Aegivex Token Analyzer before trading unverified tokens.
+                    DO NOT BUY THIS TOKEN. High risk of losing funds.
                   </p>
                 </div>
               </div>
@@ -220,28 +267,28 @@ export default function LandingPage() {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/40">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Wallet Risk</span>
-                    <span className="text-xs font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">Low Risk (12/100)</span>
+                    <span className="text-xs font-bold text-slate-400">Wallet Check</span>
+                    <span className="text-xs font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">Low Risk</span>
                   </div>
                   <p className="text-xs font-mono text-slate-200 truncate">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</p>
-                  <p className="text-[11px] text-slate-400 mt-2">Verified activity history across OKX X Layer & Ethereum Mainnet.</p>
+                  <p className="text-[11px] text-slate-400 mt-2">Normal transaction history found.</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Drainer Signatures</span>
+                    <span className="text-xs font-bold text-slate-400">Scam Reports</span>
                     <span className="text-xs font-bold text-emerald-400">0 Reports</span>
                   </div>
-                  <p className="text-xs text-slate-300">Clean permit history. No suspicious outbound drainer activity recorded.</p>
+                  <p className="text-xs text-slate-300">Clean wallet record. No theft reports linked.</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">AI Guidance</span>
+                    <span className="text-xs font-bold text-slate-400">AI Advice</span>
                     <ShieldCheck className="w-4 h-4 text-blue-400" />
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    Safe to interact with standard verification.
+                    Safe address to transfer assets.
                   </p>
                 </div>
               </div>
@@ -251,28 +298,28 @@ export default function LandingPage() {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-cyan-500/40">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Source Verification</span>
+                    <span className="text-xs font-bold text-slate-400">Code Check</span>
                     <span className="text-xs font-bold text-cyan-400 px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30">Verified</span>
                   </div>
                   <p className="text-xs font-mono text-slate-200 truncate">0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D</p>
-                  <p className="text-[11px] text-slate-400 mt-2">Solidity source code verified on Block Explorer.</p>
+                  <p className="text-[11px] text-slate-400 mt-2">Public contract code is readable and verified.</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Proxy Architecture</span>
-                    <span className="text-xs font-bold text-purple-400">Proxy Contract</span>
+                    <span className="text-xs font-bold text-slate-400">Owner Key</span>
+                    <span className="text-xs font-bold text-purple-400">Upgradeable</span>
                   </div>
-                  <p className="text-xs text-slate-300">Upgradeable Proxy Pattern detected. Admin key present.</p>
+                  <p className="text-xs text-slate-300">Owner can update logic in future.</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Reentrancy Risk</span>
-                    <span className="text-xs font-bold text-emerald-400">Clean</span>
+                    <span className="text-xs font-bold text-slate-400">Safety Status</span>
+                    <span className="text-xs font-bold text-emerald-400">Normal</span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    Reentrancy guard modifier detected. Clean execution logic.
+                    No theft backdoors found in contract logic.
                   </p>
                 </div>
               </div>
@@ -282,76 +329,94 @@ export default function LandingPage() {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/40">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Trust Score</span>
-                    <span className="text-xs font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">95% Trust</span>
+                    <span className="text-xs font-bold text-slate-400">Trust Rating</span>
+                    <span className="text-xs font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">95% Safe</span>
                   </div>
                   <p className="text-xs font-mono text-slate-200 truncate">https://uniswap.org</p>
-                  <p className="text-[11px] text-slate-400 mt-2">SSL TLS v1.3 valid. Clean DNS reputation score.</p>
+                  <p className="text-[11px] text-slate-400 mt-2">Valid security certificate found.</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Phishing Check</span>
+                    <span className="text-xs font-bold text-slate-400">Fake Link Check</span>
                     <span className="text-xs font-bold text-emerald-400">Clean</span>
                   </div>
-                  <p className="text-xs text-slate-300">0 phishing keyword matches. Domain age: 4 years.</p>
+                  <p className="text-xs text-slate-300">No fake web link keywords detected. Domain age: 4 years.</p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-400">Recommendation</span>
+                    <span className="text-xs font-bold text-slate-400">AI Advice</span>
                     <Globe className="w-4 h-4 text-cyan-400" />
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    Website appears legitimate. Safe to connect Web3 wallet.
+                    Official web link verified. Safe to open.
                   </p>
                 </div>
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Live Metrics Ticker Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
           {[
-            { metric: '$4.8M+', label: 'Protected Assets', color: 'text-cyan-400' },
-            { metric: '< 0.4s', label: 'AI Scan Latency', color: 'text-emerald-400' },
-            { metric: '99.9%', label: 'Honeypot Accuracy', color: 'text-purple-400' },
-            { metric: '24/7', label: 'OKX.AI Shield', color: 'text-blue-400' },
+            { metric: '$4.8M+', label: 'Protected Funds', color: 'text-cyan-400' },
+            { metric: '< 0.4s', label: 'Scan Response Time', color: 'text-emerald-400' },
+            { metric: '99.9%', label: 'Scam Detection', color: 'text-purple-400' },
+            { metric: '24/7', label: 'Active Protection', color: 'text-blue-400' },
           ].map((item, idx) => (
-            <div key={idx} className="glass-card p-4 rounded-2xl border border-slate-800 text-center">
+            <motion.div 
+              key={idx} 
+              whileHover={{ scale: 1.05 }}
+              className="glass-card p-4 rounded-2xl border border-slate-800 text-center"
+            >
               <span className={`text-2xl sm:text-3xl font-black ${item.color} font-mono block mb-1`}>
                 {item.metric}
               </span>
               <span className="text-xs text-slate-400 font-medium">{item.label}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
-      {/* How It Works Section (4-Step User Flow) */}
+      {/* How It Works Section (4-Step User Flow with Scroll Animations) */}
       <section className="px-6 py-20 bg-surface/40 border-t border-slate-800/80 relative">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
             <span className="text-xs font-bold px-3.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-3 inline-block font-mono">
-              USER WORKFLOW
+              SIMPLE STEPS
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">How Aegivex AI Protects You</h2>
             <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-              Inspect any Web3 wallet address, token contract, dApp domain, or transaction in 4 simple steps.
+              Check any wallet address, token, website link, or transaction in 4 easy steps.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { step: '01', title: 'Sign In', desc: 'Authenticate securely to access your AI Web3 security copilot workspace.', icon: UserCheck, color: 'text-blue-400', border: 'border-blue-500/30' },
-              { step: '02', title: 'Select Scanner', desc: 'Choose from Wallet, Token, Contract, Website, or Tx Explainer tools.', icon: Search, color: 'text-cyan-400', border: 'border-cyan-500/30' },
-              { step: '03', title: 'Submit Input', desc: 'Paste the target wallet address, contract, domain URL, or raw tx hash.', icon: Cpu, color: 'text-purple-400', border: 'border-purple-500/30' },
-              { step: '04', title: 'AI Guidance', desc: 'Receive instant risk score (0-100), summary, and actionable advice.', icon: Shield, color: 'text-emerald-400', border: 'border-emerald-500/30' },
+              { step: '01', title: 'Sign In', desc: 'Sign in to access your security assistant tools.', icon: UserCheck, color: 'text-blue-400', border: 'border-blue-500/30' },
+              { step: '02', title: 'Choose Tool', desc: 'Select Wallet, Token, Contract, Website, or Transaction checker.', icon: Search, color: 'text-cyan-400', border: 'border-cyan-500/30' },
+              { step: '03', title: 'Paste Input', desc: 'Paste the address, website link, or transfer hash to check.', icon: Cpu, color: 'text-purple-400', border: 'border-purple-500/30' },
+              { step: '04', title: 'Get AI Advice', desc: 'Receive instant risk rating (0-100) and clear advice in plain English.', icon: Shield, color: 'text-emerald-400', border: 'border-emerald-500/30' },
             ].map((s, i) => {
               const Icon = s.icon;
               return (
-                <div key={i} className={`glass-card p-6 rounded-2xl border ${s.border} glass-card-hover relative group`}>
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  className={`glass-card p-6 rounded-2xl border ${s.border} glass-card-hover relative group`}
+                >
                   <span className="text-4xl font-black text-slate-800 absolute top-4 right-4 font-mono group-hover:text-cyan-500/20 transition">
                     {s.step}
                   </span>
@@ -360,28 +425,34 @@ export default function LandingPage() {
                   </div>
                   <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
                   <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* 6 Core Security Scanners Section */}
+      {/* 6 Core Security Scanners Section with Framer Motion */}
       <section className="px-6 py-20 bg-surface/60 border-t border-slate-800">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">6 Core Web3 Security Scanners</h2>
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">6 Core Security Tools</h2>
             <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-              Everything you need to navigate Web3, DeFi, NFTs, and smart contracts securely.
+              Everything you need to check crypto wallets, tokens, links, and transfers safely.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
                 title: 'AI Security Chat',
-                desc: 'Ask natural language questions regarding contract security, wallet drainers, and scam prevention.',
+                desc: 'Ask questions in plain English to check if an address, link, or token is safe.',
                 icon: Bot,
                 color: 'text-purple-400',
                 border: 'border-purple-500/30',
@@ -389,7 +460,7 @@ export default function LandingPage() {
               },
               {
                 title: 'Wallet Risk Scanner',
-                desc: 'Audit EVM & Solana wallet addresses for drainer contract interactions and phishing flags.',
+                desc: 'Check wallet addresses for theft records, drainer links, and suspicious activity.',
                 icon: Wallet,
                 color: 'text-blue-400',
                 border: 'border-blue-500/30',
@@ -397,7 +468,7 @@ export default function LandingPage() {
               },
               {
                 title: 'Token Risk Analyzer',
-                desc: 'Check token tax rates, honeypot code traps, blacklists, and liquidity pool lock statuses.',
+                desc: 'Check token tax rates, honeypot traps, and liquidity pool lock statuses.',
                 icon: Coins,
                 color: 'text-cyan-400',
                 border: 'border-cyan-500/30',
@@ -405,7 +476,7 @@ export default function LandingPage() {
               },
               {
                 title: 'Smart Contract Auditor',
-                desc: 'Decompile bytecode, verify source code, detect proxy upgradeability and reentrancy bugs.',
+                desc: 'Check contract code logic for owner permissions, upgrade keys, and backdoors.',
                 icon: FileCode2,
                 color: 'text-emerald-400',
                 border: 'border-emerald-500/30',
@@ -413,7 +484,7 @@ export default function LandingPage() {
               },
               {
                 title: 'Website Safety Scanner',
-                desc: 'Scan Web3 dApp URLs for SSL certificate validity, phishing lookalikes, and domain age.',
+                desc: 'Check web links for fake domain clones, SSL security, and phishing traps.',
                 icon: Globe,
                 color: 'text-amber-400',
                 border: 'border-amber-500/30',
@@ -421,7 +492,7 @@ export default function LandingPage() {
               },
               {
                 title: 'Transaction Explainer',
-                desc: 'Translate raw transaction payloads and unlimited spending permits into simple language.',
+                desc: 'Translate complex transfer requests and unlimited spending permits into simple English.',
                 icon: Receipt,
                 color: 'text-rose-400',
                 border: 'border-rose-500/30',
@@ -430,27 +501,35 @@ export default function LandingPage() {
             ].map((f, i) => {
               const Icon = f.icon;
               return (
-                <Link 
-                  key={i} 
-                  href={f.link}
-                  className={`glass-card p-6 rounded-2xl border ${f.border} glass-card-hover block group`}
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ y: -6, scale: 1.02 }}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                    <Icon className={`w-6 h-6 ${f.color}`} />
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-400 transition flex items-center justify-between">
-                    {f.title}
-                    <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-1 transition" />
-                  </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
-                </Link>
+                  <Link 
+                    href={f.link}
+                    className={`glass-card p-6 rounded-2xl border ${f.border} glass-card-hover block group h-full`}
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                      <Icon className={`w-6 h-6 ${f.color}`} />
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-400 transition flex items-center justify-between">
+                      {f.title}
+                      <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-1 transition" />
+                    </h3>
+                    <p className="text-xs text-slate-400 leading-relaxed">{f.desc}</p>
+                  </Link>
+                </motion.div>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* Footer with Official Logo */}
+      {/* Footer */}
       <footer className="px-6 md:px-12 py-10 border-t border-slate-800/80 text-center text-xs text-slate-500 flex flex-col items-center justify-center gap-3 bg-slate-950/80">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg bg-blue-600/20 p-1 border border-blue-500/30 flex items-center justify-center shadow-glow-blue">
@@ -458,8 +537,8 @@ export default function LandingPage() {
           </div>
           <span className="font-black text-sm text-slate-200 tracking-tight">AEGIVEX AI</span>
         </div>
-        <p>Aegivex AI © 2026 — Built for OKX.AI Genesis Hackathon</p>
-        <p className="text-[11px] text-slate-600 font-mono">Next.js 14 • FastAPI • PostgreSQL • LangChain • OpenAI API</p>
+        <p>Aegivex AI — Built for OKX.AI Genesis Hackathon</p>
+        <p className="text-[11px] text-slate-600 font-mono">Simple AI Security Assistant</p>
       </footer>
     </div>
   );

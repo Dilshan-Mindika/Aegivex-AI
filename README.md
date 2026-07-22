@@ -678,4 +678,4 @@ All original architectural PDFs and branding assets are organized in the [`docs/
 
 ---
 
-**Built with ❤️ for the OKX.AI Genesis Hackathon** by the Aegivex AI Team.
+**Built for the OKX.AI Genesis Hackathon** by the Aegivex AI Team.
