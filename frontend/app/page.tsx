@@ -50,6 +50,61 @@ const multiChainList = [
   { name: 'Polygon PoS', symbol: 'MATIC', icon: Terminal },
 ];
 
+// Animated Count-Up / Countdown Component for Industry Metrics
+function AnimatedMetricCounter({ 
+  targetValue, 
+  prefix = '', 
+  suffix = '', 
+  decimals = 1,
+  isCountdown = false 
+}: { 
+  targetValue: number; 
+  prefix?: string; 
+  suffix?: string; 
+  decimals?: number;
+  isCountdown?: boolean;
+}) {
+  const [currentVal, setCurrentVal] = useState(isCountdown ? 3.0 : 0);
+
+  useEffect(() => {
+    let startTime: number | null = null;
+    const durationMs = 2400; // Smooth 2.4s count-up/countdown duration
+
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / durationMs, 1);
+      
+      // Smooth cubic ease-out formula
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+      if (isCountdown) {
+        // Count down from 3.0 to targetValue (e.g. 0.4s)
+        const computed = 3.0 - (3.0 - targetValue) * easedProgress;
+        setCurrentVal(computed);
+      } else {
+        // Count up from 0 to targetValue
+        const computed = targetValue * easedProgress;
+        setCurrentVal(computed);
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    };
+
+    const animFrame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animFrame);
+  }, [targetValue, isCountdown]);
+
+  return (
+    <span>
+      {prefix}
+      {currentVal.toFixed(decimals)}
+      {suffix}
+    </span>
+  );
+}
+
 export default function LandingPage() {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [scanInput, setScanInput] = useState('');
@@ -520,13 +575,34 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Metrics Bar */}
+        {/* Metrics Bar with Animated Smooth Count-Up & Countdown Timers */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
           {[
-            { metric: '$4.8M+', label: 'Total Value Protected', color: 'text-cyan-400' },
-            { metric: '< 0.4s', label: 'Latency Benchmark', color: 'text-emerald-400' },
-            { metric: '99.9%', label: 'Vulnerability Detection Rate', color: 'text-purple-400' },
-            { metric: '24/7', label: 'Autonomous Monitoring', color: 'text-blue-400' },
+            { 
+              component: <AnimatedMetricCounter targetValue={4.8} prefix="$" suffix="M+" decimals={1} />, 
+              label: 'Total Value Protected', 
+              color: 'text-cyan-400' 
+            },
+            { 
+              component: <AnimatedMetricCounter targetValue={0.4} prefix="< " suffix="s" decimals={1} isCountdown={true} />, 
+              label: 'Latency Benchmark', 
+              color: 'text-emerald-400' 
+            },
+            { 
+              component: <AnimatedMetricCounter targetValue={99.9} prefix="" suffix="%" decimals={1} />, 
+              label: 'Vulnerability Detection Rate', 
+              color: 'text-purple-400' 
+            },
+            { 
+              component: (
+                <div className="flex items-center justify-center gap-1.5">
+                  <span>24/7</span>
+                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping inline-block" />
+                </div>
+              ), 
+              label: 'Autonomous Monitoring', 
+              color: 'text-blue-400' 
+            },
           ].map((item, idx) => (
             <motion.div 
               key={idx} 
@@ -534,7 +610,7 @@ export default function LandingPage() {
               className="glass-card-premium p-4 rounded-2xl border border-slate-800 text-center"
             >
               <span className={`text-2xl sm:text-3xl font-black ${item.color} font-mono block mb-1`}>
-                {item.metric}
+                {item.component}
               </span>
               <span className="text-xs text-slate-400 font-medium">{item.label}</span>
             </motion.div>
