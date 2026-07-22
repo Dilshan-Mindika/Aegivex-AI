@@ -30,9 +30,7 @@ import {
   Flame,
   ShieldAlert,
   XCircle,
-  HelpCircle,
-  RefreshCw,
-  Sliders
+  RefreshCw
 } from 'lucide-react';
 
 const targetPhrases = [
@@ -49,12 +47,25 @@ export default function LandingPage() {
   const [selectedCategory, setSelectedCategory] = useState<'token' | 'wallet' | 'contract' | 'website'>('token');
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState<any>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setPhraseIndex((prev) => (prev + 1) % targetPhrases.length);
     }, 2800);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleRunInstantScan = (e: React.FormEvent) => {
@@ -117,52 +128,76 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative overflow-hidden bg-neural-grid bg-animated-neural">
+    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative bg-neural-grid bg-animated-neural">
       
       {/* Ambient Glow Spotlights */}
       <div className="absolute top-0 left-1/4 w-[750px] h-[750px] bg-blue-600/15 blur-[180px] rounded-full pointer-events-none" />
       <div className="absolute top-36 right-1/4 w-[750px] h-[750px] bg-purple-600/15 blur-[180px] rounded-full pointer-events-none" />
       <div className="absolute top-[650px] left-1/3 w-[850px] h-[650px] bg-cyan-500/10 blur-[200px] rounded-full pointer-events-none" />
 
-      {/* Navigation Header */}
-      <header className="px-6 md:px-12 py-5 border-b border-slate-800/80 flex items-center justify-between backdrop-blur-xl sticky top-0 z-50 bg-[#020617]/85">
-        <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600/40 via-cyan-500/30 to-purple-600/40 p-1.5 border border-cyan-500/50 flex items-center justify-center shadow-glow-cyan">
-            <Image src="/logo.png" alt="Aegivex AI Official Logo" width={36} height={36} className="object-contain" />
+      {/* Floating Modern Fixed Navigation Bar (Centered, Non Full-Width, High Visibility Logo) */}
+      <div className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6 max-w-5xl mx-auto w-full pointer-events-auto">
+        <motion.header 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className={`px-5 py-3 rounded-2xl border transition-all duration-300 flex items-center justify-between ${
+            isScrolled 
+              ? 'bg-slate-950/95 border-cyan-400/50 shadow-glow-cyan backdrop-blur-2xl scale-[0.99]' 
+              : 'bg-slate-950/85 border-cyan-500/30 shadow-glow-cyan backdrop-blur-xl'
+          }`}
+        >
+          {/* Prominent High-Visibility Official Logo & Brand */}
+          <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative w-11 h-11 rounded-xl bg-gradient-to-tr from-blue-600 via-cyan-500 to-purple-600 p-0.5 shadow-glow-cyan group-hover:scale-105 transition duration-300">
+                <div className="w-full h-full rounded-[10px] bg-slate-950 flex items-center justify-center p-1.5">
+                  <Image src="/logo.png" alt="Aegivex AI Official Logo" width={34} height={34} className="object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.9)]" />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-black text-lg sm:text-xl tracking-tight text-white group-hover:text-cyan-300 transition">AEGIVEX</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 neon-glow-cyan font-mono">AI</span>
+                </div>
+                <span className="text-[10px] text-slate-400 font-mono tracking-wider">Simple Security Assistant</span>
+              </div>
+            </Link>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-black text-xl tracking-tight text-white">AEGIVEX</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 neon-glow-cyan font-mono">AI</span>
+
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-300">
+            <Link href="/dashboard" className="hover:text-cyan-400 transition">Dashboard</Link>
+            <Link href="/chat" className="hover:text-purple-400 transition">AI Chat</Link>
+            <Link href="/history" className="hover:text-cyan-400 transition">Scan History</Link>
+            
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-[11px] font-mono text-slate-300">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="text-emerald-400 font-bold">Network Shield</span>
             </div>
-            <span className="text-[10px] text-slate-400 font-mono tracking-wider">Simple Security Assistant</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <div className="hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-mono text-slate-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-emerald-400 font-bold">Network Shield</span> Active
           </div>
 
-          <Link 
-            href="/login"
-            className="text-xs font-bold text-slate-300 hover:text-white px-4 py-2 rounded-xl transition"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/dashboard"
-            className="btn-futuristic-primary text-xs font-bold px-6 py-2.5 rounded-xl text-white flex items-center gap-2 transition"
-          >
-            Start Check
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </header>
+          {/* Action CTAs */}
+          <div className="flex items-center gap-3">
+            <Link 
+              href="/login"
+              className="text-xs font-bold text-slate-300 hover:text-white px-3.5 py-2 rounded-xl transition"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/dashboard"
+              className="btn-futuristic-primary text-xs font-bold px-5 py-2.5 rounded-xl text-white flex items-center gap-2 transition"
+            >
+              Start Check
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </motion.header>
+      </div>
 
-      {/* Hero Section with Instant Interactive Scanner */}
-      <section className="relative px-6 pt-12 pb-16 md:pt-20 md:pb-24 max-w-7xl mx-auto text-center z-10">
+      {/* Hero Section */}
+      <section className="relative px-6 pt-28 pb-16 md:pt-36 md:pb-24 max-w-7xl mx-auto text-center z-10">
         
         {/* Hackathon Badge */}
         <motion.div 
@@ -220,7 +255,7 @@ export default function LandingPage() {
           Aegivex AI checks wallet addresses, token contracts, website links, and transactions in simple English so you can avoid scams and loss of funds.
         </motion.p>
 
-        {/* INSTANT INTERACTIVE SCANNER BAR (GoPlus / Pocket Universe Style) */}
+        {/* INSTANT INTERACTIVE SCANNER BAR */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -318,7 +353,7 @@ export default function LandingPage() {
               </button>
             </div>
 
-            {/* Live Instant Result Modal Card */}
+            {/* Live Instant Result Card */}
             {scanResult && (
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
@@ -356,7 +391,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Supported Blockchains & Network Badges Bar */}
+        {/* Supported Blockchains Bar */}
         <div className="max-w-4xl mx-auto mb-16">
           <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">Protecting Assets Across Major Blockchains</p>
           <div className="flex flex-wrap items-center justify-center gap-3">
@@ -443,7 +478,6 @@ export default function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Without Protection Card */}
             <div className="glass-card-premium p-6 rounded-3xl border border-red-500/30 text-left relative overflow-hidden">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30 font-mono">
@@ -468,7 +502,6 @@ export default function LandingPage() {
               </ul>
             </div>
 
-            {/* With Aegivex AI Protection Card */}
             <div className="glass-card-premium border-gradient-glow p-6 rounded-3xl border border-cyan-500/40 text-left relative overflow-hidden shadow-glow-cyan">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono">
