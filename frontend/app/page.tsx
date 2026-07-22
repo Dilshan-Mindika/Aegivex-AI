@@ -37,7 +37,6 @@ import {
 } from 'lucide-react';
 import LiveSupportChat from '@/components/LiveSupportChat';
 
-
 const targetPhrases = [
   "WALLET ADDRESSES",
   "TOKEN ASSETS",
@@ -211,7 +210,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative bg-glow-ambient">
+    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative bg-glow-ambient overflow-x-hidden font-sans">
       
       {/* Dynamic Animated Appearing & Disappearing Background Glowing Orbs */}
       <motion.div 
@@ -256,17 +255,6 @@ export default function LandingPage() {
         }}
         transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut', delay: 6 }}
         className="absolute top-[1100px] right-1/4 w-[700px] h-[550px] bg-emerald-500/22 blur-[190px] rounded-full pointer-events-none z-0"
-      />
-
-      <motion.div 
-        animate={{
-          opacity: [0.0, 0.5, 0.1, 0.6, 0.0],
-          scale: [0.8, 1.35, 0.85, 1.25, 0.8],
-          x: [0, 70, -80, 50, 0],
-          y: [0, -60, 70, -40, 0],
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 8 }}
-        className="absolute top-[1600px] left-1/4 w-[750px] h-[600px] bg-cyan-400/20 blur-[200px] rounded-full pointer-events-none z-0"
       />
 
       {/* Floating Modern Fixed Navigation Bar */}
@@ -318,14 +306,15 @@ export default function LandingPage() {
         </motion.header>
       </div>
 
-      {/* Hero Section */}
+      {/* SECTION 1: HERO & INSTANT SCANNER BAR (UNIQUE 3D PERSPECTIVE SPRUNG SLIDE-IN) */}
       <section className="relative px-6 pt-28 pb-16 md:pt-36 md:pb-24 max-w-7xl mx-auto text-center z-10">
         
         {/* Hackathon Badge (Strictly 2 Lines, ZERO Glowing Dots) */}
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: -25, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, type: "spring", stiffness: 120 }}
           className="inline-flex flex-col items-center gap-1 px-5 py-2.5 rounded-2xl bg-slate-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-8 shadow-glow-cyan backdrop-blur-md"
         >
           <span className="font-bold text-white tracking-wide">OKX.AI Genesis Hackathon Project</span>
@@ -336,9 +325,10 @@ export default function LandingPage() {
 
         {/* Dynamic Rotating Headline */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 0, y: 35, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-5xl mx-auto mb-6"
         >
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.2]">
@@ -370,8 +360,9 @@ export default function LandingPage() {
 
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
           className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10 font-normal"
         >
           Delivers real-time automated threat intelligence, vulnerability auditing, honeypot detection, and transaction risk analysis across multi-chain ecosystems.
@@ -379,9 +370,10 @@ export default function LandingPage() {
 
         {/* INSTANT INTERACTIVE SCANNER BAR WITH FULL-WIDTH RUNNING ANIMATED BORDER */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
+          initial={{ opacity: 0, y: 40, scale: 0.96 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-3xl mx-auto mb-16"
         >
           <div className="relative p-[2.5px] rounded-3xl border-running-glow shadow-glow-cyan overflow-hidden text-left">
@@ -437,7 +429,7 @@ export default function LandingPage() {
                 <button
                   type="submit"
                   disabled={isScanning || !scanInput.trim()}
-                  className="btn-futuristic-primary w-full sm:w-auto px-7 py-3.5 rounded-2xl text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shrink-0 transition disabled:opacity-50"
+                  className="btn-futuristic-primary w-full sm:w-auto px-7 py-3.5 rounded-2xl text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shrink-0 transition disabled:opacity-50 cursor-pointer"
                 >
                   {isScanning ? (
                     <>
@@ -458,19 +450,19 @@ export default function LandingPage() {
                 <span className="font-mono text-[11px] text-slate-500 shrink-0">Preset Vectors:</span>
                 <button
                   onClick={() => handleQuickPreset('token', '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984')}
-                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0 cursor-pointer"
                 >
                   Token 0x1f98...
                 </button>
                 <button
                   onClick={() => handleQuickPreset('website', 'https://uniswap.org')}
-                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0 cursor-pointer"
                 >
                   Uniswap Endpoint
                 </button>
                 <button
                   onClick={() => handleQuickPreset('wallet', '0x71C7656EC7ab88b098defB751B7401B5f6d8976F')}
-                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
+                  className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0 cursor-pointer"
                 >
                   Verified Address
                 </button>
@@ -516,9 +508,15 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Futuristic Multi-Chain Protocol Coverage Grid (STRICTLY ONE BOX LIGHTS UP AT ONCE) */}
-        <div className="max-w-5xl mx-auto mb-16">
-          <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">Multi-Chain Protocol Coverage</p>
+        {/* SECTION 2: MULTI-CHAIN PROTOCOL COVERAGE (UNIQUE STAGGERED CYBER CHIP ANIMATION) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.25 }}
+          transition={{ duration: 0.7 }}
+          className="max-w-5xl mx-auto mb-16"
+        >
+          <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4 font-semibold">Multi-Chain Protocol Coverage</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3.5">
             {multiChainList.map((chain, i) => {
               const isLit = litChainIndex === i;
@@ -527,22 +525,23 @@ export default function LandingPage() {
               return (
                 <motion.div
                   key={i}
+                  initial={{ opacity: 0, y: 25, rotateY: -15 }}
+                  whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
+                  viewport={{ once: false, amount: 0.2 }}
+                  transition={{ duration: 0.5, delay: i * 0.08 }}
                   animate={{
                     scale: isLit ? 1.05 : 1,
                     y: isLit ? -4 : 0,
                   }}
-                  transition={{ duration: 0.4, ease: 'easeInOut' }}
                   className={`relative p-3.5 rounded-2xl border transition-all duration-500 overflow-hidden cursor-default group ${
                     isLit 
                       ? 'bg-gradient-to-br from-cyan-950/90 via-slate-900 to-purple-950/90 border-cyan-400/80 shadow-[0_0_30px_rgba(6,182,212,0.5)]' 
                       : 'bg-slate-950/80 border-slate-800/90 hover:border-slate-700 shadow-lg'
                   }`}
                 >
-                  {/* Futuristic Corner Tech Bracket Accents */}
                   <div className={`absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 transition-colors duration-500 ${isLit ? 'border-cyan-400' : 'border-slate-700/50'}`} />
                   <div className={`absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 transition-colors duration-500 ${isLit ? 'border-purple-400' : 'border-slate-700/50'}`} />
 
-                  {/* Ambient Glowing Light Pulse Node */}
                   {isLit && (
                     <motion.div 
                       initial={{ opacity: 0, scale: 0.5 }}
@@ -577,10 +576,16 @@ export default function LandingPage() {
               );
             })}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Metrics Bar with Animated Smooth Count-Up & Countdown Timers */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+        {/* SECTION 3: METRICS BAR WITH SMOOTH ELEVATED LIFT */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.93 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: false, amount: 0.25 }}
+          transition={{ duration: 0.7 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto"
+        >
           {[
             { 
               component: <AnimatedMetricCounter targetValue={4.8} prefix="$" suffix="M+" decimals={1} />, 
@@ -619,13 +624,19 @@ export default function LandingPage() {
               <span className="text-xs text-slate-400 font-medium">{item.label}</span>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
-      {/* "Without Aegivex AI vs With Aegivex AI" Comparison Section */}
+      {/* SECTION 4: SECURITY COMPARISON MATRIX (UNIQUE SPLIT-SCREEN LEFT VS RIGHT SLIDE-IN) */}
       <section className="px-6 py-20 bg-slate-950/60 border-t border-slate-800/80 relative">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
             <span className="text-xs font-bold px-3.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-3 inline-block font-mono">
               SECURITY EVALUATION MATRIX
             </span>
@@ -633,10 +644,18 @@ export default function LandingPage() {
             <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
               Comparative analysis between unverified transaction signing and autonomous AI vulnerability protection.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="glass-card-premium p-6 rounded-3xl border border-red-500/30 text-left relative overflow-hidden">
+            
+            {/* Unprotected Execution Card (SLIDES IN FROM LEFT) */}
+            <motion.div 
+              initial={{ opacity: 0, x: -60, rotateY: 8 }}
+              whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+              viewport={{ once: false, amount: 0.25 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              className="glass-card-premium p-6 rounded-3xl border border-red-500/30 text-left relative overflow-hidden"
+            >
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30 font-mono">
                   UNPROTECTED EXECUTION
@@ -658,9 +677,16 @@ export default function LandingPage() {
                   <span>Interaction with typosquatted dApp phishing endpoints.</span>
                 </li>
               </ul>
-            </div>
+            </motion.div>
 
-            <div className="glass-card-premium border-gradient-glow p-6 rounded-3xl border border-cyan-500/40 text-left relative overflow-hidden shadow-glow-cyan">
+            {/* Aegivex Autonomous Shield Card (SLIDES IN FROM RIGHT) */}
+            <motion.div 
+              initial={{ opacity: 0, x: 60, rotateY: -8 }}
+              whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+              viewport={{ once: false, amount: 0.25 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+              className="glass-card-premium border-gradient-glow p-6 rounded-3xl border border-cyan-500/40 text-left relative overflow-hidden shadow-glow-cyan"
+            >
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono">
                   AEGIVEX AUTONOMOUS SHIELD
@@ -682,12 +708,13 @@ export default function LandingPage() {
                   <span>Cryptographic domain and SSL validation preventing wallet drainer attacks.</span>
                 </li>
               </ul>
-            </div>
+            </motion.div>
+
           </div>
         </div>
       </section>
 
-      {/* How It Works Section (WITH RUNNING ANIMATED GRADIENT BORDER AROUND CARDS) */}
+      {/* SECTION 5: HOW IT WORKS WORKFLOW ARCHITECTURE (UNIQUE SEQUENTIAL STAGGERED FLIP) */}
       <section className="px-6 py-20 bg-slate-950/40 border-t border-slate-800/80 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div 
@@ -717,10 +744,10 @@ export default function LandingPage() {
               return (
                 <motion.div 
                   key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: false, amount: 0.25 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  transition={{ duration: 0.5, delay: i * 0.12 }}
                   whileHover={{ y: -8, scale: 1.03 }}
                   className="relative p-[2px] rounded-2xl border-running-glow shadow-glow-cyan overflow-hidden h-full group transition duration-300"
                 >
@@ -743,7 +770,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 6 Core Security Tools Showcase (WITH RUNNING ANIMATED BORDERS AROUND TOOL CARDS) */}
+      {/* SECTION 6: ENTERPRISE SECURITY SUITE (UNIQUE 3D PERSPECTIVE GRID TILT) */}
       <section className="px-6 py-20 bg-slate-950/60 border-t border-slate-800">
         <div className="max-w-6xl mx-auto">
           <motion.div 
@@ -808,10 +835,10 @@ export default function LandingPage() {
               return (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 35, rotateX: 12 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
                   viewport={{ once: false, amount: 0.25 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  transition={{ duration: 0.6, delay: i * 0.08 }}
                   whileHover={{ y: -8, scale: 1.02 }}
                   className="relative p-[2px] rounded-2xl border-running-glow shadow-glow-cyan overflow-hidden h-full group"
                 >
@@ -957,7 +984,7 @@ export default function LandingPage() {
               <div className="mt-8 pt-4 border-t border-slate-800 flex justify-end">
                 <button
                   onClick={() => setShowTermsModal(false)}
-                  className="btn-futuristic-primary px-6 py-2.5 rounded-xl text-xs font-bold text-white"
+                  className="btn-futuristic-primary px-6 py-2.5 rounded-xl text-xs font-bold text-white cursor-pointer"
                 >
                   Close Document
                 </button>
@@ -1034,7 +1061,7 @@ export default function LandingPage() {
               <div className="mt-8 pt-4 border-t border-slate-800 flex justify-end">
                 <button
                   onClick={() => setShowPrivacyModal(false)}
-                  className="btn-futuristic-primary px-6 py-2.5 rounded-xl text-xs font-bold text-white"
+                  className="btn-futuristic-primary px-6 py-2.5 rounded-xl text-xs font-bold text-white cursor-pointer"
                 >
                   Close Document
                 </button>
@@ -1050,4 +1077,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
