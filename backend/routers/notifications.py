@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from database.database import get_db
@@ -19,3 +19,29 @@ def get_notifications(current_user: User = Depends(get_current_user), db: Sessio
         .all()
     )
     return notifications
+
+@router.post("/read-all", response_model=dict)
+def mark_all_notifications_as_read(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db.query(Notification).filter(
+        Notification.user_id == current_user.id,
+        Notification.is_read == False
+    ).update({"is_read": True}, synchronize_session=False)
+    db.commit()
+    return {"success": True, "message": "All notifications marked as read."}
+
+@router.post("/{notification_id}/read", response_model=dict)
+def mark_single_notification_as_read(
+    notification_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    noti = db.query(Notification).filter(
+        Notification.id == notification_id,
+        Notification.user_id == current_user.id
+    ).first()
+    if not noti:
+        raise HTTPException(status_code=404, detail="Notification not found.")
+    
+    noti.is_read = True
+    db.commit()
+    return {"success": True, "message": "Notification marked as read."}
