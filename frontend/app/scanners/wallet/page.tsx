@@ -1,21 +1,34 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Wallet, Search, ShieldCheck, ShieldAlert, AlertTriangle, ArrowRight, Zap } from 'lucide-react';
+import { Wallet, Search, ShieldCheck, ShieldAlert, AlertTriangle, ArrowRight, Zap, RefreshCw } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../../services/api';
 
 export default function WalletScannerPage() {
   const [address, setAddress] = useState('0x71C7656EC7ab88b098defB751B7401B5f6d8976F');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [result, setResult] = useState<any>(null);
 
   const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!address.trim()) return;
+    setError('');
+
+    const cleanAddr = address.trim();
+    if (!cleanAddr) {
+      setError('Please enter a valid wallet address.');
+      return;
+    }
+
+    if (!cleanAddr.startsWith('0x') && cleanAddr.length < 32) {
+      setError('Invalid wallet address format. EVM addresses must start with 0x and be 42 characters.');
+      return;
+    }
+
     setLoading(true);
 
     const fallback = {
-      wallet_address: address,
+      wallet_address: cleanAddr,
       risk_score: 18,
       risk_level: 'Low',
       summary: 'Standard EVM wallet address. 0 drainer contract interactions detected in past 30 days.',
@@ -23,7 +36,7 @@ export default function WalletScannerPage() {
     };
 
     const res = await handleApiCall(
-      apiClient.post('/scan/wallet', { wallet_address: address }),
+      apiClient.post('/scan/wallet', { wallet_address: cleanAddr }),
       fallback
     );
 
@@ -33,7 +46,7 @@ export default function WalletScannerPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header */}
+      {/* Scanner Header */}
       <div className="glass-card p-6 rounded-3xl border border-blue-500/20 bg-gradient-to-r from-blue-900/30 to-slate-900">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
@@ -56,17 +69,35 @@ export default function WalletScannerPage() {
               onChange={(e) => setAddress(e.target.value)}
               placeholder="Paste wallet address (0x... or Solana)"
               className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-xs font-mono focus:outline-none focus:border-blue-500 transition"
+              aria-label="Wallet Address Input"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs shadow-glow-blue flex items-center justify-center gap-2 transition"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs shadow-glow-blue flex items-center justify-center gap-2 transition disabled:opacity-50"
           >
-            {loading ? 'Scanning...' : 'Scan Wallet'}
-            <Zap className="w-4 h-4" />
+            {loading ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                Scanning Wallet...
+              </>
+            ) : (
+              <>
+                Scan Wallet
+                <Zap className="w-4 h-4" />
+              </>
+            )}
           </button>
         </form>
+
+        {/* Error Alert (Section 12 Error Handling) */}
+        {error && (
+          <div className="mt-3 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
       </div>
 
       {/* Result Card */}

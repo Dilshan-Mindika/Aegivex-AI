@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
   Bell, 
@@ -10,7 +12,8 @@ import {
   ChevronDown, 
   CheckCircle2, 
   Activity,
-  Layers
+  Layers,
+  Sparkles
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -51,20 +54,30 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="h-16 border-b border-slate-800 bg-surface/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
-      {/* Left Title & Status */}
+      {/* Left Title & Official Logo Mark */}
       <div className="flex items-center gap-3">
-        <h1 className="text-base font-bold text-white tracking-wide">
+        <Link href="/dashboard" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-lg bg-blue-600/20 p-1 border border-blue-500/30 flex items-center justify-center shadow-glow-blue group-hover:scale-105 transition">
+            <Image src="/logo.png" alt="Aegivex AI" width={24} height={24} className="object-contain" />
+          </div>
+          <span className="font-extrabold text-sm tracking-tight text-white hidden md:inline">AEGIVEX</span>
+        </Link>
+
+        <span className="text-slate-600 hidden md:inline">/</span>
+
+        <h1 className="text-sm md:text-base font-bold text-slate-100 tracking-wide">
           {getPageTitle(pathname)}
         </h1>
-        <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs border border-emerald-500/20 font-medium">
+
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] border border-emerald-500/20 font-medium">
           <Activity className="w-3 h-3 animate-pulse" />
-          AI Engine Online
+          AI Engine Active
         </div>
       </div>
 
       {/* Right Tools & Profile */}
-      <div className="flex items-center gap-4">
-        {/* Network Selector Pill */}
+      <div className="flex items-center gap-3.5">
+        {/* OKX Network Selector Pill */}
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300">
           <Layers className="w-3.5 h-3.5 text-blue-400" />
           <span>OKX X Layer / EVM</span>
@@ -76,6 +89,7 @@ export const Navbar: React.FC = () => {
             onClick={() => setShowNotifications(!showNotifications)}
             className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition relative"
             title="Threat Notifications"
+            aria-label="Threat Notifications"
           >
             <Bell className="w-4 h-4" />
             <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 animate-ping" />
@@ -107,16 +121,17 @@ export const Navbar: React.FC = () => {
           )}
         </div>
 
-        {/* User Account Pill */}
+        {/* User Profile Menu */}
         <div className="relative">
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}
             className="flex items-center gap-2.5 p-1.5 pr-3 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 transition"
+            aria-label="User Account Menu"
           >
-            <div className="w-7 h-7 rounded-md bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white text-xs font-bold shadow-glow-blue">
+            <div className="w-7 h-7 rounded-md bg-gradient-to-tr from-blue-600 via-cyan-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-glow-blue">
               US
             </div>
-            <span className="text-xs font-medium text-slate-200 hidden sm:inline">Web3 User</span>
+            <span className="text-xs font-medium text-slate-200 hidden sm:inline">Web3 Researcher</span>
             <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           </button>
 
@@ -127,7 +142,10 @@ export const Navbar: React.FC = () => {
                 <p className="text-[11px] text-slate-400 truncate">user@aegivex.ai</p>
               </div>
               <button
-                onClick={() => router.push('/settings')}
+                onClick={() => {
+                  setShowUserMenu(false);
+                  router.push('/settings');
+                }}
                 className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-lg flex items-center gap-2"
               >
                 <UserIcon className="w-3.5 h-3.5 text-slate-400" />

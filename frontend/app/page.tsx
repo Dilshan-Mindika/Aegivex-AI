@@ -16,21 +16,25 @@ import {
   Lock,
   Zap,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  UserCheck,
+  Search,
+  Cpu,
+  Shield
 } from 'lucide-react';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background text-white flex flex-col justify-between -m-4 md:-m-6">
+    <div className="min-h-screen bg-background text-white flex flex-col justify-between -m-4 md:-m-6 selection:bg-blue-500/30">
       {/* Top Header Navigation */}
-      <header className="px-8 py-5 border-b border-slate-800/80 flex items-center justify-between backdrop-blur-md sticky top-0 z-50 bg-background/90">
+      <header className="px-6 md:px-12 py-5 border-b border-slate-800/80 flex items-center justify-between backdrop-blur-md sticky top-0 z-50 bg-background/90">
         <div className="flex items-center gap-3">
           <div className="relative w-10 h-10 rounded-xl bg-blue-600/20 p-1.5 border border-blue-500/30 flex items-center justify-center shadow-glow-blue">
-            <Image src="/logo.png" alt="Aegivex AI" width={36} height={36} className="object-contain" />
+            <Image src="/logo.png" alt="Aegivex AI Official Logo" width={36} height={36} className="object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-xl tracking-tight text-white">AEGIVEX</span>
+              <span className="font-black text-xl tracking-tight text-white">AEGIVEX</span>
               <span className="text-xs px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold border border-blue-500/30">AI</span>
             </div>
             <span className="text-xs text-slate-400">Web3 Security Copilot</span>
@@ -46,7 +50,7 @@ export default function LandingPage() {
           </Link>
           <Link
             href="/dashboard"
-            className="text-sm font-semibold px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white shadow-glow-blue flex items-center gap-2 transition transform hover:-translate-y-0.5"
+            className="text-sm font-semibold px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-600 to-purple-600 hover:opacity-90 text-white shadow-glow-blue flex items-center gap-2 transition transform hover:-translate-y-0.5"
           >
             Launch Dashboard
             <ArrowRight className="w-4 h-4" />
@@ -55,8 +59,8 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative px-6 py-20 md:py-28 max-w-6xl mx-auto text-center overflow-hidden">
-        {/* Glow Effects Background */}
+      <section className="relative px-6 py-16 md:py-24 max-w-6xl mx-auto text-center overflow-hidden">
+        {/* Glow Background Elements */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-blue-600/20 via-purple-600/20 to-cyan-500/20 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold mb-6 shadow-glow-blue">
@@ -68,7 +72,7 @@ export default function LandingPage() {
           Your Intelligent <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400 glow-text-blue">AI Security Copilot</span> for Web3
         </h1>
 
-        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+        <p className="text-base md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
           Identify wallet drainers, token honeypots, malicious smart contracts, phishing domains, and risky transaction approvals in plain language before signing.
         </p>
 
@@ -89,7 +93,7 @@ export default function LandingPage() {
           </Link>
         </div>
 
-        {/* Live Mock Feature Banner Preview */}
+        {/* Live Interactive Security Engine Banner */}
         <div className="glass-card p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl text-left max-w-4xl mx-auto relative">
           <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
             <div className="flex items-center gap-3">
@@ -135,7 +139,45 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Core Scanners Grid Section */}
+      {/* How It Works Section (4-Step Flow) */}
+      <section className="px-6 py-16 bg-surface/30 border-t border-slate-800/80">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-3 inline-block">
+              USER FLOW
+            </span>
+            <h2 className="text-3xl font-black text-white mb-3">How Aegivex AI Protects You</h2>
+            <p className="text-slate-400 text-base max-w-xl mx-auto">
+              Inspect any Web3 address, token contract, dApp domain, or transaction in 4 simple steps.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { step: '01', title: 'Sign In', desc: 'Log in to your Aegivex security copilot account to access scanners.', icon: UserCheck, color: 'text-blue-400' },
+              { step: '02', title: 'Select Scanner', desc: 'Choose from Wallet, Token, Contract, Website, or Tx Explainer tools.', icon: Search, color: 'text-cyan-400' },
+              { step: '03', title: 'Submit Input', desc: 'Paste the target wallet address, contract, domain URL, or raw tx hash.', icon: Cpu, color: 'text-purple-400' },
+              { step: '04', title: 'AI Recommendation', desc: 'Receive instant risk score (0-100), summary, and actionable advice.', icon: Shield, color: 'text-emerald-400' },
+            ].map((s, i) => {
+              const Icon = s.icon;
+              return (
+                <div key={i} className="glass-card p-6 rounded-2xl border border-slate-800 relative group hover:border-blue-500/40 transition">
+                  <span className="text-3xl font-black text-slate-700 absolute top-4 right-4 font-mono group-hover:text-blue-500/40 transition">
+                    {s.step}
+                  </span>
+                  <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4">
+                    <Icon className={`w-6 h-6 ${s.color}`} />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Core Scanners Feature Section */}
       <section className="px-6 py-16 bg-surface/50 border-t border-slate-800">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
@@ -215,10 +257,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-8 py-8 border-t border-slate-800 text-center text-xs text-slate-500">
-        <p className="mb-2">Aegivex AI © 2026 — Built for OKX.AI Genesis Hackathon</p>
-        <p>Powered by Next.js, FastAPI, PostgreSQL, LangChain & OpenAI API</p>
+      {/* Footer with Official Logo */}
+      <footer className="px-6 md:px-12 py-8 border-t border-slate-800 text-center text-xs text-slate-500 flex flex-col items-center justify-center gap-3">
+        <div className="flex items-center gap-2">
+          <Image src="/logo.png" alt="Aegivex AI Logo" width={24} height={24} className="object-contain" />
+          <span className="font-extrabold text-sm text-slate-300 tracking-tight">AEGIVEX AI</span>
+        </div>
+        <p>Aegivex AI © 2026 — Built for OKX.AI Genesis Hackathon</p>
+        <p>Powered by Next.js 14, FastAPI, PostgreSQL, LangChain & OpenAI API</p>
       </footer>
     </div>
   );
