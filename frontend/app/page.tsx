@@ -14,7 +14,6 @@ import {
   Receipt, 
   ArrowRight, 
   Sparkles, 
-  Lock,
   Zap,
   CheckCircle2,
   AlertTriangle,
@@ -22,22 +21,22 @@ import {
   Search,
   Cpu,
   Shield,
-  Activity,
   Radio,
-  Layers,
   ChevronRight,
-  ShieldAlert,
   Terminal,
+  Activity,
   Check,
-  Eye
+  Lock,
+  Flame,
+  ShieldAlert
 } from 'lucide-react';
 
-const changingPhrases = [
-  "Wallet Addresses",
-  "Tokens & Coins",
-  "Smart Contracts",
-  "Web Links & Sites",
-  "Crypto Transactions"
+const targetPhrases = [
+  "WALLET ADDRESSES",
+  "TOKEN ASSETS",
+  "SMART CONTRACTS",
+  "WEBSITE LINKS",
+  "CRYPTO TRANSFERS"
 ];
 
 export default function LandingPage() {
@@ -46,38 +45,38 @@ export default function LandingPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPhraseIndex((prev) => (prev + 1) % changingPhrases.length);
-    }, 2500);
+      setPhraseIndex((prev) => (prev + 1) % targetPhrases.length);
+    }, 2800);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-white flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative overflow-hidden bg-cyber-grid bg-animated-grid">
+    <div className="min-h-screen bg-[#020617] text-slate-100 flex flex-col justify-between -m-4 md:-m-6 selection:bg-cyan-500/30 selection:text-cyan-200 relative overflow-hidden bg-neural-grid bg-animated-neural">
       
-      {/* Background Lighting Elements */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/15 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute top-40 right-1/4 w-[500px] h-[500px] bg-purple-600/15 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute top-96 left-1/3 w-[600px] h-[400px] bg-cyan-500/10 blur-[180px] rounded-full pointer-events-none" />
+      {/* Vibrant Ambient Glow Spotlights */}
+      <div className="absolute top-0 left-1/4 w-[700px] h-[700px] bg-blue-600/15 blur-[170px] rounded-full pointer-events-none" />
+      <div className="absolute top-36 right-1/4 w-[700px] h-[700px] bg-purple-600/15 blur-[170px] rounded-full pointer-events-none" />
+      <div className="absolute top-[600px] left-1/3 w-[800px] h-[600px] bg-cyan-500/10 blur-[190px] rounded-full pointer-events-none" />
 
       {/* Navigation Header */}
-      <header className="px-6 md:px-12 py-5 border-b border-slate-800/80 flex items-center justify-between backdrop-blur-xl sticky top-0 z-50 bg-background/80">
+      <header className="px-6 md:px-12 py-5 border-b border-slate-800/80 flex items-center justify-between backdrop-blur-xl sticky top-0 z-50 bg-[#020617]/85">
         <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600/30 via-cyan-500/20 to-purple-600/30 p-1.5 border border-cyan-500/40 flex items-center justify-center shadow-glow-cyan">
+          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600/40 via-cyan-500/30 to-purple-600/40 p-1.5 border border-cyan-500/50 flex items-center justify-center shadow-glow-cyan">
             <Image src="/logo.png" alt="Aegivex AI Official Logo" width={36} height={36} className="object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-black text-xl tracking-tight text-white">AEGIVEX</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/40 neon-glow-cyan">AI</span>
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 neon-glow-cyan font-mono">AI</span>
             </div>
             <span className="text-[10px] text-slate-400 font-mono tracking-wider">Simple Security Assistant</span>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 text-xs font-mono text-slate-300">
+          <div className="hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-mono text-slate-300">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-emerald-400 font-bold">Network Monitor</span> Active
+            <span className="text-emerald-400 font-bold">Network Shield</span> Active
           </div>
 
           <Link 
@@ -88,7 +87,7 @@ export default function LandingPage() {
           </Link>
           <Link
             href="/dashboard"
-            className="btn-futuristic-primary text-xs font-bold px-5 py-2.5 rounded-xl text-white flex items-center gap-2 transition"
+            className="btn-futuristic-primary text-xs font-bold px-6 py-2.5 rounded-xl text-white flex items-center gap-2 transition"
           >
             Start Check
             <ArrowRight className="w-4 h-4" />
@@ -96,10 +95,10 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hero Section with Framer Motion */}
-      <section className="relative px-6 pt-16 pb-20 md:pt-24 md:pb-28 max-w-7xl mx-auto text-center z-10">
+      {/* Hero Section */}
+      <section className="relative px-6 pt-12 pb-16 md:pt-20 md:pb-24 max-w-7xl mx-auto text-center z-10">
         
-        {/* Hackathon Badge */}
+        {/* Project Badge */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -109,50 +108,58 @@ export default function LandingPage() {
           <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
           <span>OKX.AI Genesis Project</span>
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <span className="font-mono text-[11px] text-purple-300">Simple Security Protection</span>
+          <span className="font-mono text-[11px] text-purple-300">Simple AI Protection</span>
         </motion.div>
 
-        {/* Hero Title with Dynamic Rotating Changing Text */}
-        <motion.h1 
+        {/* Dynamic Rotating Headline */}
+        <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7 }}
-          className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.1] max-w-5xl mx-auto mb-6"
+          className="max-w-5xl mx-auto mb-6"
         >
-          CHECK IF YOUR <br />
-          <span className="relative inline-block min-w-[280px] sm:min-w-[420px]">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.2]">
+            AI SECURITY PROTECTION FOR YOUR
+          </h1>
+          
+          <div className="h-16 sm:h-20 flex items-center justify-center my-3">
             <AnimatePresence mode="wait">
-              <motion.span
+              <motion.div
                 key={phraseIndex}
-                initial={{ opacity: 0, y: 20, rotateX: -90 }}
+                initial={{ opacity: 0, y: 20, rotateX: -60 }}
                 animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                exit={{ opacity: 0, y: -20, rotateX: 90 }}
-                transition={{ duration: 0.5 }}
-                className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 neon-glow-cyan inline-block"
+                exit={{ opacity: 0, y: -20, rotateX: 60 }}
+                transition={{ duration: 0.4 }}
+                className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-purple-500/20 border border-cyan-400/50 shadow-glow-cyan inline-flex items-center gap-3"
               >
-                {changingPhrases[phraseIndex]}
-              </motion.span>
+                <ShieldCheck className="w-6 h-6 sm:w-8 sm:h-8 text-cyan-400 animate-pulse" />
+                <span className="text-2xl sm:text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-400 neon-glow-cyan font-mono">
+                  {targetPhrases[phraseIndex]}
+                </span>
+              </motion.div>
             </AnimatePresence>
-          </span>
-          <br />
-          ARE SAFE BEFORE YOU SIGN
-        </motion.h1>
+          </div>
+
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-200">
+            BEFORE YOU SIGN OR TRANSFER
+          </h2>
+        </motion.div>
 
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10 font-normal"
+          className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10 font-normal"
         >
           Aegivex AI checks wallet addresses, token contracts, website links, and transactions in simple English so you can avoid scams and loss of funds.
         </motion.p>
 
-        {/* Futuristic CTA Action Buttons */}
+        {/* Action Buttons */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20"
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
         >
           <Link
             href="/dashboard"
@@ -172,43 +179,42 @@ export default function LandingPage() {
           </Link>
         </motion.div>
 
-        {/* 3D HUD Central Logo Radar & Interactive Console */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative max-w-4xl mx-auto mb-16"
-        >
-          {/* Central Logo Radar Orb */}
+        {/* Central Official Logo HUD Radar */}
+        <div className="relative max-w-4xl mx-auto mb-16">
           <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto mb-12 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full border-2 border-dashed border-cyan-500/30 radar-spin-slow" />
-            <div className="absolute inset-4 rounded-full border-2 border-dotted border-purple-500/40 radar-spin-reverse" />
-            <div className="absolute inset-10 rounded-full bg-gradient-to-tr from-blue-600/40 via-cyan-500/30 to-purple-600/40 blur-xl animate-pulse" />
+            <div className="absolute inset-0 rounded-full border-2 border-dashed border-cyan-500/40 radar-spin-slow" />
+            <div className="absolute inset-4 rounded-full border-2 border-dotted border-purple-500/50 radar-spin-reverse" />
+            <div className="absolute inset-8 rounded-full bg-gradient-to-tr from-blue-600/40 via-cyan-500/30 to-purple-600/40 blur-2xl animate-pulse" />
             
-            <div className="relative z-10 w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-slate-900/90 border-2 border-cyan-400/60 p-4 shadow-glow-cyan flex items-center justify-center backdrop-blur-xl">
-              <Image src="/logo.png" alt="Aegivex AI Official Logo" width={80} height={80} className="object-contain drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]" />
-            </div>
+            <motion.div 
+              whileHover={{ scale: 1.08 }}
+              className="relative z-10 w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-slate-900/90 border-2 border-cyan-400/60 p-4 shadow-glow-cyan flex items-center justify-center backdrop-blur-xl border-gradient-glow transition duration-300"
+            >
+              <Image src="/logo.png" alt="Aegivex AI Official Logo" width={90} height={90} className="object-contain drop-shadow-[0_0_20px_rgba(6,182,212,0.9)]" />
+            </motion.div>
 
-            <div className="absolute -top-2 -left-8 sm:-left-12 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/40 text-emerald-400 text-xs font-mono font-bold shadow-glow-cyan animate-float-slow flex items-center gap-1.5">
+            <div className="absolute -top-2 -left-8 sm:-left-12 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/40 text-emerald-400 text-xs font-mono font-bold shadow-glow-cyan animate-float-slow flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5" /> Drainer Blocked
             </div>
 
-            <div className="absolute top-1/2 -right-8 sm:-right-16 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-red-500/40 text-red-400 text-xs font-mono font-bold shadow-glow-red animate-float-delayed flex items-center gap-1.5">
+            <div className="absolute top-1/2 -right-8 sm:-right-16 -translate-y-1/2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-red-500/40 text-red-400 text-xs font-mono font-bold shadow-glow-red animate-float-delayed flex items-center gap-1.5">
               <AlertTriangle className="w-3.5 h-3.5" /> High Risk Alert
             </div>
 
-            <div className="absolute -bottom-2 -left-4 sm:-left-8 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold shadow-glow-purple animate-float-slow flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" /> Assistant Ready
+            <div className="absolute -bottom-2 -left-4 sm:-left-8 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold shadow-glow-purple animate-float-slow flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" /> Assistant Active
             </div>
           </div>
 
           {/* Interactive Security Console Simulator */}
-          <div className="glass-card-futuristic p-6 sm:p-8 rounded-3xl text-left shadow-2xl relative border border-cyan-500/30">
+          <motion.div 
+            whileHover={{ y: -4 }}
+            className="glass-card-premium border-gradient-glow p-6 sm:p-8 rounded-3xl text-left shadow-2xl relative border border-cyan-500/40 transition duration-300"
+          >
             <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
               <div className="flex items-center gap-3">
                 <Terminal className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs font-mono text-slate-300 font-bold">Live AI Security Scanner Demo</span>
+                <span className="text-xs font-mono text-slate-200 font-bold">Live AI Security Scanner Demo</span>
               </div>
 
               <div className="flex items-center gap-2 text-xs">
@@ -216,10 +222,10 @@ export default function LandingPage() {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-3 py-1 rounded-lg capitalize font-mono font-semibold transition ${
+                    className={`px-3 py-1.5 rounded-lg capitalize font-mono font-semibold transition ${
                       activeTab === tab 
                         ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-glow-cyan' 
-                        : 'text-slate-400 hover:text-white bg-slate-900/50'
+                        : 'text-slate-400 hover:text-white bg-slate-900/60'
                     }`}
                   >
                     {tab}
@@ -228,7 +234,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Console Content */}
+            {/* Console Tabs Data */}
             {activeTab === 'token' && (
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-2xl bg-slate-900/90 border border-red-500/40 shadow-glow-red">
@@ -355,10 +361,10 @@ export default function LandingPage() {
                 </div>
               </div>
             )}
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
-        {/* Live Metrics Ticker Bar */}
+        {/* Metrics Ticker Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
           {[
             { metric: '$4.8M+', label: 'Protected Funds', color: 'text-cyan-400' },
@@ -368,8 +374,8 @@ export default function LandingPage() {
           ].map((item, idx) => (
             <motion.div 
               key={idx} 
-              whileHover={{ scale: 1.05 }}
-              className="glass-card p-4 rounded-2xl border border-slate-800 text-center"
+              whileHover={{ scale: 1.05, y: -4 }}
+              className="glass-card-premium p-4 rounded-2xl border border-slate-800 text-center"
             >
               <span className={`text-2xl sm:text-3xl font-black ${item.color} font-mono block mb-1`}>
                 {item.metric}
@@ -380,8 +386,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How It Works Section (4-Step User Flow with Scroll Animations) */}
-      <section className="px-6 py-20 bg-surface/40 border-t border-slate-800/80 relative">
+      {/* How It Works Section */}
+      <section className="px-6 py-20 bg-slate-950/40 border-t border-slate-800/80 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -414,8 +420,8 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  className={`glass-card p-6 rounded-2xl border ${s.border} glass-card-hover relative group`}
+                  whileHover={{ y: -8, scale: 1.03 }}
+                  className={`glass-card-premium border-gradient-glow p-6 rounded-2xl border ${s.border} relative group transition duration-300`}
                 >
                   <span className="text-4xl font-black text-slate-800 absolute top-4 right-4 font-mono group-hover:text-cyan-500/20 transition">
                     {s.step}
@@ -432,8 +438,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 6 Core Security Scanners Section with Framer Motion */}
-      <section className="px-6 py-20 bg-surface/60 border-t border-slate-800">
+      {/* 6 Core Security Tools Showcase */}
+      <section className="px-6 py-20 bg-slate-950/60 border-t border-slate-800">
         <div className="max-w-6xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -507,11 +513,11 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ y: -6, scale: 1.02 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                 >
                   <Link 
                     href={f.link}
-                    className={`glass-card p-6 rounded-2xl border ${f.border} glass-card-hover block group h-full`}
+                    className={`glass-card-premium border-gradient-glow p-6 rounded-2xl border ${f.border} block group h-full`}
                   >
                     <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                       <Icon className={`w-6 h-6 ${f.color}`} />
@@ -530,7 +536,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 md:px-12 py-10 border-t border-slate-800/80 text-center text-xs text-slate-500 flex flex-col items-center justify-center gap-3 bg-slate-950/80">
+      <footer className="px-6 md:px-12 py-10 border-t border-slate-800/80 text-center text-xs text-slate-500 flex flex-col items-center justify-center gap-3 bg-slate-950/90">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg bg-blue-600/20 p-1 border border-blue-500/30 flex items-center justify-center shadow-glow-blue">
             <Image src="/logo.png" alt="Aegivex AI Logo" width={20} height={20} className="object-contain" />
