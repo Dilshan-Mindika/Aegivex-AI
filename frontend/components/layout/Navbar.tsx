@@ -26,23 +26,23 @@ export const Navbar: React.FC = () => {
 
   const getPageTitle = (path: string) => {
     switch (path) {
-      case '/dashboard': return 'Security Command Dashboard';
-      case '/chat': return 'AI Security Copilot Chat';
+      case '/dashboard': return 'Security Command Intelligence Dashboard';
+      case '/chat': return 'AI Security Intelligence Copilot Chat';
       case '/scanners/wallet': return 'Wallet Risk & Drainer Scanner';
       case '/scanners/token': return 'Token Honeypot & Liquidity Analyzer';
       case '/scanners/contract': return 'Smart Contract Code Auditor';
-      case '/scanners/website': return 'dApp & Website Safety Scanner';
-      case '/scanners/transaction': return 'Blockchain Transaction Explainer';
-      case '/history': return 'Security Scan History & Audit Log';
-      case '/settings': return 'User Security Preferences';
-      default: return 'Aegivex AI Security';
+      case '/scanners/website': return 'dApp & Domain Security Scanner';
+      case '/scanners/transaction': return 'Blockchain Transaction Payload Explainer';
+      case '/history': return 'Security Audit History & Event Log';
+      case '/settings': return 'User Security Configurations';
+      default: return 'Aegivex AI Security Intelligence';
     }
   };
 
   const notificationsMock = [
-    { id: '1', title: 'Phishing Website Alert', msg: 'Website claim-airdrop-okx.xyz was flagged with High Risk.', time: '10m ago', type: 'high' },
-    { id: '2', title: 'Unlimited Approval Warning', msg: 'Spender 0x7a2... requested unlimited WETH spending.', time: '1h ago', type: 'warn' },
-    { id: '3', title: 'Token Honeypot Blocked', msg: 'PEPE-Fake token code contains 100% sell fee blacklist.', time: '3h ago', type: 'high' },
+    { id: '1', title: 'Phishing Domain Alert', msg: 'Website claim-airdrop-okx.xyz was flagged with Critical Threat Risk.', time: '10m ago', type: 'high' },
+    { id: '2', title: 'Unlimited Approval Signature', msg: 'Spender 0x7a2... requested unlimited WETH spending authorization.', time: '1h ago', type: 'warn' },
+    { id: '3', title: 'Token Honeypot Blocked', msg: 'PEPE-Fake token code contains 100% sell fee blacklist vectors.', time: '3h ago', type: 'high' },
   ];
 
   const handleLogout = () => {
@@ -63,7 +63,13 @@ export const Navbar: React.FC = () => {
                 <Image src="/logo.png" alt="Aegivex AI" width={28} height={28} className="object-contain drop-shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
               </div>
             </div>
-            <span className="font-extrabold text-sm tracking-tight text-white hidden md:inline group-hover:text-cyan-300 transition">AEGIVEX</span>
+            <div className="hidden sm:flex flex-col">
+              <div className="flex items-center gap-1">
+                <span className="font-extrabold text-sm tracking-tight text-white group-hover:text-cyan-300 transition">AEGIVEX</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 font-mono">AI</span>
+              </div>
+              <span className="text-[9px] text-slate-400 font-mono tracking-wider">Security Intelligence</span>
+            </div>
           </Link>
 
           <span className="text-slate-700 hidden md:inline">/</span>
@@ -105,7 +111,7 @@ export const Navbar: React.FC = () => {
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
                   <span className="text-xs font-bold text-white flex items-center gap-1.5">
                     <ShieldAlert className="w-3.5 h-3.5 text-red-400" />
-                    Live Threat Alerts
+                    Live Threat Intelligence Alerts
                   </span>
                   <span className="text-[10px] text-slate-500 font-mono">3 Unread</span>
                 </div>
@@ -134,7 +140,7 @@ export const Navbar: React.FC = () => {
               <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 via-cyan-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-glow-blue">
                 US
               </div>
-              <span className="text-xs font-medium text-slate-200 hidden sm:inline">Web3 Researcher</span>
+              <span className="text-xs font-medium text-slate-200 hidden sm:inline">Web3 Security Researcher</span>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
             </button>
 
@@ -142,7 +148,7 @@ export const Navbar: React.FC = () => {
               <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-1.5 z-50">
                 <div className="px-3 py-2 border-b border-slate-800 mb-1">
                   <p className="text-xs font-semibold text-white">Signed in User</p>
-                  <p className="text-[11px] text-slate-400 truncate">user@aegivex.ai</p>
+                  <p className="text-[11px] text-slate-400 truncate">researcher@aegivex.ai</p>
                 </div>
                 <button
                   onClick={() => {
@@ -152,7 +158,7 @@ export const Navbar: React.FC = () => {
                   className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-lg flex items-center gap-2"
                 >
                   <UserIcon className="w-3.5 h-3.5 text-slate-400" />
-                  Account Settings
+                  Security Configurations
                 </button>
                 <button
                   onClick={handleLogout}

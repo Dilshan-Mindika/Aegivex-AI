@@ -37,7 +37,7 @@ const targetPhrases = [
   "WALLET ADDRESSES",
   "TOKEN ASSETS",
   "SMART CONTRACTS",
-  "WEBSITE LINKS",
+  "WEBSITE DOMAINS",
   "CRYPTO TRANSFERS"
 ];
 
@@ -79,42 +79,42 @@ export default function LandingPage() {
       setIsScanning(false);
       if (selectedCategory === 'token') {
         setScanResult({
-          type: 'Token Scan',
+          type: 'Token Risk Analysis',
           target: scanInput,
           score: 88,
-          rating: 'High Risk',
-          summary: 'Scam Token Alert: 100% sell tax detected. You cannot sell this token after buying.',
-          recommendation: 'DO NOT BUY THIS TOKEN. High risk of total loss.',
+          rating: 'Critical Threat Detected',
+          summary: 'Malicious honeypot pattern identified: 100% sell fee restriction embedded within transfer functions.',
+          recommendation: 'ABORT TRANSACTION. Extreme capital loss vector detected.',
           isSafe: false
         });
       } else if (selectedCategory === 'wallet') {
         setScanResult({
-          type: 'Wallet Scan',
+          type: 'Wallet Integrity Audit',
           target: scanInput,
           score: 12,
-          rating: 'Low Risk',
-          summary: 'Normal wallet address history found with 0 drainer interactions.',
-          recommendation: 'Safe address for standard token transfers.',
+          rating: 'Low Risk Signature',
+          summary: 'Verified address history with zero malicious approval permits or drainer contract association.',
+          recommendation: 'Address cleared for standard cross-chain transfers.',
           isSafe: true
         });
       } else if (selectedCategory === 'contract') {
         setScanResult({
-          type: 'Smart Contract Audit',
+          type: 'Smart Contract Vulnerability Assessment',
           target: scanInput,
           score: 25,
-          rating: 'Low Risk',
-          summary: 'Verified smart contract code. Upgradeable proxy key present.',
-          recommendation: 'Standard verified contract. Safe for standard interaction.',
+          rating: 'Verified Contract Logic',
+          summary: 'Verified open-source code with standard proxy upgradeability permissions enabled.',
+          recommendation: 'Standard proxy contract verified. Safe for authorized protocol interaction.',
           isSafe: true
         });
       } else {
         setScanResult({
-          type: 'Website Link Check',
+          type: 'Domain & Protocol Security Check',
           target: scanInput,
           score: 5,
-          rating: 'Verified Safe',
-          summary: 'Official website SSL certificate valid. 0 phishing keywords detected.',
-          recommendation: 'Legitimate Web3 website. Safe to connect wallet.',
+          rating: 'Authentic Endpoint Verified',
+          summary: 'SSL certificate validated. Zero phishing keyword signatures or typosquatting patterns detected.',
+          recommendation: 'Official dApp domain confirmed. Safe to initialize wallet connection.',
           isSafe: true
         });
       }
@@ -198,7 +198,7 @@ export default function LandingPage() {
               : 'bg-slate-950/85 border-cyan-500/30 shadow-glow-cyan backdrop-blur-xl'
           }`}
         >
-          {/* Official Logo with Running Animated Border */}
+          {/* Industry-Level Brand Title & Professional Subtext */}
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-11 h-11 rounded-xl p-[2px] border-running-glow shadow-glow-cyan group-hover:scale-105 transition duration-300">
@@ -211,7 +211,7 @@ export default function LandingPage() {
                   <span className="font-black text-lg sm:text-xl tracking-tight text-white group-hover:text-cyan-300 transition">AEGIVEX</span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 neon-glow-cyan font-mono">AI</span>
                 </div>
-                <span className="text-[10px] text-slate-400 font-mono tracking-wider">Simple Security Assistant</span>
+                <span className="text-[10px] text-slate-400 font-mono tracking-wider font-semibold">Web3 AI Security Intelligence Copilot</span>
               </div>
             </Link>
           </div>
@@ -228,7 +228,7 @@ export default function LandingPage() {
               href="/dashboard"
               className="btn-futuristic-primary text-xs font-bold px-5 py-2.5 rounded-xl text-white flex items-center gap-2 transition"
             >
-              Start Check
+              Launch Platform
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -246,9 +246,9 @@ export default function LandingPage() {
           className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-8 shadow-glow-cyan backdrop-blur-md"
         >
           <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <span>OKX.AI Genesis Project</span>
+          <span>OKX.AI Genesis Hackathon Project</span>
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <span className="font-mono text-[11px] text-purple-300">Simple AI Protection</span>
+          <span className="font-mono text-[11px] text-purple-300">Autonomous Threat Intelligence</span>
         </motion.div>
 
         {/* Dynamic Rotating Headline */}
@@ -259,7 +259,7 @@ export default function LandingPage() {
           className="max-w-5xl mx-auto mb-6"
         >
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.2]">
-            AI SECURITY PROTECTION FOR YOUR
+            AUTONOMOUS AI SECURITY ENGINE FOR
           </h1>
           
           <div className="h-16 sm:h-20 flex items-center justify-center my-3">
@@ -281,7 +281,7 @@ export default function LandingPage() {
           </div>
 
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-200">
-            BEFORE YOU SIGN OR TRANSFER
+            PRE-EXECUTION RISK ASSESSMENT ENGINE
           </h2>
         </motion.div>
 
@@ -291,26 +291,26 @@ export default function LandingPage() {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10 font-normal"
         >
-          Aegivex AI checks wallet addresses, token contracts, website links, and transactions in simple English so you can avoid scams and loss of funds.
+          Delivers real-time automated threat intelligence, vulnerability auditing, honeypot detection, and transaction risk analysis across multi-chain ecosystems.
         </motion.p>
 
-        {/* INSTANT INTERACTIVE SCANNER BAR WITH RUNNING ANIMATED BORDER */}
+        {/* INSTANT INTERACTIVE SCANNER BAR WITH FULL-WIDTH RUNNING ANIMATED BORDER */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
           className="max-w-3xl mx-auto mb-16"
         >
-          <div className="glass-card-premium p-[2px] rounded-3xl border-running-glow shadow-glow-cyan relative text-left">
-            <div className="w-full h-full p-4 sm:p-6 rounded-[22px] bg-slate-950/90 backdrop-blur-2xl relative z-10">
+          <div className="relative p-[2.5px] rounded-3xl border-running-glow shadow-glow-cyan overflow-hidden text-left">
+            <div className="w-full h-full p-4 sm:p-6 rounded-[22px] bg-slate-950/95 backdrop-blur-2xl relative z-10">
               
               {/* Category Selector Tabs */}
               <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1">
                 {[
-                  { id: 'token', label: 'Token Contract', icon: Coins },
-                  { id: 'wallet', label: 'Wallet Address', icon: Wallet },
-                  { id: 'contract', label: 'Smart Contract', icon: FileCode2 },
-                  { id: 'website', label: 'Website Link', icon: Globe },
+                  { id: 'token', label: 'Token Contract Analysis', icon: Coins },
+                  { id: 'wallet', label: 'Wallet Risk Audit', icon: Wallet },
+                  { id: 'contract', label: 'Smart Contract Auditor', icon: FileCode2 },
+                  { id: 'website', label: 'Website Domain Check', icon: Globe },
                 ].map((tab) => {
                   const Icon = tab.icon;
                   return (
@@ -342,10 +342,10 @@ export default function LandingPage() {
                     value={scanInput}
                     onChange={(e) => setScanInput(e.target.value)}
                     placeholder={
-                      selectedCategory === 'token' ? 'Paste token contract address (0x...)' :
-                      selectedCategory === 'wallet' ? 'Paste crypto wallet address (0x...)' :
-                      selectedCategory === 'contract' ? 'Paste smart contract address (0x...)' :
-                      'Paste website URL (https://...)'
+                      selectedCategory === 'token' ? 'Enter target token contract address (0x...)' :
+                      selectedCategory === 'wallet' ? 'Enter target wallet public address (0x...)' :
+                      selectedCategory === 'contract' ? 'Enter smart contract deployment address (0x...)' :
+                      'Enter dApp URL endpoint (https://...)'
                     }
                     className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-500 transition font-mono"
                   />
@@ -359,12 +359,12 @@ export default function LandingPage() {
                   {isScanning ? (
                     <>
                       <RefreshCw className="w-4 h-4 animate-spin" />
-                      Scanning...
+                      Analyzing Target...
                     </>
                   ) : (
                     <>
                       <ShieldCheck className="w-4 h-4" />
-                      Instant AI Check
+                      Execute Security Audit
                     </>
                   )}
                 </button>
@@ -372,7 +372,7 @@ export default function LandingPage() {
 
               {/* Quick Example Presets */}
               <div className="flex items-center gap-2 mt-3 text-xs text-slate-400 overflow-x-auto">
-                <span className="font-mono text-[11px] text-slate-500 shrink-0">Try Example:</span>
+                <span className="font-mono text-[11px] text-slate-500 shrink-0">Preset Vectors:</span>
                 <button
                   onClick={() => handleQuickPreset('token', '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984')}
                   className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
@@ -383,13 +383,13 @@ export default function LandingPage() {
                   onClick={() => handleQuickPreset('website', 'https://uniswap.org')}
                   className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
                 >
-                  Uniswap Site
+                  Uniswap Endpoint
                 </button>
                 <button
                   onClick={() => handleQuickPreset('wallet', '0x71C7656EC7ab88b098defB751B7401B5f6d8976F')}
                   className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-cyan-400 font-mono text-[11px] transition shrink-0"
                 >
-                  Safe Wallet
+                  Verified Address
                 </button>
               </div>
 
@@ -411,7 +411,7 @@ export default function LandingPage() {
                       ) : (
                         <AlertTriangle className="w-5 h-5 text-red-400" />
                       )}
-                      <span className="font-bold text-sm text-white">{scanResult.type} Result</span>
+                      <span className="font-bold text-sm text-white">{scanResult.type} Assessment</span>
                     </div>
                     <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
                       scanResult.isSafe 
@@ -424,7 +424,7 @@ export default function LandingPage() {
                   <p className="text-xs leading-relaxed text-slate-200 mb-2">{scanResult.summary}</p>
                   <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] font-mono text-slate-300 flex items-center gap-2">
                     <Zap className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                    <span>AI Advice: {scanResult.recommendation}</span>
+                    <span>Security Directive: {scanResult.recommendation}</span>
                   </div>
                 </motion.div>
               )}
@@ -435,7 +435,7 @@ export default function LandingPage() {
 
         {/* Supported Blockchains Bar */}
         <div className="max-w-4xl mx-auto mb-16">
-          <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">Protecting Assets Across Major Blockchains</p>
+          <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">Multi-Chain Protocol Coverage</p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             {[
               { name: 'OKX X Layer', color: 'border-emerald-500/40 text-emerald-400' },
@@ -459,10 +459,10 @@ export default function LandingPage() {
         {/* Metrics Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
           {[
-            { metric: '$4.8M+', label: 'Protected Funds', color: 'text-cyan-400' },
-            { metric: '< 0.4s', label: 'Scan Response Time', color: 'text-emerald-400' },
-            { metric: '99.9%', label: 'Scam Detection', color: 'text-purple-400' },
-            { metric: '24/7', label: 'Active Protection', color: 'text-blue-400' },
+            { metric: '$4.8M+', label: 'Total Value Protected', color: 'text-cyan-400' },
+            { metric: '< 0.4s', label: 'Latency Benchmark', color: 'text-emerald-400' },
+            { metric: '99.9%', label: 'Vulnerability Detection Rate', color: 'text-purple-400' },
+            { metric: '24/7', label: 'Autonomous Monitoring', color: 'text-blue-400' },
           ].map((item, idx) => (
             <motion.div 
               key={idx} 
@@ -483,11 +483,11 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <span className="text-xs font-bold px-3.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-3 inline-block font-mono">
-              SECURITY COMPARISON
+              SECURITY EVALUATION MATRIX
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">Why You Need Aegivex AI</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">Institutional & Retail Security Matrix</h2>
             <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-              See the difference between signing unknown Web3 permits blindly versus using Aegivex AI security protection.
+              Comparative analysis between unverified transaction signing and autonomous AI vulnerability protection.
             </p>
           </div>
 
@@ -495,23 +495,23 @@ export default function LandingPage() {
             <div className="glass-card-premium p-6 rounded-3xl border border-red-500/30 text-left relative overflow-hidden">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30 font-mono">
-                  WITHOUT AEGIVEX AI
+                  UNPROTECTED EXECUTION
                 </span>
                 <XCircle className="w-5 h-5 text-red-400" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Blind Signing & High Risk</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Unverified Signing Risk Factors</h3>
               <ul className="space-y-3 text-xs text-slate-300">
                 <li className="flex items-start gap-2">
                   <XCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                  <span>Unknowingly sign unlimited asset approval permits.</span>
+                  <span>Unintentional authorization of unlimited ERC20/NFT approval permits.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <XCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                  <span>Buy honeypot tokens with 100% hidden sell tax fees.</span>
+                  <span>Exposure to honeypot tokens with unannounced 100% sell tax code logic.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <XCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                  <span>Connect wallet to phishing website clones.</span>
+                  <span>Interaction with typosquatted dApp phishing endpoints.</span>
                 </li>
               </ul>
             </div>
@@ -519,23 +519,23 @@ export default function LandingPage() {
             <div className="glass-card-premium border-gradient-glow p-6 rounded-3xl border border-cyan-500/40 text-left relative overflow-hidden shadow-glow-cyan">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono">
-                  WITH AEGIVEX AI
+                  AEGIVEX AUTONOMOUS SHIELD
                 </span>
                 <ShieldCheck className="w-5 h-5 text-emerald-400" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">100% Real-Time Asset Shield</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Real-Time Autonomous Risk Prevention</h3>
               <ul className="space-y-3 text-xs text-slate-200">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Instant warning in simple English before signing permits.</span>
+                  <span>Pre-signature transaction decoding and risk signature classification.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Automated honeypot audit detects 100% sell tax in 0.4s.</span>
+                  <span>Automated static code analysis identifying honeypot traps in &lt; 0.4s.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>SSL and phishing link verification prevents wallet theft.</span>
+                  <span>Cryptographic domain and SSL validation preventing wallet drainer attacks.</span>
                 </li>
               </ul>
             </div>
@@ -554,20 +554,20 @@ export default function LandingPage() {
             className="text-center mb-16"
           >
             <span className="text-xs font-bold px-3.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-3 inline-block font-mono">
-              SIMPLE STEPS
+              EXECUTION WORKFLOW
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">How Aegivex AI Protects You</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">Security Intelligence Architecture</h2>
             <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-              Check any wallet address, token, website link, or transaction in 4 easy steps.
+              Multi-tiered threat analysis pipeline verifying Web3 transactions in 4 automated phases.
             </p>
           </motion.div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { step: '01', title: 'Sign In', desc: 'Sign in to access your security assistant tools.', icon: UserCheck, color: 'text-blue-400', border: 'border-blue-500/30' },
-              { step: '02', title: 'Choose Tool', desc: 'Select Wallet, Token, Contract, Website, or Transaction checker.', icon: Search, color: 'text-cyan-400', border: 'border-cyan-500/30' },
-              { step: '03', title: 'Paste Input', desc: 'Paste the address, website link, or transfer hash to check.', icon: Cpu, color: 'text-purple-400', border: 'border-purple-500/30' },
-              { step: '04', title: 'Get AI Advice', desc: 'Receive instant risk rating (0-100) and clear advice in plain English.', icon: Shield, color: 'text-emerald-400', border: 'border-emerald-500/30' },
+              { step: '01', title: 'Session Authentication', desc: 'Initialize secure platform session with cryptographic token validation.', icon: UserCheck, color: 'text-blue-400', border: 'border-blue-500/30' },
+              { step: '02', title: 'Target Vector Input', desc: 'Specify contract address, wallet identifier, dApp URL, or transaction payload.', icon: Search, color: 'text-cyan-400', border: 'border-cyan-500/30' },
+              { step: '03', title: 'Neural Analysis', desc: 'Execute deep neural evaluation against known threat vectors and opcode heuristics.', icon: Cpu, color: 'text-purple-400', border: 'border-purple-500/30' },
+              { step: '04', title: 'Threat Intelligence Report', desc: 'Receive standardized risk score (0-100), vulnerability breakdown, and directive.', icon: Shield, color: 'text-emerald-400', border: 'border-emerald-500/30' },
             ].map((s, i) => {
               const Icon = s.icon;
               return (
@@ -605,33 +605,33 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">6 Core Security Tools</h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">Enterprise Security Suite</h2>
             <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-              Everything you need to check crypto wallets, tokens, links, and transfers safely.
+              Comprehensive threat assessment tools for smart contracts, digital assets, endpoints, and transaction payloads.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                title: 'AI Security Chat',
-                desc: 'Ask questions in plain English to check if an address, link, or token is safe.',
+                title: 'AI Security Copilot Chat',
+                desc: 'Interact with our conversational AI security agent to evaluate smart contracts, verify wallet integrity, and audit Web3 URLs.',
                 icon: Bot,
                 color: 'text-purple-400',
                 border: 'border-purple-500/30',
                 link: '/chat'
               },
               {
-                title: 'Wallet Risk Scanner',
-                desc: 'Check wallet addresses for theft records, drainer links, and suspicious activity.',
+                title: 'Wallet Risk & Drainer Scanner',
+                desc: 'Perform deep-chain analysis on public wallet addresses to flag drainer authorization patterns and illicit counterparty risks.',
                 icon: Wallet,
                 color: 'text-blue-400',
                 border: 'border-blue-500/30',
                 link: '/scanners/wallet'
               },
               {
-                title: 'Token Risk Analyzer',
-                desc: 'Check token tax rates, honeypot traps, and liquidity pool lock statuses.',
+                title: 'Token Risk & Honeypot Analyzer',
+                desc: 'Audit token bytecode for tax manipulation, liquidity lock mechanisms, blacklist restrictions, and hidden mint functions.',
                 icon: Coins,
                 color: 'text-cyan-400',
                 border: 'border-cyan-500/30',
@@ -639,23 +639,23 @@ export default function LandingPage() {
               },
               {
                 title: 'Smart Contract Auditor',
-                desc: 'Check contract code logic for owner permissions, upgrade keys, and backdoors.',
+                desc: 'Examine contract AST and opcode logic for reentrancy vectors, access control flaws, and unverified upgradeability keys.',
                 icon: FileCode2,
                 color: 'text-emerald-400',
                 border: 'border-emerald-500/30',
                 link: '/scanners/contract'
               },
               {
-                title: 'Website Safety Scanner',
-                desc: 'Check web links for fake domain clones, SSL security, and phishing traps.',
+                title: 'Website & dApp Domain Scanner',
+                desc: 'Validate dApp domain signatures, SSL authority credentials, typosquatting vectors, and malicious script injection payloads.',
                 icon: Globe,
                 color: 'text-amber-400',
                 border: 'border-amber-500/30',
                 link: '/scanners/website'
               },
               {
-                title: 'Transaction Explainer',
-                desc: 'Translate complex transfer requests and unlimited spending permits into simple English.',
+                title: 'Transaction Payload Explainer',
+                desc: 'Decode complex ABI calldata, Permit2 signature approvals, and multi-call state modifications into clear risk audits.',
                 icon: Receipt,
                 color: 'text-rose-400',
                 border: 'border-rose-500/30',
@@ -701,7 +701,7 @@ export default function LandingPage() {
           <span className="font-black text-sm text-slate-200 tracking-tight">AEGIVEX AI</span>
         </div>
         <p>Aegivex AI — Built for OKX.AI Genesis Hackathon</p>
-        <p className="text-[11px] text-slate-600 font-mono">Simple AI Security Assistant</p>
+        <p className="text-[11px] text-slate-600 font-mono">Autonomous Web3 Security Intelligence Engine</p>
       </footer>
     </div>
   );

@@ -30,7 +30,7 @@ body {
     #020617;
 }
 
-/* Running Animated Rotating Gradient Border Frame */
+/* Clean Theme-Aligned Running Animated Gradient Border Frame (Electric Cyan & Cyber Purple Only) */
 .border-running-glow {
   position: relative;
   overflow: hidden;
@@ -39,16 +39,16 @@ body {
 .border-running-glow::before {
   content: '';
   position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 300%;
-  height: 300%;
+  top: -150%;
+  left: -150%;
+  width: 400%;
+  height: 400%;
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
     #06b6d4 90deg,
     #8b5cf6 180deg,
-    #3b82f6 270deg,
+    #06b6d4 270deg,
     transparent 360deg
   );
   animation: borderRotate 4s linear infinite;
