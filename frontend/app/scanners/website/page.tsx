@@ -3,24 +3,48 @@
 import React, { useState } from 'react';
 import { Globe, Search, ShieldCheck, Lock, AlertTriangle, Zap } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../../services/api';
+import { ScannerHistoryTable, ScanHistoryItem } from '../../../components/scanners/ScannerHistoryTable';
 
 export default function WebsiteScannerPage() {
-  const [url, setUrl] = useState('https://uniswap.org');
+  const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+
+  const [history, setHistory] = useState<ScanHistoryItem[]>([
+    {
+      id: 'web-1',
+      timestamp: '2026-07-25 18:50',
+      target: 'https://uniswap.org',
+      riskScore: 5,
+      riskLevel: 'Low',
+      summary: 'Official Web3 portal verified. High DNS trust score with active SSL security certificate.'
+    },
+    {
+      id: 'web-2',
+      timestamp: '2026-07-25 15:30',
+      target: 'https://claim-aegivex-airdrop.xyz',
+      riskScore: 92,
+      riskLevel: 'High',
+      summary: 'PHISHING DRAINER DETECTED: Domain registered 2 days ago, contains hidden permit drainer script.'
+    }
+  ]);
 
   const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
     setLoading(true);
 
+    const isPhishing = url.toLowerCase().includes('claim') || url.toLowerCase().includes('airdrop') || url.toLowerCase().includes('xyz');
+
     const fallback = {
       website_url: url,
-      trust_score: 95,
-      ssl_status: 'Valid TLS v1.3',
-      domain_age: '4 years',
-      risk_level: 'Low',
-      recommendation: 'Official Web3 portal verified. High DNS trust score with active SSL security certificate.'
+      trust_score: isPhishing ? 8 : 95,
+      ssl_status: isPhishing ? 'Untrusted Free SSL (Cloudflare)' : 'Valid TLS v1.3',
+      domain_age: isPhishing ? '2 days old (HIGH RISK)' : '4 years',
+      risk_level: isPhishing ? 'High' : 'Low',
+      recommendation: isPhishing 
+        ? 'PHISHING WARNING: Typosquatted clone domain designed to drain connected wallets upon approval.' 
+        : 'Official Web3 portal verified. High DNS trust score with active SSL security certificate.'
     };
 
     const res = await handleApiCall(
@@ -30,6 +54,17 @@ export default function WebsiteScannerPage() {
 
     setResult(res);
     setLoading(false);
+
+    // Append to history
+    const newItem: ScanHistoryItem = {
+      id: `web-${Date.now()}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      target: res.website_url,
+      riskScore: 100 - res.trust_score,
+      riskLevel: res.risk_level,
+      summary: res.recommendation
+    };
+    setHistory(prev => [newItem, ...prev]);
   };
 
   return (
@@ -49,7 +84,7 @@ export default function WebsiteScannerPage() {
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
             <input
-              type="url"
+              type="text"
               required
               value={url}
               onChange={(e) => setUrl(e.target.value)}
@@ -102,6 +137,13 @@ export default function WebsiteScannerPage() {
           </div>
         </div>
       )}
+
+      {/* History Table */}
+      <ScannerHistoryTable 
+        title="Website Scan History"
+        history={history}
+        onClearHistory={() => setHistory([])}
+      />
     </div>
   );
 }

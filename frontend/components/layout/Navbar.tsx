@@ -17,7 +17,6 @@ import {
   CheckCheck,
   Menu,
   X,
-  Sparkles,
   Search,
   Command
 } from 'lucide-react';
@@ -321,7 +320,7 @@ export const Navbar: React.FC = () => {
                   <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : item.highlight ? 'text-purple-400' : 'text-slate-400'}`} />
                   <span className="flex-1 font-semibold">{item.name}</span>
                   {item.highlight && (
-                    <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
+                    <Zap className="w-4 h-4 text-purple-400 animate-pulse" />
                   )}
                 </Link>
               );

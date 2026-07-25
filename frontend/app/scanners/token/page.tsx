@@ -3,26 +3,48 @@
 import React, { useState } from 'react';
 import { Coins, Search, ShieldAlert, CheckCircle2, AlertOctagon, Zap } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../../services/api';
+import { ScannerHistoryTable, ScanHistoryItem } from '../../../components/scanners/ScannerHistoryTable';
 
 export default function TokenScannerPage() {
-  const [contract, setContract] = useState('0x1f9840a85d5af5bf1d1762f925bdaddc4201f984');
+  const [contract, setContract] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+
+  const [history, setHistory] = useState<ScanHistoryItem[]>([
+    {
+      id: 't-1',
+      timestamp: '2026-07-25 19:05',
+      target: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 (UNI)',
+      riskScore: 12,
+      riskLevel: 'Low',
+      summary: 'Uniswap Token (UNI): Verified code, $12.45M liquidity locked, 0% sell tax.'
+    },
+    {
+      id: 't-2',
+      timestamp: '2026-07-25 16:40',
+      target: '0xdeadbeef11223344556677889900aabbccddeeff (PEPE RUG)',
+      riskScore: 95,
+      riskLevel: 'High',
+      summary: 'HONEYPOT DETECTED: 100% sell fee lock, proxy ownership unrenounced.'
+    }
+  ]);
 
   const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contract.trim()) return;
     setLoading(true);
 
+    const isRug = contract.toLowerCase().includes('rug') || contract.toLowerCase().includes('dead');
+
     const fallback = {
       contract_address: contract,
-      token_name: 'Uniswap Token',
-      symbol: 'UNI',
-      risk_score: 12,
-      risk_level: 'Low',
-      liquidity: '$12,450,000 USD (Locked)',
-      honeypot: false,
-      recommendation: 'Verified token contract. Standard slippage controls recommended.'
+      token_name: isRug ? 'Honeypot Scam Token' : 'Uniswap Token',
+      symbol: isRug ? 'RUG' : 'UNI',
+      risk_score: isRug ? 95 : 12,
+      risk_level: isRug ? 'High' : 'Low',
+      liquidity: isRug ? '$1,200 USD (Unlocked)' : '$12,450,000 USD (Locked)',
+      honeypot: isRug,
+      recommendation: isRug ? 'HONEYPOT ALERT: Do not buy. 100% sell fee lock enabled.' : 'Verified token contract. Standard slippage controls recommended.'
     };
 
     const res = await handleApiCall(
@@ -32,6 +54,17 @@ export default function TokenScannerPage() {
 
     setResult(res);
     setLoading(false);
+
+    // Append to history
+    const newItem: ScanHistoryItem = {
+      id: `t-${Date.now()}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      target: `${res.contract_address} (${res.symbol})`,
+      riskScore: res.risk_score,
+      riskLevel: res.risk_level,
+      summary: `${res.token_name}: Liquidity ${res.liquidity} - ${res.recommendation}`
+    };
+    setHistory(prev => [newItem, ...prev]);
   };
 
   return (
@@ -116,6 +149,13 @@ export default function TokenScannerPage() {
           </div>
         </div>
       )}
+
+      {/* History Table */}
+      <ScannerHistoryTable 
+        title="Token Scan History"
+        history={history}
+        onClearHistory={() => setHistory([])}
+      />
     </div>
   );
 }

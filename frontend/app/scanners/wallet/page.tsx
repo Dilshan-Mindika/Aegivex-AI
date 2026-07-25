@@ -3,12 +3,32 @@
 import React, { useState } from 'react';
 import { Wallet, Search, ShieldCheck, ShieldAlert, AlertTriangle, ArrowRight, Zap, RefreshCw } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../../services/api';
+import { ScannerHistoryTable, ScanHistoryItem } from '../../../components/scanners/ScannerHistoryTable';
 
 export default function WalletScannerPage() {
-  const [address, setAddress] = useState('0x71C7656EC7ab88b098defB751B7401B5f6d8976F');
+  const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState<any>(null);
+
+  const [history, setHistory] = useState<ScanHistoryItem[]>([
+    {
+      id: 'w-1',
+      timestamp: '2026-07-25 18:24',
+      target: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
+      riskScore: 18,
+      riskLevel: 'Low',
+      summary: 'Standard EVM wallet address. 0 drainer contract interactions detected in past 30 days.'
+    },
+    {
+      id: 'w-2',
+      timestamp: '2026-07-25 14:10',
+      target: '0x9876543210abcdef9876543210abcdef98765432',
+      riskScore: 88,
+      riskLevel: 'High',
+      summary: 'CRITICAL DRAINER PERMIT: Wallet has active setApprovalForAll permit to known phishing spender.'
+    }
+  ]);
 
   const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,10 +49,14 @@ export default function WalletScannerPage() {
 
     const fallback = {
       wallet_address: cleanAddr,
-      risk_score: 18,
-      risk_level: 'Low',
-      summary: 'Standard EVM wallet address. 0 drainer contract interactions detected in past 30 days.',
-      recommendation: 'Safe for standard token transfers and smart contract interactions.'
+      risk_score: cleanAddr.toLowerCase().includes('bad') ? 85 : 18,
+      risk_level: cleanAddr.toLowerCase().includes('bad') ? 'High' : 'Low',
+      summary: cleanAddr.toLowerCase().includes('bad') 
+        ? 'High risk wallet: Active approval signatures granted to unverified drainer proxy.' 
+        : 'Standard EVM wallet address. 0 drainer contract interactions detected in past 30 days.',
+      recommendation: cleanAddr.toLowerCase().includes('bad') 
+        ? 'Revoke approval permissions immediately using Revoke.cash or Aegivex Permit Manager.' 
+        : 'Safe for standard token transfers and smart contract interactions.'
     };
 
     const res = await handleApiCall(
@@ -42,6 +66,17 @@ export default function WalletScannerPage() {
 
     setResult(res);
     setLoading(false);
+
+    // Append to scan history
+    const newHistoryItem: ScanHistoryItem = {
+      id: `w-${Date.now()}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      target: res.wallet_address || cleanAddr,
+      riskScore: res.risk_score,
+      riskLevel: res.risk_level,
+      summary: res.summary
+    };
+    setHistory(prev => [newHistoryItem, ...prev]);
   };
 
   return (
@@ -91,7 +126,7 @@ export default function WalletScannerPage() {
           </button>
         </form>
 
-        {/* Error Alert (Section 12 Error Handling) */}
+        {/* Error Alert */}
         {error && (
           <div className="mt-3 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 shrink-0" />
@@ -141,6 +176,13 @@ export default function WalletScannerPage() {
           </div>
         </div>
       )}
+
+      {/* History Table with Search, Filter & Sorting */}
+      <ScannerHistoryTable 
+        title="Wallet Scan History"
+        history={history}
+        onClearHistory={() => setHistory([])}
+      />
     </div>
   );
 }

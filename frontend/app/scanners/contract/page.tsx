@@ -3,24 +3,48 @@
 import React, { useState } from 'react';
 import { FileCode2, Search, CheckCircle2, AlertTriangle, ShieldCheck, Zap } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../../services/api';
+import { ScannerHistoryTable, ScanHistoryItem } from '../../../components/scanners/ScannerHistoryTable';
 
 export default function ContractScannerPage() {
-  const [contract, setContract] = useState('0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D');
+  const [contract, setContract] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+
+  const [history, setHistory] = useState<ScanHistoryItem[]>([
+    {
+      id: 'c-1',
+      timestamp: '2026-07-25 17:30',
+      target: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D (Uniswap Router)',
+      riskScore: 21,
+      riskLevel: 'Low',
+      summary: 'Verified code on Block Explorer. Immutable contract, 0 reentrancy bugs.'
+    },
+    {
+      id: 'c-2',
+      timestamp: '2026-07-25 11:15',
+      target: '0x3344556677889900aabbccddeeff112233445566 (Unverified Proxy)',
+      riskScore: 82,
+      riskLevel: 'High',
+      summary: 'UNVERIFIED PROXY BACKDOOR: Selfdestruct opcode present & single-owner admin upgrade key.'
+    }
+  ]);
 
   const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contract.trim()) return;
     setLoading(true);
 
+    const isUnverified = contract.toLowerCase().includes('bad') || contract.toLowerCase().includes('proxy');
+
     const fallback = {
       contract_address: contract,
-      verified: true,
-      proxy_contract: false,
-      risk_score: 21,
-      risk_level: 'Low',
-      recommendation: 'Source code verified on Block Explorer. Clean reentrancy audit. No malicious backdoor functions detected.'
+      verified: !isUnverified,
+      proxy_contract: isUnverified,
+      risk_score: isUnverified ? 82 : 21,
+      risk_level: isUnverified ? 'High' : 'Low',
+      recommendation: isUnverified 
+        ? 'UNVERIFIED BYTECODE WARNING: Unverified proxy implementation containing upgradeable backdoor functions.' 
+        : 'Source code verified on Block Explorer. Clean reentrancy audit. No malicious backdoor functions detected.'
     };
 
     const res = await handleApiCall(
@@ -30,6 +54,17 @@ export default function ContractScannerPage() {
 
     setResult(res);
     setLoading(false);
+
+    // Append to history
+    const newItem: ScanHistoryItem = {
+      id: `c-${Date.now()}`,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      target: res.contract_address,
+      riskScore: res.risk_score,
+      riskLevel: res.risk_level,
+      summary: res.recommendation
+    };
+    setHistory(prev => [newItem, ...prev]);
   };
 
   return (
@@ -120,6 +155,13 @@ export default function ContractScannerPage() {
           </div>
         </div>
       )}
+
+      {/* History Table */}
+      <ScannerHistoryTable 
+        title="Contract Audit History"
+        history={history}
+        onClearHistory={() => setHistory([])}
+      />
     </div>
   );
 }

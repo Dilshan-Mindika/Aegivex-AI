@@ -15,7 +15,7 @@ import {
   History, 
   Settings, 
   ShieldCheck,
-  Sparkles,
+  Zap,
   Bell,
   Gift,
   Play,
@@ -94,7 +94,7 @@ export const Sidebar: React.FC = () => {
                 <Icon className={`w-4 h-4 ${isActive ? 'text-blue-400' : item.highlight ? 'text-purple-400' : 'text-slate-400'}`} />
                 <span className="flex-1">{item.name}</span>
                 {item.highlight && (
-                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <Zap className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
                 )}
               </Link>
             );
