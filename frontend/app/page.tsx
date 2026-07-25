@@ -34,9 +34,11 @@ import {
   Layers,
   X,
   FileText,
-  LockKeyhole
+  LockKeyhole,
+  ExternalLink
 } from 'lucide-react';
-import LiveSupportChat from '@/components/LiveSupportChat';
+import LiveSupportChat from '../components/LiveSupportChat';
+import { LanguageSwitcher } from '../components/layout/LanguageSwitcher';
 
 const targetPhrases = [
   "WALLET ADDRESSES",
@@ -353,6 +355,7 @@ export default function LandingPage() {
 
           {/* Action Buttons: Sign In, Sign Up & Try Now */}
           <div className="flex items-center gap-2 sm:gap-2.5">
+            <LanguageSwitcher />
             <Link
               href="/login"
               className="text-xs font-bold text-slate-300 hover:text-white px-2 sm:px-3 py-1.5 sm:py-2 transition hidden xs:inline-block cursor-pointer"

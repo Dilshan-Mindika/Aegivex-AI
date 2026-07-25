@@ -24,6 +24,7 @@ import {
 import { apiClient, handleApiCall } from '../../services/api';
 import { navItems } from './Sidebar';
 import { CommandPaletteModal } from './CommandPaletteModal';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -142,6 +143,9 @@ export const Navbar: React.FC = () => {
             <Layers className="w-3.5 h-3.5 text-blue-400" />
             <span>OKX X Layer / EVM</span>
           </div>
+
+          {/* FlagCDN Multi-Language Switcher (Ported from Nexora IT Web) */}
+          <LanguageSwitcher />
 
           {/* Notifications Bell */}
           <div className="relative">

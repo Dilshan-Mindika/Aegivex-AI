@@ -1,0 +1,15 @@
+export const languages = [
+  { code: "en", name: "English", country: "us" },
+  { code: "si", name: "Sinhala", country: "lk" },
+  { code: "ta", name: "Tamil", country: "lk" },
+  { code: "ar", name: "Arabic", country: "sa" },
+  { code: "zh-CN", name: "Chinese (Simplified)", country: "cn" },
+  { code: "fr", name: "French", country: "fr" },
+  { code: "de", name: "German", country: "de" },
+  { code: "hi", name: "Hindi", country: "in" },
+  { code: "it", name: "Italian", country: "it" },
+  { code: "ja", name: "Japanese", country: "jp" },
+  { code: "ko", name: "Korean", country: "kr" },
+  { code: "ru", name: "Russian", country: "ru" },
+  { code: "es", name: "Spanish", country: "es" },
+];

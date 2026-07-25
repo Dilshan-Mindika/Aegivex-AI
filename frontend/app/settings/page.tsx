@@ -26,6 +26,7 @@ import {
   Check
 } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';
+import { LanguageSwitcher } from '../../components/layout/LanguageSwitcher';
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<'profile' | '2fa' | 'history' | 'wallets' | 'api' | 'theme' | 'notifications'>('profile');
@@ -513,23 +514,13 @@ export default function SettingsPage() {
           <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-4">
             <h2 className="text-lg font-bold text-white flex items-center gap-2">
               <Globe className="w-5 h-5 text-cyan-400" />
-              Language Selector
+              Global Language Translation Engine (FlagCDN)
             </h2>
-            <div className="space-y-2">
-              {['English (US)', 'Spanish (Español)', 'Chinese (中文)', 'Japanese (日本語)', 'German (Deutsch)'].map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => setSelectedLanguage(lang)}
-                  className={`w-full p-3 rounded-xl border text-left font-mono text-xs flex items-center justify-between transition ${
-                    selectedLanguage === lang 
-                      ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300 font-bold' 
-                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <span>{lang}</span>
-                  {selectedLanguage === lang && <Check className="w-4 h-4 text-cyan-400" />}
-                </button>
-              ))}
+            <p className="text-xs text-slate-400 font-mono leading-relaxed">
+              Select your preferred global language below. Google Translate engine will automatically translate all security reports, threat feeds, and AI consultations transiently with cookie persistence.
+            </p>
+            <div className="pt-2">
+              <LanguageSwitcher />
             </div>
           </div>
         </div>

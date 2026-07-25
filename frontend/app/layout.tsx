@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata, Viewport } from 'next';
 import '../styles/globals.css';
 import { RootLayoutClient } from '../components/layout/RootLayoutClient';
+import { GoogleTranslateProvider } from '../components/providers/GoogleTranslateProvider';
 
 export const viewport: Viewport = {
   themeColor: '#020617',
@@ -80,6 +81,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="bg-[#020617] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen w-full m-0 p-0 overflow-x-hidden">
+        <GoogleTranslateProvider />
         <RootLayoutClient>{children}</RootLayoutClient>
       </body>
     </html>
