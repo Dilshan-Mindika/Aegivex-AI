@@ -17,10 +17,13 @@ import {
   CheckCheck,
   Menu,
   X,
-  Sparkles
+  Sparkles,
+  Search,
+  Command
 } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';
 import { navItems } from './Sidebar';
+import { CommandPaletteModal } from './CommandPaletteModal';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -28,6 +31,7 @@ export const Navbar: React.FC = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
 
   // Fetch real notifications from backend database
@@ -122,6 +126,16 @@ export const Navbar: React.FC = () => {
 
         {/* Right Tools & Profile */}
         <div className="flex items-center gap-1.5 xs:gap-2 sm:gap-3 shrink-0">
+
+          {/* Quick Search Ctrl+K Trigger */}
+          <button
+            onClick={() => setCommandPaletteOpen(true)}
+            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 text-xs text-slate-400 hover:text-slate-200 transition font-mono cursor-pointer"
+          >
+            <Search className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Search Hub...</span>
+            <span className="text-[10px] bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800 text-slate-300 font-bold">⌘K</span>
+          </button>
 
           {/* OKX Network Selector Pill */}
           <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300">
@@ -321,6 +335,12 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Global Command Palette Modal */}
+      <CommandPaletteModal 
+        isOpen={commandPaletteOpen} 
+        onClose={() => setCommandPaletteOpen(false)} 
+      />
     </div>
   );
 };
