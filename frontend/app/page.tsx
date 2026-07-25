@@ -1014,7 +1014,7 @@ export default function LandingPage() {
                   </div>
                   <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-cyan-400">
                     <span>Audit Status</span>
-                    <span className="font-bold">Verified ✅</span>
+                    <span className="font-bold text-emerald-400">Verified</span>
                   </div>
                 </motion.div>
               );

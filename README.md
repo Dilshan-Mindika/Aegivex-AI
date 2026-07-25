@@ -9,7 +9,7 @@
 
 ---
 
-## 📚 Complete Project Documentation Suite (`docs/`)
+## Complete Project Documentation Suite (`docs/`)
 
 This codebase is built in strict adherence to the 13 official specification documents located in the [`docs/`](./docs) directory:
 
@@ -29,16 +29,16 @@ This codebase is built in strict adherence to the 13 official specification docu
 
 ---
 
-## 🔑 Pre-Seeded Database Accounts & Demo Credentials
+## Pre-Seeded Database Accounts & Demo Credentials
 
 The database (`aegivex.db`) comes pre-seeded with accounts and initial threat telemetry:
 
 | User Account Role | Email Address | Default Password | Access Scope & Permissions |
 | :--- | :--- | :--- | :--- |
-| **System Administrator** ⭐ | `admin@aegivex.ai` | `AdminPassword123!` | Super Admin Control Center (`/admin/dashboard`), Live Support Desk Inbox, User Role Elevation, System Audits. |
-| **Regular User** 🛡️ | `user@aegivex.ai` | `UserPassword123!` | Security Dashboard (`/dashboard`), AI Copilot Chat (`/chat`), Scanners (`/scanners/*`), Scan History (`/history`), & Settings (`/settings`). |
+| **System Administrator** | `admin@aegivex.ai` | `AdminPassword123!` | Super Admin Control Center (`/admin/dashboard`), Live Support Desk Inbox, User Role Elevation, System Audits. |
+| **Regular User** | `user@aegivex.ai` | `UserPassword123!` | Security Dashboard (`/dashboard`), AI Copilot Chat (`/chat`), Scanners (`/scanners/*`), Scan History (`/history`), & Settings (`/settings`). |
 
-### 🛠️ Re-Seeding Database Accounts
+### Re-Seeding Database Accounts
 To re-run the database seeder script and reset pre-seeded accounts:
 ```bash
 cd backend
@@ -47,7 +47,7 @@ python seed.py
 
 ---
 
-## 🚀 Key Features Implemented
+## Key Features Implemented
 
 ### 1. Multi-Provider AI Copilot Engine
 - **Groq Cloud API** (`gsk_VdUnLo...` fast Llama 3 models).
@@ -84,7 +84,7 @@ python seed.py
 
 ---
 
-## 🗄️ 11-Entity Database Schema (`Database Design Document`)
+## 11-Entity Database Schema (`Database Design Document`)
 
 | Table Name | Primary Key | Description & Foreign Keys |
 | :--- | :--- | :--- |
@@ -102,7 +102,7 @@ python seed.py
 
 ---
 
-## 🛠️ Project Execution & Local Setup
+## Project Execution & Local Setup
 
 ### 1. Backend Service (FastAPI)
 ```bash
@@ -129,7 +129,7 @@ npm run dev
 
 ---
 
-## 🧪 Comprehensive System Test Verification
+## Comprehensive System Test Verification
 
 All 18 REST endpoints and UI components have been audited programmatically and verified with **100% HTTP 200 OK**:
 
