@@ -182,7 +182,7 @@ export default function AIChatPage() {
             </div>
 
             <div
-              className={`max-w-[80%] rounded-2xl p-4 text-xs leading-relaxed ${
+              className={`max-w-[92%] sm:max-w-[80%] rounded-2xl p-4 text-xs leading-relaxed ${
                 msg.sender === 'user'
                   ? 'bg-blue-600 text-white rounded-tr-none'
                   : 'bg-slate-900/90 border border-slate-800 text-slate-200 rounded-tl-none'

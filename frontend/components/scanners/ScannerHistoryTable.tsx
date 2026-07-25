@@ -149,8 +149,8 @@ export function ScannerHistoryTable({ history, title = "Scan Audit History Log",
                 key={item.id}
                 className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition space-y-1.5 font-mono text-xs"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 truncate">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0 max-w-full">
                     {isHigh ? (
                       <ShieldAlert className="w-4 h-4 text-red-400 shrink-0" />
                     ) : isMed ? (
@@ -158,7 +158,7 @@ export function ScannerHistoryTable({ history, title = "Scan Audit History Log",
                     ) : (
                       <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                     )}
-                    <span className="font-bold text-white truncate">{item.target}</span>
+                    <span className="font-bold text-white break-all text-xs">{item.target}</span>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">

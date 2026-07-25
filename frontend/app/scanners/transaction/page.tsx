@@ -107,15 +107,15 @@ export default function TransactionScannerPage() {
 
       {result && (
         <div className="glass-card p-6 rounded-3xl border border-slate-800 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-            <div>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div className="min-w-0 flex-1">
               <span className="text-xs font-bold text-slate-400">TRANSACTION HASH</span>
-              <p className="text-xs font-mono font-bold text-white mt-0.5 truncate max-w-md">{result.transaction_hash}</p>
+              <p className="text-xs font-mono font-bold text-white mt-0.5 break-all">{result.transaction_hash}</p>
             </div>
 
-            <div className="text-right">
+            <div className="text-left sm:text-right">
               <span className="text-xs font-bold text-slate-400 block mb-1">RISK RATING</span>
-              <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
+              <span className={`px-3 py-1 rounded-full text-xs font-bold border inline-block ${
                 result.risk_level === 'High'
                   ? 'bg-red-500/10 text-red-400 border-red-500/30'
                   : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'

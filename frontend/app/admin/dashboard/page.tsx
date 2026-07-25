@@ -351,7 +351,7 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
+          <table className="w-full min-w-[650px] text-left text-xs font-mono">
             <thead>
               <tr className="border-b border-slate-800 text-slate-400">
                 <th className="py-3 px-4">User Name</th>

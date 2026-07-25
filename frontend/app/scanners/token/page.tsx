@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Coins, Search, ShieldAlert, CheckCircle2, AlertOctagon, Zap } from 'lucide-react';
+import { Coins, Search, ShieldAlert, CheckCircle2, AlertOctagon, AlertTriangle, Zap } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../../services/api';
 import { ScannerHistoryTable, ScanHistoryItem } from '../../../components/scanners/ScannerHistoryTable';
 
@@ -105,13 +105,13 @@ export default function TokenScannerPage() {
 
       {result && (
         <div className="glass-card p-6 rounded-3xl border border-slate-800 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-lg font-black text-white">{result.token_name} ({result.symbol})</h3>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-lg font-bold text-white">{result.token_name} ({result.symbol})</h3>
                 {result.honeypot ? (
                   <span className="text-[10px] px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold border border-red-500/30 flex items-center gap-1">
-                    <AlertOctagon className="w-3 h-3" /> HONEYPOT ALERT
+                    <AlertTriangle className="w-3 h-3" /> HONEYPOT DETECTED
                   </span>
                 ) : (
                   <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30 flex items-center gap-1">
@@ -119,12 +119,12 @@ export default function TokenScannerPage() {
                   </span>
                 )}
               </div>
-              <p className="text-xs font-mono text-slate-400 mt-1">{result.contract_address}</p>
+              <p className="text-xs font-mono text-slate-400 mt-1 break-all">{result.contract_address}</p>
             </div>
 
-            <div className="text-right">
+            <div className="text-left sm:text-right">
               <span className="text-xs font-bold text-slate-400 block mb-1">RISK LEVEL</span>
-              <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
+              <span className={`px-3 py-1 rounded-full text-xs font-bold border inline-block ${
                 result.risk_level === 'High'
                   ? 'bg-red-500/10 text-red-400 border-red-500/30'
                   : result.risk_level === 'Medium'

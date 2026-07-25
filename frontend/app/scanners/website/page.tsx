@@ -105,13 +105,13 @@ export default function WebsiteScannerPage() {
 
       {result && (
         <div className="glass-card p-6 rounded-3xl border border-slate-800 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-            <div>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div className="min-w-0 flex-1">
               <span className="text-xs font-bold text-slate-400">TARGET WEBSITE</span>
-              <p className="text-sm font-bold text-white mt-0.5">{result.website_url}</p>
+              <p className="text-xs sm:text-sm font-bold text-white mt-0.5 break-all">{result.website_url}</p>
             </div>
 
-            <div className="text-right">
+            <div className="text-left sm:text-right">
               <span className="text-xs font-bold text-slate-400 block mb-1">TRUST SCORE</span>
               <span className="text-lg font-black text-emerald-400">{result.trust_score}%</span>
             </div>
