@@ -180,7 +180,36 @@ class AISecurityEngine:
         }
 
     @staticmethod
-    def chat_copilot(prompt: str) -> Tuple[str, int, int]:
+    def query_copilot(prompt: str) -> Tuple[str, int, int]:
+        """
+        Query AI Copilot for Web3 Security advice.
+        Prioritizes OpenAI API (gpt-4o-mini), then Groq Cloud API, OpenRouter Free Models, with Aegivex Heuristic Engine fallback.
+        Returns: (response_text, risk_score, confidence_percentage)
+        """
+        # 0. Try OpenAI API if OPENAI_API_KEY is present
+        if settings.OPENAI_API_KEY:
+            try:
+                url = "https://api.openai.com/v1/chat/completions"
+                headers = {
+                    "Authorization": f"Bearer {settings.OPENAI_API_KEY.strip()}",
+                    "Content-Type": "application/json"
+                }
+                payload = {
+                    "model": "gpt-4o-mini",
+                    "messages": [
+                        {"role": "system", "content": "You are Aegivex AI, an autonomous Web3 AI security copilot. Provide concise, expert security analysis for Web3 smart contracts, wallet addresses, token honeypots, domain safety, and transaction approvals."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    "temperature": 0.3
+                }
+                req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    res_data = json.loads(response.read().decode('utf-8'))
+                    ans = res_data['choices'][0]['message']['content']
+                    return ans, 8, 99
+            except Exception as e:
+                print(f"[Aegivex AI] OpenAI API call failed or timed out: {e}")
+
         # 1. Try Groq API if GROQ_API_KEY is present
         if settings.GROQ_API_KEY:
             try:
