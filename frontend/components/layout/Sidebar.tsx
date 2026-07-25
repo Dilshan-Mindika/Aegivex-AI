@@ -26,6 +26,7 @@ import {
 
 export const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { name: 'Admin Control Center', path: '/admin/dashboard', icon: ShieldCheck, highlight: true },
   { name: 'AI Security Chat', path: '/chat', icon: Bot, highlight: true },
   { name: 'Tx Simulator', path: '/simulation', icon: Play },
   { name: 'Static Auditor', path: '/scanners/static-analysis', icon: Bug },

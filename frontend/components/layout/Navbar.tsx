@@ -112,6 +112,7 @@ export const Navbar: React.FC = () => {
   const getPageTitle = (path: string) => {
     switch (path) {
       case '/dashboard': return 'Command Intelligence';
+      case '/admin/dashboard': return 'Super Admin Control Center';
       case '/chat': return 'AI Copilot Chat';
       case '/scanners/wallet': return 'Wallet Risk Scanner';
       case '/scanners/token': return 'Token Honeypot Analyzer';
