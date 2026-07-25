@@ -19,7 +19,9 @@ import {
   Bell,
   Gift,
   Play,
-  Bug
+  Bug,
+  Gauge,
+  Users
 } from 'lucide-react';
 
 export const navItems = [
@@ -27,6 +29,8 @@ export const navItems = [
   { name: 'AI Security Chat', path: '/chat', icon: Bot, highlight: true },
   { name: 'Tx Simulator', path: '/simulation', icon: Play },
   { name: 'Static Auditor', path: '/scanners/static-analysis', icon: Bug },
+  { name: 'MEV & Gas Optimizer', path: '/scanners/mev-gas', icon: Gauge },
+  { name: 'Multi-Sig Auditor', path: '/scanners/multisig', icon: Users },
   { name: 'NFT & Airdrop Scanner', path: '/scanners/nft-airdrop', icon: Gift },
   { name: 'Wallet Risk Scanner', path: '/scanners/wallet', icon: Wallet },
   { name: 'Token Risk Analyzer', path: '/scanners/token', icon: Coins },

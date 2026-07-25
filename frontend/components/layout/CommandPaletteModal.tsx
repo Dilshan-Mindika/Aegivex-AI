@@ -21,7 +21,9 @@ import {
   Sparkles,
   Command,
   Play,
-  Bug
+  Bug,
+  Gauge,
+  Users
 } from 'lucide-react';
 
 interface CommandPaletteModalProps {
@@ -33,6 +35,8 @@ const commandItems = [
   { name: 'AI Security Copilot Chat', category: 'AI Assistant', path: '/chat', icon: Bot, desc: 'Ask Aegivex AI GPT-4o-mini copilot about Web3 security' },
   { name: 'Pre-Execution Transaction Simulator', category: 'Simulation', path: '/simulation', icon: Play, desc: 'Simulate transaction calldata & asset balance changes' },
   { name: 'Smart Contract Static Vulnerability Auditor', category: 'Audit', path: '/scanners/static-analysis', icon: Bug, desc: 'Slither SWC static rule check (Reentrancy, tx.origin)' },
+  { name: 'MEV Protection & Gas Optimization Analyzer', category: 'Optimization', path: '/scanners/mev-gas', icon: Gauge, desc: 'Calculate sandwich attack exposure & gas savings' },
+  { name: 'Multi-Sig Vault & Timelock Auditor', category: 'Governance', path: '/scanners/multisig', icon: Users, desc: 'Audit Gnosis Safe thresholds & 48h timelock guards' },
   { name: 'NFT & Airdrop Scam Scanner', category: 'Scanners', path: '/scanners/nft-airdrop', icon: Gift, desc: 'Detect setApprovalForAll traps & fake claim permits' },
   { name: 'Wallet Risk & Reputation Scanner', category: 'Scanners', path: '/scanners/wallet', icon: Wallet, desc: 'Audit wallet history & active spender permits' },
   { name: 'Token Risk & Honeypot Analyzer', category: 'Scanners', path: '/scanners/token', icon: Coins, desc: 'Identify 100% sell fee locks & liquidity traps' },
