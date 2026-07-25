@@ -171,14 +171,14 @@ export default function SettingsPage() {
       </div>
 
       {/* Tabs Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 p-1.5 rounded-2xl bg-slate-950/80 border border-slate-800/80">
         {[
-          { id: 'profile', label: 'Profile & Password', icon: User },
-          { id: '2fa', label: 'Two-Factor (2FA)', icon: Lock },
+          { id: 'profile', label: 'Profile', icon: User },
+          { id: '2fa', label: '2FA Auth', icon: Lock },
           { id: 'history', label: 'Login History', icon: History },
-          { id: 'wallets', label: 'Connected Wallets', icon: Wallet },
+          { id: 'wallets', label: 'Wallets', icon: Wallet },
           { id: 'api', label: 'API Keys', icon: Key },
-          { id: 'theme', label: 'Theme & Language', icon: SunMoon },
+          { id: 'theme', label: 'Theme & Lang', icon: SunMoon },
           { id: 'notifications', label: 'Notifications', icon: Bell },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -188,14 +188,14 @@ export default function SettingsPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-3.5 py-2.5 rounded-xl text-xs font-bold font-mono flex items-center gap-2 transition shrink-0 cursor-pointer ${
+              className={`w-full py-2.5 px-2 rounded-xl text-xs font-bold font-mono flex items-center justify-center gap-1.5 transition cursor-pointer text-center ${
                 isActive
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-glow-cyan'
-                  : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+                  : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800/80'
               }`}
             >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
+              <Icon className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">{tab.label}</span>
             </button>
           );
         })}

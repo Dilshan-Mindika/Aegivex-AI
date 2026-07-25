@@ -137,7 +137,7 @@ export default function AlertsPage() {
       </div>
 
       {/* Category Filter Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 p-1.5 rounded-2xl bg-slate-950/80 border border-slate-800/80">
         {alertCategories.map((cat) => {
           const Icon = cat.icon;
           const isActive = selectedFilter === cat.id;
@@ -146,15 +146,15 @@ export default function AlertsPage() {
             <button
               key={cat.id}
               onClick={() => setSelectedFilter(cat.id)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono flex items-center gap-2 transition shrink-0 cursor-pointer ${
+              className={`w-full py-2 px-2.5 rounded-xl text-xs font-bold font-mono flex items-center justify-center gap-1.5 transition cursor-pointer text-center ${
                 isActive 
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-glow-cyan' 
-                  : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+                  : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800/80'
               }`}
             >
-              {Icon && <Icon className="w-3.5 h-3.5" />}
-              <span>{cat.label}</span>
-              <span className="px-1.5 py-0.2 rounded bg-slate-950 text-[10px] text-slate-300">
+              {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
+              <span className="truncate">{cat.label}</span>
+              <span className="px-1.5 py-0.2 rounded bg-slate-950 text-[10px] text-slate-300 shrink-0">
                 {cat.count}
               </span>
             </button>
