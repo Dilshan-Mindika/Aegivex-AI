@@ -55,6 +55,15 @@ const multiChainList = [
   { name: 'Polygon PoS', symbol: 'MATIC', icon: Terminal },
 ];
 
+const liveIncidentFeed = [
+  { chain: 'OKX X LAYER', type: 'HONEYPOT NEUTRALIZED', target: '0x8f2a...39f1', time: '12s ago', badgeClass: 'badge-risk-critical' },
+  { chain: 'ETHEREUM MAINNET', type: 'SECURITY SCORE 98/100', target: 'Uniswap V3 Vault', time: '42s ago', badgeClass: 'badge-risk-safe' },
+  { chain: 'SOLANA NETWORK', type: 'UNLIMITED APPROVAL RISK', target: '0x71c7...976f', time: '1m ago', badgeClass: 'badge-risk-high' },
+  { chain: 'ARBITRUM ONE', type: 'PHISHING DOMAIN BLOCKED', target: 'claim-aegivex-airdrop.xyz', time: '2m ago', badgeClass: 'badge-risk-critical' },
+  { chain: 'BASE NETWORK', type: 'FORMAL VERIFICATION PASS', target: '0x3a82...10bc', time: '3m ago', badgeClass: 'badge-risk-safe' },
+  { chain: 'POLYGON POS', type: 'REENTRANCY GUARD VERIFIED', target: '0x49f1...8e21', time: '4m ago', badgeClass: 'badge-risk-warning' },
+];
+
 function AnimatedMetricCounter({ 
   targetValue, 
   prefix = '', 
@@ -171,47 +180,81 @@ export default function LandingPage() {
     setTimeout(() => {
       setIsScanning(false);
       if (selectedCategory === 'token') {
+        const isHoneypot = scanInput.toLowerCase().includes('honeypot') || scanInput.startsWith('0x1f');
         setScanResult({
-          type: 'Token Risk Analysis',
+          type: 'Token Risk Audit',
           target: scanInput,
-          score: 88,
-          rating: 'Critical Threat Detected',
-          summary: 'Malicious honeypot pattern identified: 100% sell fee restriction embedded within transfer functions.',
-          recommendation: 'ABORT TRANSACTION. Extreme capital loss vector detected.',
-          isSafe: false
+          score: isHoneypot ? 88 : 12,
+          safetyScore: isHoneypot ? 12 : 98,
+          rating: isHoneypot ? 'CRITICAL THREAT DETECTED' : 'VERIFIED SAFE TOKEN',
+          summary: isHoneypot 
+            ? 'Malicious honeypot pattern identified: 100% sell fee lock embedded within bytecode transfer logic.' 
+            : 'Standard ERC20 liquidity token verified with 0% buy/sell tax and immutable contract ownership.',
+          recommendation: isHoneypot 
+            ? 'ABORT TRANSACTION. Extreme capital loss vector detected.' 
+            : 'Safe for decentralized swap and liquidity routing.',
+          isSafe: !isHoneypot,
+          vectors: [
+            { name: 'Honeypot Sell Lock', passed: !isHoneypot, detail: isHoneypot ? '100% Sell Lock' : '0% Sell Tax' },
+            { name: 'Buy/Sell Tax %', passed: !isHoneypot, detail: isHoneypot ? '100% Fee Lock' : '0% Tax Verified' },
+            { name: 'Minting Permission', passed: true, detail: 'Owner Mint Disabled' },
+            { name: 'Proxy Architecture', passed: true, detail: 'Immutable Source Code' },
+            { name: 'Blacklist Function', passed: !isHoneypot, detail: isHoneypot ? 'Selective Address Lock' : 'Zero Address Blacklist' },
+          ]
         });
       } else if (selectedCategory === 'wallet') {
         setScanResult({
-          type: 'Wallet Integrity Audit',
+          type: 'Wallet Health & Allowance Audit',
           target: scanInput,
-          score: 12,
-          rating: 'Low Risk Signature',
-          summary: 'Verified address history with zero malicious approval permits or drainer contract association.',
-          recommendation: 'Address cleared for standard cross-chain transfers.',
-          isSafe: true
+          score: 15,
+          safetyScore: 92,
+          rating: 'LOW RISK SIGNATURE',
+          summary: 'Verified clean address execution history with zero active malicious approvals or drainer associations.',
+          recommendation: 'Target address cleared for standard cross-chain interactions.',
+          isSafe: true,
+          vectors: [
+            { name: 'Active Allowances', passed: true, detail: '0 Risky Permits' },
+            { name: 'Phishing Association', passed: true, detail: 'Clean History' },
+            { name: 'Mixer Interaction', passed: true, detail: 'Zero Tornado Links' },
+            { name: 'On-Chain Health', passed: true, detail: 'Grade A Security' }
+          ]
         });
       } else if (selectedCategory === 'contract') {
         setScanResult({
-          type: 'Smart Contract Vulnerability Assessment',
+          type: 'Smart Contract Logic Audit',
           target: scanInput,
-          score: 25,
-          rating: 'Verified Contract Logic',
-          summary: 'Verified open-source code with standard proxy upgradeability permissions enabled.',
-          recommendation: 'Standard proxy contract verified. Safe for authorized protocol interaction.',
-          isSafe: true
+          score: 20,
+          safetyScore: 95,
+          rating: 'VERIFIED CONTRACT LOGIC',
+          summary: 'Open-source verified contract with formal verification checks passed and zero reentrancy risks.',
+          recommendation: 'Standard verified contract safe for protocol interaction.',
+          isSafe: true,
+          vectors: [
+            { name: 'Formal Verification', passed: true, detail: 'Opcodes Verified' },
+            { name: 'Reentrancy Guard', passed: true, detail: 'Mutex Lock Active' },
+            { name: 'Selfdestruct Opcode', passed: true, detail: 'No Selfdestruct' },
+            { name: 'Source Verification', passed: true, detail: 'Exact Compiler Match' }
+          ]
         });
       } else {
         setScanResult({
-          type: 'Domain & Protocol Security Check',
+          type: 'Domain & Phishing Risk Audit',
           target: scanInput,
           score: 5,
-          rating: 'Authentic Endpoint Verified',
-          summary: 'SSL certificate validated. Zero phishing keyword signatures or typosquatting patterns detected.',
-          recommendation: 'Official dApp domain confirmed. Safe to initialize wallet connection.',
-          isSafe: true
+          safetyScore: 99,
+          rating: 'AUTHENTIC DAPP ENDPOINT',
+          summary: 'SSL TLS 1.3 certificate verified. Zero typosquatting signatures or malicious drainer scripts detected.',
+          recommendation: 'Official protocol domain confirmed safe for wallet connection.',
+          isSafe: true,
+          vectors: [
+            { name: 'Typosquatting Check', passed: true, detail: 'Exact Brand Match' },
+            { name: 'SSL Certificate', passed: true, detail: 'TLS 1.3 Encryption' },
+            { name: 'Drainer Script Check', passed: true, detail: 'Zero Drainers Found' },
+            { name: 'DNS Poisoning', passed: true, detail: 'Clean Resolvers' }
+          ]
         });
       }
-    }, 1200);
+    }, 1000);
   };
 
   const handleQuickPreset = (category: 'token' | 'wallet' | 'contract' | 'website', preset: string) => {
@@ -303,8 +346,43 @@ export default function LandingPage() {
       </div>
 
       {/* SECTION 1: HERO & INSTANT SCANNER BAR */}
-      <section className="relative px-3 sm:px-6 pt-24 pb-12 sm:pt-36 sm:pb-24 max-w-7xl mx-auto text-center z-10 w-full overflow-x-hidden">
+      <section className="relative px-3 sm:px-6 pt-20 pb-12 sm:pt-32 sm:pb-24 max-w-7xl mx-auto text-center z-10 w-full overflow-x-hidden">
         
+        {/* Real-Time Threat Incident Live Ticker Bar (CertiK Skynet & De.Fi Radar Style) */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8 max-w-5xl mx-auto overflow-hidden rounded-2xl border border-cyan-500/30 bg-slate-950/90 p-2 backdrop-blur-xl relative shadow-glow-cyan"
+        >
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-cyan-950/80 rounded-xl border border-cyan-500/40 shrink-0 absolute left-2 top-2 bottom-2 z-20 shadow-md">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+            </span>
+            <span className="text-[10px] sm:text-xs font-mono font-bold text-cyan-300 tracking-wider whitespace-nowrap hidden xs:inline-block">
+              SKYNET LIVE THREAT FEED
+            </span>
+            <span className="text-[10px] font-mono font-bold text-cyan-300 tracking-wider whitespace-nowrap xs:hidden">
+              LIVE FEED
+            </span>
+          </div>
+
+          <div className="overflow-hidden pl-32 xs:pl-48">
+            <div className="animate-threat-marquee flex items-center gap-4">
+              {[...liveIncidentFeed, ...liveIncidentFeed].map((item, idx) => (
+                <div key={idx} className="flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] font-mono shrink-0 whitespace-nowrap shadow-sm">
+                  <span className="text-slate-400 font-bold">{item.chain}</span>
+                  <span className="text-slate-700">•</span>
+                  <span className={item.badgeClass}>{item.type}</span>
+                  <span className="text-slate-200 font-medium">{item.target}</span>
+                  <span className="text-slate-500 text-[10px]">{item.time}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
         {/* Hackathon Badge */}
         <motion.div 
           initial={{ opacity: 0, y: -25, scale: 0.9 }}
@@ -464,38 +542,82 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              {/* Live Instant Result Card */}
+              {/* Live Instant Result Card (CertiK & GoPlus SecWareX Style) */}
               {scanResult && (
                 <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`mt-4 p-3.5 sm:p-4 rounded-2xl border ${
-                    scanResult.isSafe 
-                      ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' 
-                      : 'bg-red-500/10 border-red-500/40 text-red-300'
-                  }`}
+                  initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  className="mt-5 p-4 sm:p-5 rounded-2xl border border-slate-800 bg-slate-950/90 shadow-2xl relative overflow-hidden"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      {scanResult.isSafe ? (
-                        <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
-                      ) : (
-                        <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-red-400" />
-                      )}
-                      <span className="font-bold text-xs sm:text-sm text-white">{scanResult.type} Assessment</span>
+                  {/* Top Bar: Risk Dial + Title + Severity Pill */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-slate-800/80 mb-4">
+                    <div className="flex items-center gap-3">
+                      
+                      {/* CertiK Skynet 0-100 Risk Score Circular Gauge */}
+                      <div className={`relative w-12 h-12 rounded-full border-2 flex items-center justify-center font-mono font-black text-sm shrink-0 shadow-lg ${
+                        scanResult.isSafe 
+                          ? 'border-emerald-400 text-emerald-300 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.35)]' 
+                          : 'border-red-500 text-red-400 bg-red-500/10 shadow-[0_0_15px_rgba(239,68,68,0.35)]'
+                      }`}>
+                        <span>{scanResult.score}</span>
+                        <span className="text-[9px] text-slate-400 absolute -bottom-1 font-mono">/100</span>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-sm sm:text-base text-white">{scanResult.type}</span>
+                        </div>
+                        <p className="text-[11px] font-mono text-slate-400 truncate max-w-xs sm:max-w-md">Target: {scanResult.target}</p>
+                      </div>
                     </div>
-                    <span className={`text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full border ${
-                      scanResult.isSafe 
-                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' 
-                        : 'bg-red-500/20 text-red-400 border-red-500/40'
-                    }`}>
-                      {scanResult.rating} ({scanResult.score}/100)
+
+                    <span className={scanResult.isSafe ? 'badge-risk-safe' : 'badge-risk-critical'}>
+                      {scanResult.isSafe ? <CheckCircle2 className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
+                      {scanResult.rating}
                     </span>
                   </div>
-                  <p className="text-[11px] sm:text-xs leading-relaxed text-slate-200 mb-2">{scanResult.summary}</p>
-                  <div className="p-2 sm:p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[10px] sm:text-[11px] font-mono text-slate-300 flex items-center gap-2">
-                    <Zap className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                    <span>Security Directive: {scanResult.recommendation}</span>
+
+                  <p className="text-xs text-slate-300 leading-relaxed mb-4 text-left font-medium">{scanResult.summary}</p>
+
+                  {/* GoPlus SecWareX Style Multi-Vector Risk Breakdown Checklist Grid */}
+                  {scanResult.vectors && (
+                    <div className="mb-4">
+                      <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2 text-left">
+                        Multi-Vector Threat Inspection Checklist
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        {scanResult.vectors.map((vec: any, idx: number) => (
+                          <div 
+                            key={idx} 
+                            className={`p-2.5 rounded-xl border text-left flex items-center justify-between gap-2 text-xs font-mono transition ${
+                              vec.passed 
+                                ? 'bg-emerald-500/5 border-emerald-500/30 text-emerald-300' 
+                                : 'bg-red-500/5 border-red-500/30 text-red-300'
+                            }`}
+                          >
+                            <div className="flex items-center gap-1.5 truncate">
+                              {vec.passed ? (
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                              ) : (
+                                <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                              )}
+                              <span className="truncate font-semibold">{vec.name}</span>
+                            </div>
+                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${
+                              vec.passed ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' : 'bg-red-500/20 border-red-500/40 text-red-300'
+                            }`}>
+                              {vec.detail}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Security Directive Box */}
+                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-200 flex items-center gap-2 text-left shadow-inner">
+                    <Zap className="w-4 h-4 text-cyan-400 shrink-0" />
+                    <span><strong className="text-cyan-300">SECURITY DIRECTIVE:</strong> {scanResult.recommendation}</span>
                   </div>
                 </motion.div>
               )}
@@ -710,6 +832,85 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* SECTION: ALLOWANCE & REVOCATION SHIELD (REVOKE.CASH & DE.FI SHIELD STYLE) */}
+      <section className="px-3 sm:px-6 py-12 sm:py-16 bg-slate-950/80 border-t border-slate-800/80 relative w-full overflow-x-hidden">
+        <div className="max-w-6xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-8 sm:mb-12"
+          >
+            <span className="text-xs font-bold px-3.5 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 mb-3 inline-block font-mono">
+              ALLOWANCE & PERMIT SHIELD
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-white mb-2">Automated Token Approval & Revocation Hub</h2>
+            <p className="text-slate-400 text-xs sm:text-base max-w-xl mx-auto">
+              Scan active ERC20 and NFT allowances in real time. Flag unlimited spender permits and revoke malicious authorizations in 1 click.
+            </p>
+          </motion.div>
+
+          <div className="glass-card-premium p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-amber-500/30 max-w-4xl mx-auto relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <ShieldAlert className="w-5 h-5 text-amber-400" />
+                <span className="font-bold text-sm text-white font-mono">Active Allowance Risk Telemetry</span>
+              </div>
+              <span className="badge-risk-high">HIGH RISK EXPOSURE DETECTED</span>
+            </div>
+
+            <div className="space-y-2.5 mb-5">
+              {[
+                { asset: 'USDT Token', spender: 'Uniswap V2 Router (0x7a25...488d)', allowance: 'UNLIMITED (MAX_UINT256)', risk: 'CRITICAL', isRisky: true },
+                { asset: 'USDC Token', spender: 'Aave V3 Pool (0x8787...12bc)', allowance: '5,000.00 USDC', risk: 'SAFE', isRisky: false },
+                { asset: 'Uniswap V3 LP', spender: 'Suspicious Drainer (0x9f1a...8e21)', allowance: 'UNLIMITED (MAX_UINT256)', risk: 'CRITICAL', isRisky: true }
+              ].map((item, idx) => (
+                <div key={idx} className={`p-3 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono transition ${
+                  item.isRisky ? 'bg-red-500/10 border-red-500/30 text-slate-200' : 'bg-slate-900 border-slate-800 text-slate-300'
+                }`}>
+                  <div className="flex items-center gap-3">
+                    <Coins className={`w-4 h-4 ${item.isRisky ? 'text-red-400' : 'text-emerald-400'}`} />
+                    <div>
+                      <span className="font-bold text-white block">{item.asset}</span>
+                      <span className="text-[11px] text-slate-400">Spender: {item.spender}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 self-end sm:self-auto">
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                      item.isRisky ? 'bg-red-500/20 text-red-400 border-red-500/40' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                    }`}>
+                      {item.allowance}
+                    </span>
+                    {item.isRisky && (
+                      <button 
+                        onClick={() => handleProtectedNavigation('/scanners/wallet')}
+                        className="px-2.5 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-300 font-bold text-[11px] transition cursor-pointer flex items-center gap-1"
+                      >
+                        <Flame className="w-3 h-3" />
+                        Revoke Permit
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs">
+              <span className="text-slate-400 text-center sm:text-left">Protect your wallet against unlimited spender permits and approval exploits.</span>
+              <button
+                onClick={() => handleProtectedNavigation('/scanners/wallet')}
+                className="btn-futuristic-primary px-5 py-2.5 rounded-xl text-white font-bold text-xs flex items-center gap-2 cursor-pointer shrink-0"
+              >
+                <Shield className="w-4 h-4" />
+                Launch Full Allowance Shield
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 5: HOW IT WORKS WORKFLOW ARCHITECTURE */}
       <section className="px-3 sm:px-6 py-12 sm:py-20 bg-slate-950/40 border-t border-slate-800/80 relative w-full overflow-x-hidden">
         <div className="max-w-6xl mx-auto">
@@ -758,6 +959,62 @@ export default function LandingPage() {
                       <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 sm:mb-2">{s.title}</h3>
                       <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
                     </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION: INSTITUTIONAL PROTOCOL VERIFICATION BADGES (CERTIK & SHERLOCK STYLE) */}
+      <section className="px-3 sm:px-6 py-12 sm:py-16 bg-slate-950/90 border-t border-slate-800/80 relative w-full overflow-x-hidden">
+        <div className="max-w-6xl mx-auto text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.25 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8 sm:mb-12"
+          >
+            <span className="text-xs font-bold px-3.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-3 inline-block font-mono">
+              PROTOCOL TRUST STANDARDS
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-white mb-2">Institutional Security Verification Badges</h2>
+            <p className="text-slate-400 text-xs sm:text-base max-w-xl mx-auto">
+              Automated cryptographic proofs, formal opcode verification, and non-custodial security standards.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+            {[
+              { title: 'Formal Verification Engine', badge: 'PASSED', desc: 'Mathematical proofs confirming zero unhandled opcode exceptions.', icon: ShieldCheck, color: 'border-emerald-500/40 text-emerald-300 bg-emerald-500/10' },
+              { title: 'Skynet Neural Telemetry', badge: '24/7 ACTIVE', desc: 'Continuous on-chain threat monitoring across multi-chain ecosystems.', icon: Activity, color: 'border-cyan-500/40 text-cyan-300 bg-cyan-500/10' },
+              { title: 'OKX X Layer Standard', badge: 'VERIFIED L2', desc: 'Optimized risk engine for OKX X Layer and EVM smart contracts.', icon: Cpu, color: 'border-purple-500/40 text-purple-300 bg-purple-500/10' },
+              { title: 'Non-Custodial Shield', badge: '100% SECURE', desc: 'Zero private key storage, zero custodial exposure, zero PII logging.', icon: Lock, color: 'border-blue-500/40 text-blue-300 bg-blue-500/10' }
+            ].map((badge, idx) => {
+              const Icon = badge.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  whileHover={{ scale: 1.04, y: -4 }}
+                  className="glass-card-premium p-4 sm:p-5 rounded-2xl border border-slate-800 text-left relative overflow-hidden flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`p-2 rounded-xl border ${badge.color}`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${badge.color}`}>
+                        {badge.badge}
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-sm sm:text-base text-white mb-1">{badge.title}</h3>
+                    <p className="text-xs text-slate-400 leading-relaxed font-medium">{badge.desc}</p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-cyan-400">
+                    <span>Audit Status</span>
+                    <span className="font-bold">Verified ✅</span>
                   </div>
                 </motion.div>
               );

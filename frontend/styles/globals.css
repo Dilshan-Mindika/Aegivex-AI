@@ -219,6 +219,39 @@ body {
   box-shadow: 0 0 25px rgba(239, 68, 68, 0.35);
 }
 
+/* Continuous Threat Incident Ticker Marquee (CertiK / De.Fi Style) */
+@keyframes threatTickerMarquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-threat-marquee {
+  display: flex;
+  width: max-content;
+  animation: threatTickerMarquee 35s linear infinite;
+}
+
+.animate-threat-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Web3 Risk Level Badge Utilities (De.Fi / CertiK / Immunefi Style) */
+.badge-risk-critical {
+  @apply bg-red-500/20 text-red-400 border border-red-500/40 font-mono font-bold px-2.5 py-0.5 rounded-full text-[10px] tracking-wider uppercase flex items-center gap-1 shadow-[0_0_12px_rgba(239,68,68,0.35)];
+}
+
+.badge-risk-high {
+  @apply bg-orange-500/20 text-orange-400 border border-orange-500/40 font-mono font-bold px-2.5 py-0.5 rounded-full text-[10px] tracking-wider uppercase flex items-center gap-1 shadow-[0_0_12px_rgba(249,115,22,0.35)];
+}
+
+.badge-risk-warning {
+  @apply bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono font-bold px-2.5 py-0.5 rounded-full text-[10px] tracking-wider uppercase flex items-center gap-1 shadow-[0_0_12px_rgba(245,158,11,0.35)];
+}
+
+.badge-risk-safe {
+  @apply bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono font-bold px-2.5 py-0.5 rounded-full text-[10px] tracking-wider uppercase flex items-center gap-1 shadow-[0_0_12px_rgba(16,185,129,0.35)];
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
