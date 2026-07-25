@@ -227,13 +227,9 @@ export default function AdminDashboardPage() {
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">Live Support Desk Inbox</h2>
-              <p className="text-xs text-slate-400 font-mono">Respond directly to user queries from the central database desk</p>
+              <p className="text-xs text-slate-400 font-mono">Respond directly to active user support tickets</p>
             </div>
           </div>
-          <span className="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-mono border border-emerald-500/40 flex items-center gap-1.5 font-bold">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            Live DB Sync Active
-          </span>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
