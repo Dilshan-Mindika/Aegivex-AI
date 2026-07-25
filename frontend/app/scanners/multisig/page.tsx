@@ -11,7 +11,8 @@ import {
   AlertTriangle, 
   Download, 
   Lock,
-  Layers
+  Layers,
+  Zap
 } from 'lucide-react';
 
 export default function MultisigAuditorPage() {

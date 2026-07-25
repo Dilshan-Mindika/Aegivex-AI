@@ -45,7 +45,16 @@ def register(user_in: UserRegisterRequest, request: Request, db: Session = Depen
     db.add(audit)
     db.commit()
 
-    return {"access_token": access_token, "token_type": "Bearer"}
+    return {
+        "access_token": access_token, 
+        "token_type": "Bearer",
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.role
+        }
+    }
 
 @router.post("/login", response_model=TokenResponse)
 def login(login_in: UserLoginRequest, request: Request, db: Session = Depends(get_db)):
@@ -64,7 +73,16 @@ def login(login_in: UserLoginRequest, request: Request, db: Session = Depends(ge
     db.add(audit)
     db.commit()
 
-    return {"access_token": access_token, "token_type": "Bearer"}
+    return {
+        "access_token": access_token, 
+        "token_type": "Bearer",
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.role
+        }
+    }
 
 @router.post("/logout", response_model=dict)
 def logout(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):

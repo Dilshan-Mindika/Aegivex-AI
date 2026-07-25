@@ -19,6 +19,7 @@ class UserLoginRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "Bearer"
+    user: Optional[dict] = None
 
 class UserResponse(BaseModel):
     id: str

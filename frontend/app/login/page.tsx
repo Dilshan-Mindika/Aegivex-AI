@@ -40,7 +40,17 @@ export default function LoginPage() {
       const res = await apiClient.post('/auth/login', { email, password });
       if (res.data && res.data.access_token) {
         localStorage.setItem('aegivex_token', res.data.access_token);
-        router.push('/dashboard');
+        
+        const isSystemAdmin = email.toLowerCase().trim() === 'admin@aegivex.ai' || (res.data.user && res.data.user.role === 'Admin');
+        const userPayload = res.data.user || {
+          email: email.trim(),
+          name: isSystemAdmin ? 'System Administrator' : 'Security Researcher',
+          role: isSystemAdmin ? 'Admin' : 'User'
+        };
+        localStorage.setItem('aegivex_user', JSON.stringify(userPayload));
+        window.dispatchEvent(new Event('aegivex_user_updated'));
+
+        router.push(isSystemAdmin ? '/admin/dashboard' : '/dashboard');
       } else {
         setError('Invalid login response from backend.');
       }

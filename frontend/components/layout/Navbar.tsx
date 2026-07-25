@@ -18,7 +18,8 @@ import {
   Menu,
   X,
   Search,
-  Command
+  Command,
+  Zap
 } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';
 import { navItems } from './Sidebar';
@@ -33,6 +34,40 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [currentUser, setCurrentUser] = useState({
+    email: 'user@aegivex.ai',
+    name: 'Security Researcher',
+    role: 'User',
+    initials: 'US'
+  });
+
+  const loadUser = () => {
+    const storedUserStr = localStorage.getItem('aegivex_user');
+    if (storedUserStr) {
+      try {
+        const u = JSON.parse(storedUserStr);
+        const email = u.email || 'user@aegivex.ai';
+        const role = u.role || (email.toLowerCase().includes('admin') ? 'Admin' : 'User');
+        const name = u.name || (role === 'Admin' ? 'System Administrator' : 'Security Researcher');
+        const initials = email.toLowerCase().includes('admin') ? 'AD' : email.substring(0, 2).toUpperCase();
+        setCurrentUser({ email, name, role, initials });
+      } catch (e) {
+        // fallback
+      }
+    }
+  };
+
+  useEffect(() => {
+    loadUser();
+
+    window.addEventListener('aegivex_user_updated', loadUser);
+    window.addEventListener('storage', loadUser);
+
+    return () => {
+      window.removeEventListener('aegivex_user_updated', loadUser);
+      window.removeEventListener('storage', loadUser);
+    };
+  }, []);
 
   // Fetch real notifications from backend database
   const fetchNotifications = async () => {
@@ -49,20 +84,29 @@ export const Navbar: React.FC = () => {
     }
   }, [pathname]);
 
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('aegivex_token');
+      localStorage.removeItem('aegivex_user');
+      window.dispatchEvent(new Event('aegivex_user_updated'));
+    }
+    router.push('/login');
+  };
+
   // Hide Navbar on public landing page and auth pages
   if (pathname === '/' || pathname === '/login' || pathname === '/register') return null;
 
-  const unreadCount = notifications.filter(n => !n.is_read).length;
+  const unreadCount = notifications.filter((n: any) => !n.is_read).length;
 
   const handleMarkAllRead = async () => {
     await handleApiCall(apiClient.post('/notifications/read-all'), {});
-    setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+    setNotifications((prev: any[]) => prev.map((n: any) => ({ ...n, is_read: true })));
   };
 
   const handleMarkSingleRead = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     await handleApiCall(apiClient.post(`/notifications/${id}/read`), {});
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+    setNotifications((prev: any[]) => prev.map((n: any) => n.id === id ? { ...n, is_read: true } : n));
   };
 
   const getPageTitle = (path: string) => {
@@ -78,13 +122,6 @@ export const Navbar: React.FC = () => {
       case '/settings': return 'User Configurations';
       default: return 'Aegivex Security AI';
     }
-  };
-
-  const handleLogout = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('aegivex_token');
-    }
-    router.push('/login');
   };
 
   return (
@@ -244,47 +281,58 @@ export const Navbar: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center gap-2 p-1.5 sm:pr-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition"
+              className="flex items-center gap-2 p-1.5 sm:pr-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition cursor-pointer"
               aria-label="User Account Menu"
             >
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 via-cyan-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-glow-blue shrink-0">
-                US
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 via-cyan-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-glow-blue shrink-0 font-mono">
+                {currentUser.initials}
               </div>
-              <span className="text-xs font-medium text-slate-200 hidden md:inline">Researcher</span>
+              <span className="text-xs font-medium text-slate-200 hidden md:inline truncate max-w-[140px]">
+                {currentUser.role === 'Admin' ? 'System Administrator' : currentUser.name}
+              </span>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden xs:inline" />
             </button>
 
             {showUserMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-1.5 z-50">
+              <div className="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-1.5 z-50 text-left font-mono">
                 <div className="px-3 py-2 border-b border-slate-800 mb-1">
-                  <p className="text-xs font-semibold text-white">Signed in User</p>
-                  <p className="text-[11px] text-slate-400 truncate">user@aegivex.ai</p>
+                  <p className="text-xs font-bold text-white truncate">
+                    {currentUser.role === 'Admin' ? 'System Administrator' : 'Signed in User'}
+                  </p>
+                  <p className="text-[11px] text-slate-400 truncate">{currentUser.email}</p>
                 </div>
-                <button
-                  onClick={() => {
-                    setShowUserMenu(false);
-                    router.push('/admin/dashboard');
-                  }}
-                  className="w-full text-left px-3 py-2 text-xs text-purple-300 hover:bg-purple-500/20 rounded-lg flex items-center gap-2"
-                >
-                  <ShieldAlert className="w-3.5 h-3.5 text-purple-400" />
-                  Admin Control Center
-                </button>
+                
+                {currentUser.role === 'Admin' && (
+                  <button
+                    onClick={() => {
+                      setShowUserMenu(false);
+                      router.push('/admin/dashboard');
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-purple-300 hover:bg-purple-500/20 rounded-lg flex items-center gap-2 font-bold cursor-pointer transition"
+                  >
+                    <ShieldAlert className="w-3.5 h-3.5 text-purple-400" />
+                    Admin Control Center
+                  </button>
+                )}
+
                 <button
                   onClick={() => {
                     setShowUserMenu(false);
                     router.push('/settings');
                   }}
-                  className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-lg flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-lg flex items-center gap-2 cursor-pointer transition"
                 >
                   <UserIcon className="w-3.5 h-3.5 text-slate-400" />
                   Security Configurations
                 </button>
+
+                <div className="border-t border-slate-800 my-1" />
+
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded-lg flex items-center gap-2 mt-1"
+                  className="w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 rounded-lg flex items-center gap-2 cursor-pointer transition"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <LogOut className="w-3.5 h-3.5 text-red-400" />
                   Sign Out
                 </button>
               </div>
