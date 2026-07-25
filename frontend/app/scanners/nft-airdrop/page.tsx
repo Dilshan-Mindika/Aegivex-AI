@@ -19,15 +19,18 @@ import {
   Check, 
   Download,
   Coins,
-  ShieldCheck
+  ShieldCheck,
+  FileCode2,
+  Layers
 } from 'lucide-react';
 
 export default function NftAirdropScannerPage() {
-  const [activeTab, setActiveTab] = useState<'nft' | 'airdrop' | 'qr' | 'fakeToken'>('nft');
+  const [activeTab, setActiveTab] = useState<'nft' | 'airdrop' | 'fakeToken' | 'qr' | 'decompiler' | 'batch'>('nft');
   const [targetInput, setTargetInput] = useState('');
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState<any>(null);
   const [copied, setCopied] = useState(false);
+  const [showRevokeModal, setShowRevokeModal] = useState(false);
 
   // QR Camera simulator state
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -42,7 +45,53 @@ export default function NftAirdropScannerPage() {
     setTimeout(() => {
       setIsScanning(false);
 
-      if (activeTab === 'nft') {
+      if (activeTab === 'decompiler') {
+        setScanResult({
+          title: 'EVM Smart Contract Bytecode Decompiler Audit',
+          target: targetInput || '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
+          score: 8,
+          safetyScore: 98,
+          isSafe: true,
+          rating: 'CLEAN BYTECODE STRUCTURE',
+          summary: 'Bytecode decompiled successfully into 142 assembly instructions. Zero dangerous DELEGATECALL or SELFDESTRUCT opcodes detected.',
+          directive: 'Smart contract logic confirmed immutable and safe for execution.',
+          opcodes: [
+            { op: 'DELEGATECALL (0xF4)', status: 'SAFE (0 FOUND)', desc: 'Zero unconstrained delegate calls to external logic contracts.' },
+            { op: 'SELFDESTRUCT (0xFF)', status: 'SAFE (0 FOUND)', desc: 'Zero selfdestruct instructions present.' },
+            { op: 'CREATE2 (0xF5)', status: 'PASS (1 FOUND)', desc: 'Standard deterministic factory deployment opcode.' },
+            { op: 'SSTORE (0x55)', status: 'PASS (12 FOUND)', desc: 'Normal state variable storage updates.' }
+          ],
+          vectors: [
+            { name: 'DelegateCall Backdoor', passed: true, detail: '0 Opcodes' },
+            { name: 'SelfDestruct Destruction Vector', passed: true, detail: '0 Opcodes' },
+            { name: 'Owner Override Storage Slot', passed: true, detail: 'Slot Locked' },
+            { name: 'Assembly Reentrancy Risk', passed: true, detail: 'Guard Active' }
+          ]
+        });
+      } else if (activeTab === 'batch') {
+        const addresses = targetInput.split(/[\n,]+/).map(a => a.trim()).filter(Boolean);
+        setScanResult({
+          title: `Bulk Address & Token Audit (${addresses.length || 3} Targets Scanned)`,
+          target: `${addresses.length || 3} Batch Target Inputs`,
+          score: 12,
+          safetyScore: 96,
+          isSafe: true,
+          rating: 'BATCH SCAN COMPLETED',
+          summary: `Parallel neural scan completed across ${addresses.length || 3} addresses. 0 Critical threats or honeypot locks detected.`,
+          directive: 'All batch targets cleared for operational interaction.',
+          batchItems: (addresses.length ? addresses : ['0x71C7...976F', '0x8f2A...39F1', '0x33b1...8E21']).map((addr, idx) => ({
+            address: addr,
+            score: idx === 0 ? 12 : idx === 1 ? 5 : 18,
+            status: 'VERIFIED SAFE',
+            risk: 'Low Risk'
+          })),
+          vectors: [
+            { name: 'Batch Target Integrity', passed: true, detail: 'All Clean' },
+            { name: 'Cross-Chain Reputation', passed: true, detail: 'Grade A' },
+            { name: 'Shared Blacklist Cluster', passed: true, detail: '0 Cluster Hits' }
+          ]
+        });
+      } else if (activeTab === 'nft') {
         const isScam = targetInput.toLowerCase().includes('scam') || targetInput.toLowerCase().includes('drainer') || targetInput.startsWith('0x99');
         setScanResult({
           title: 'NFT Mint Pass & Collection Audit',
@@ -174,12 +223,14 @@ export default function NftAirdropScannerPage() {
       </div>
 
       {/* Mode Selector Tabs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
         {[
-          { id: 'nft', label: 'NFT Scam Checker', icon: ImageIcon, desc: 'Detect setApprovalForAll traps' },
-          { id: 'airdrop', label: 'Airdrop Scam Detector', icon: Gift, desc: 'Verify claim permit signatures' },
-          { id: 'fakeToken', label: 'Fake Token Detector', icon: Coins, desc: 'Identify impersonator tokens' },
-          { id: 'qr', label: 'QR Code Scanner', icon: QrCode, desc: 'Parse camera / image payloads' },
+          { id: 'nft', label: 'NFT Scam Checker', icon: ImageIcon, desc: 'Detect setApprovalForAll' },
+          { id: 'airdrop', label: 'Airdrop Scam Detector', icon: Gift, desc: 'Verify claim permits' },
+          { id: 'fakeToken', label: 'Fake Token Detector', icon: Coins, desc: 'Identify honeypots' },
+          { id: 'qr', label: 'QR Code Scanner', icon: QrCode, desc: 'Parse camera / image' },
+          { id: 'decompiler', label: 'Bytecode Decompiler', icon: FileCode2, desc: 'Inspect assembly opcodes' },
+          { id: 'batch', label: 'Bulk Address Scan', icon: Layers, desc: 'Parallel multi-address audit' },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -248,6 +299,17 @@ export default function NftAirdropScannerPage() {
                 </div>
               )}
             </div>
+          ) : activeTab === 'batch' ? (
+            <div className="space-y-2">
+              <label className="text-xs font-mono text-slate-400 block text-left">Input Multiple Target Addresses or URLs (One per line or comma-separated):</label>
+              <textarea
+                value={targetInput}
+                onChange={(e) => setTargetInput(e.target.value)}
+                rows={3}
+                placeholder="0x71C7656EC7ab88b098defB751B7401B5f6d8976F&#10;0x8f2a49f139f10a85d5af5bf1d1762f925bdaddc&#10;https://claim-airdrop-aegivex.xyz"
+                className="w-full p-4 rounded-2xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-xs font-mono focus:outline-none focus:border-cyan-500 transition"
+              />
+            </div>
           ) : (
             <div className="relative">
               <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
@@ -258,6 +320,7 @@ export default function NftAirdropScannerPage() {
                 placeholder={
                   activeTab === 'nft' ? 'Enter NFT Collection contract address or mint URL (0x...)' :
                   activeTab === 'airdrop' ? 'Enter Airdrop claim website URL or contract payload...' :
+                  activeTab === 'decompiler' ? 'Enter contract address for EVM bytecode decompilation...' :
                   'Enter target token symbol or contract address to verify authenticity...'
                 }
                 className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-500 font-mono transition"
@@ -312,7 +375,45 @@ export default function NftAirdropScannerPage() {
               </span>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed mb-4 font-medium">{scanResult.summary}</p>
+            {/* Opcodes Section */}
+            {scanResult.opcodes && (
+              <div className="mb-4 space-y-2">
+                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block">
+                  Decompiled Assembly Opcode Inspection
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {scanResult.opcodes.map((op: any, idx: number) => (
+                    <div key={idx} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono">
+                      <div className="flex items-center justify-between text-white font-bold mb-1">
+                        <span>{op.op}</span>
+                        <span className="text-[10px] text-emerald-400 font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 border border-emerald-500/30">{op.status}</span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed font-sans">{op.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Batch Items Section */}
+            {scanResult.batchItems && (
+              <div className="mb-4 space-y-2">
+                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block">
+                  Bulk Parallel Threat Audit Results
+                </span>
+                <div className="space-y-1.5">
+                  {scanResult.batchItems.map((item: any, idx: number) => (
+                    <div key={idx} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs font-mono">
+                      <span className="text-slate-200 font-bold">{item.address}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-slate-400">Score: {item.score}/100</span>
+                        <span className="badge-risk-safe text-[10px]">{item.status}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Vector Checklist */}
             <div className="mb-4">

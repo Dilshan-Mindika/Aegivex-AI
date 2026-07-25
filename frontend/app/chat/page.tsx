@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Send, User, Sparkles, ShieldCheck, RefreshCw, AlertTriangle, Volume2, VolumeX } from 'lucide-react';
+import { Bot, Send, User, Sparkles, ShieldCheck, RefreshCw, AlertTriangle, Volume2, VolumeX, Download } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';
 
 interface Message {
@@ -27,6 +27,16 @@ export default function AIChatPage() {
   const [loading, setLoading] = useState(false);
   const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const handleExportTranscript = () => {
+    const content = messages.map(m => `### [${m.sender.toUpperCase()}] (${m.timestamp})\n${m.text}\n`).join('\n---\n\n');
+    const blob = new Blob([`# Aegivex AI Security Consultation Transcript\nExported: ${new Date().toLocaleString()}\n\n${content}`], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Aegivex_Security_Chat_${Date.now()}.md`;
+    a.click();
+  };
 
   const speakText = (text: string) => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -116,6 +126,15 @@ export default function AIChatPage() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Export Transcript */}
+          <button
+            onClick={handleExportTranscript}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold font-mono bg-slate-900 text-slate-300 hover:text-white border border-slate-800 flex items-center gap-1.5 transition cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export</span>
+          </button>
+
           {/* AI Voice Toggle */}
           <button
             onClick={() => {

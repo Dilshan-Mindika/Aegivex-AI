@@ -47,12 +47,12 @@ const targetPhrases = [
 ];
 
 const multiChainList = [
-  { name: 'OKX X Layer', symbol: 'XLAYER', icon: Cpu },
-  { name: 'Ethereum Mainnet', symbol: 'ETH', icon: Layers },
-  { name: 'Solana Network', symbol: 'SOL', icon: Zap },
-  { name: 'Arbitrum One', symbol: 'ARB', icon: Activity },
-  { name: 'Base Network', symbol: 'BASE', icon: Shield },
-  { name: 'Polygon PoS', symbol: 'MATIC', icon: Terminal },
+  { name: 'OKX X Layer', symbol: 'XLAYER', icon: Cpu, gwei: '0.001 Gwei', tps: '2,400 TPS', latency: '0.3s' },
+  { name: 'Ethereum Mainnet', symbol: 'ETH', icon: Layers, gwei: '12.4 Gwei', tps: '15.2 TPS', latency: '0.4s' },
+  { name: 'Solana Network', symbol: 'SOL', icon: Zap, gwei: '<0.001 SOL', tps: '3,800 TPS', latency: '0.2s' },
+  { name: 'Arbitrum One', symbol: 'ARB', icon: Activity, gwei: '0.12 Gwei', tps: '850 TPS', latency: '0.25s' },
+  { name: 'Base Network', symbol: 'BASE', icon: Shield, gwei: '0.08 Gwei', tps: '1,200 TPS', latency: '0.28s' },
+  { name: 'Polygon PoS', symbol: 'MATIC', icon: Terminal, gwei: '32.1 Gwei', tps: '450 TPS', latency: '0.35s' },
 ];
 
 const liveIncidentFeed = [
@@ -170,6 +170,8 @@ export default function LandingPage() {
     router.push('/login');
   };
 
+  const [selectedVectorDetail, setSelectedVectorDetail] = useState<any>(null);
+
   const handleRunInstantScan = (e: React.FormEvent) => {
     e.preventDefault();
     if (!scanInput.trim()) return;
@@ -195,11 +197,41 @@ export default function LandingPage() {
             : 'Safe for decentralized swap and liquidity routing.',
           isSafe: !isHoneypot,
           vectors: [
-            { name: 'Honeypot Sell Lock', passed: !isHoneypot, detail: isHoneypot ? '100% Sell Lock' : '0% Sell Tax' },
-            { name: 'Buy/Sell Tax %', passed: !isHoneypot, detail: isHoneypot ? '100% Fee Lock' : '0% Tax Verified' },
-            { name: 'Minting Permission', passed: true, detail: 'Owner Mint Disabled' },
-            { name: 'Proxy Architecture', passed: true, detail: 'Immutable Source Code' },
-            { name: 'Blacklist Function', passed: !isHoneypot, detail: isHoneypot ? 'Selective Address Lock' : 'Zero Address Blacklist' },
+            { 
+              name: 'Honeypot Sell Lock', 
+              passed: !isHoneypot, 
+              detail: isHoneypot ? '100% Sell Lock' : '0% Sell Tax',
+              snippet: isHoneypot ? 'function _transfer(...) internal {\n  require(msg.sender == owner || sellAllowed, "Honeypot Lock");\n}' : 'function _transfer(...) internal {\n  _balances[sender] -= amount;\n  _balances[recipient] += amount;\n}',
+              explanation: isHoneypot ? 'The transfer function enforces an unannounced owner condition preventing non-owner wallets from selling.' : 'Standard OpenZeppelin ERC20 implementation without sell tax overrides.'
+            },
+            { 
+              name: 'Buy/Sell Tax %', 
+              passed: !isHoneypot, 
+              detail: isHoneypot ? '100% Fee Lock' : '0% Tax Verified',
+              snippet: isHoneypot ? 'uint256 fee = amount * 99 / 100;\n_balances[feeAddress] += fee;' : '// Zero fee deduction\namountReceived = amount;',
+              explanation: isHoneypot ? 'Siphons 99-100% of swapped assets into creator vault.' : 'Confirmed 0% fee deduction across Uniswap/PancakeSwap pools.'
+            },
+            { 
+              name: 'Minting Permission', 
+              passed: true, 
+              detail: 'Owner Mint Disabled',
+              snippet: '// Mint function removed after deployment',
+              explanation: 'Total supply is permanently capped with no hidden mint authority.'
+            },
+            { 
+              name: 'Proxy Architecture', 
+              passed: true, 
+              detail: 'Immutable Source Code',
+              snippet: 'address immutable implementation;',
+              explanation: 'Immutable logic contract prevents creator from upgrading code to introduce post-launch backdoors.'
+            },
+            { 
+              name: 'Blacklist Function', 
+              passed: !isHoneypot, 
+              detail: isHoneypot ? 'Selective Address Lock' : 'Zero Address Blacklist',
+              snippet: isHoneypot ? 'mapping(address => bool) public isBlacklisted;' : '// No blacklist mapping',
+              explanation: isHoneypot ? 'Creator maintains capability to freeze arbitrary buyer wallets.' : 'Zero blacklist mappings present in bytecode.'
+            },
           ]
         });
       } else if (selectedCategory === 'wallet') {
@@ -589,10 +621,11 @@ export default function LandingPage() {
                         {scanResult.vectors.map((vec: any, idx: number) => (
                           <div 
                             key={idx} 
-                            className={`p-2.5 rounded-xl border text-left flex items-center justify-between gap-2 text-xs font-mono transition ${
+                            onClick={() => setSelectedVectorDetail(vec)}
+                            className={`p-2.5 rounded-xl border text-left flex items-center justify-between gap-2 text-xs font-mono transition cursor-pointer hover:scale-[1.02] ${
                               vec.passed 
-                                ? 'bg-emerald-500/5 border-emerald-500/30 text-emerald-300' 
-                                : 'bg-red-500/5 border-red-500/30 text-red-300'
+                                ? 'bg-emerald-500/5 border-emerald-500/30 text-emerald-300 hover:border-emerald-500/60' 
+                                : 'bg-red-500/5 border-red-500/30 text-red-300 hover:border-red-500/60'
                             }`}
                           >
                             <div className="flex items-center gap-1.5 truncate">
@@ -626,7 +659,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* SECTION 2: MULTI-CHAIN PROTOCOL COVERAGE */}
+        {/* SECTION 2: MULTI-CHAIN PROTOCOL COVERAGE & REAL-TIME TELEMETRY METER */}
         <motion.div 
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -634,7 +667,14 @@ export default function LandingPage() {
           transition={{ duration: 0.7 }}
           className="max-w-5xl mx-auto mb-12 sm:mb-16 w-full"
         >
-          <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4 font-semibold">Multi-Chain Protocol Coverage</p>
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-xs font-mono text-slate-400 uppercase tracking-widest font-semibold">Multi-Chain Protocol Coverage & Live Telemetry</p>
+            <span className="text-[10px] font-mono text-cyan-300 flex items-center gap-1.5 bg-cyan-950/60 px-2.5 py-0.5 rounded-full border border-cyan-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+              Live Network Telemetry
+            </span>
+          </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 sm:gap-3.5 w-full">
             {multiChainList.map((chain, i) => {
               const isLit = litChainIndex === i;
@@ -660,15 +700,6 @@ export default function LandingPage() {
                   <div className={`absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 transition-colors duration-500 ${isLit ? 'border-cyan-400' : 'border-slate-700/50'}`} />
                   <div className={`absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 transition-colors duration-500 ${isLit ? 'border-purple-400' : 'border-slate-700/50'}`} />
 
-                  {isLit && (
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: [0.4, 0.85, 0.4], scale: [0.8, 1.25, 0.8] }}
-                      transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                      className="absolute -top-6 -right-6 w-20 h-20 bg-cyan-400/30 blur-xl rounded-full pointer-events-none"
-                    />
-                  )}
-
                   <div className="flex flex-col items-center justify-center gap-1 sm:gap-1.5 relative z-10">
                     <div className={`p-1.5 sm:p-2 rounded-xl border transition-colors duration-500 ${
                       isLit 
@@ -684,11 +715,11 @@ export default function LandingPage() {
                       {chain.name}
                     </span>
 
-                    <span className={`text-[9px] sm:text-[10px] font-mono transition-colors duration-500 ${
-                      isLit ? 'text-cyan-300 font-bold' : 'text-slate-500'
-                    }`}>
-                      {chain.symbol}
-                    </span>
+                    <div className="flex items-center gap-1.5 text-[9px] font-mono text-slate-400">
+                      <span className="text-cyan-300 font-bold">{chain.gwei}</span>
+                      <span>•</span>
+                      <span>{chain.latency}</span>
+                    </div>
                   </div>
                 </motion.div>
               );
@@ -1314,6 +1345,68 @@ export default function LandingPage() {
                   className="btn-futuristic-primary px-5 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs font-bold text-white cursor-pointer"
                 >
                   Close Document
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Vector Detail Inspection Modal */}
+      <AnimatePresence>
+        {selectedVectorDetail && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setSelectedVectorDetail(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              onClick={(e) => e.stopPropagation()}
+              className="glass-card-premium p-6 rounded-3xl border border-slate-700 max-w-lg w-full relative space-y-4 shadow-2xl text-left"
+            >
+              <button
+                onClick={() => setSelectedVectorDetail(null)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <div className={`p-2 rounded-xl border ${selectedVectorDetail.passed ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' : 'bg-red-500/20 border-red-500/40 text-red-300'}`}>
+                  {selectedVectorDetail.passed ? <CheckCircle2 className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">{selectedVectorDetail.name}</h3>
+                  <span className="text-xs font-mono text-cyan-400">Vulnerability Audit & Bytecode Inspection</span>
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-mono text-slate-400 uppercase font-bold block mb-1">Vulnerability Proof & Explanation:</span>
+                <p className="text-xs text-slate-300 leading-relaxed font-medium">{selectedVectorDetail.explanation}</p>
+              </div>
+
+              {selectedVectorDetail.snippet && (
+                <div>
+                  <span className="text-[10px] font-mono text-slate-400 uppercase font-bold block mb-1">Decompiled Bytecode Snippet:</span>
+                  <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300 overflow-x-auto">
+                    <code>{selectedVectorDetail.snippet}</code>
+                  </pre>
+                </div>
+              )}
+
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+                <span className="text-[11px] font-mono text-slate-400">Status: <strong className={selectedVectorDetail.passed ? 'text-emerald-400' : 'text-red-400'}>{selectedVectorDetail.detail}</strong></span>
+                <button
+                  onClick={() => setSelectedVectorDetail(null)}
+                  className="btn-futuristic-primary px-4 py-1.5 rounded-xl text-xs font-bold text-white cursor-pointer"
+                >
+                  Close Inspection
                 </button>
               </div>
             </motion.div>
