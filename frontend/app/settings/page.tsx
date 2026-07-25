@@ -2,27 +2,83 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, User, Key, Shield, CheckCircle2, Save, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { 
+  Settings, 
+  User, 
+  Key, 
+  Shield, 
+  CheckCircle2, 
+  Save, 
+  Lock, 
+  Eye, 
+  EyeOff, 
+  AlertCircle,
+  QrCode,
+  History,
+  Wallet,
+  Globe,
+  SunMoon,
+  Bell,
+  Copy,
+  Trash2,
+  Plus,
+  Sparkles,
+  Check
+} from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';
 
 export default function SettingsPage() {
+  const [activeTab, setActiveTab] = useState<'profile' | '2fa' | 'history' | 'wallets' | 'api' | 'theme' | 'notifications'>('profile');
+  
+  // Profile state
   const [name, setName] = useState('Web3 Security Researcher');
   const [email, setEmail] = useState('user@aegivex.ai');
   const [saved, setSaved] = useState(false);
 
-  // Change Password state
+  // Password state
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [pwdLoading, setPwdLoading] = useState(false);
-
   const [pwdMessage, setPwdMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // 2FA State
+  const [is2faEnabled, setIs2faEnabled] = useState(false);
+  const [twoFaCode, setTwoFaCode] = useState('');
+  const [twoFaSuccess, setTwoFaSuccess] = useState(false);
+
+  // Connected Wallets State
+  const [wallets, setWallets] = useState([
+    { name: 'MetaMask', address: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F', network: 'Ethereum Mainnet', primary: true },
+    { name: 'OKX Wallet', address: '0x8f2a49f139f10a85d5af5bf1d1762f925bdaddc', network: 'OKX X Layer', primary: false },
+    { name: 'Phantom', address: '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU', network: 'Solana', primary: false }
+  ]);
+
+  // API Keys State
+  const [apiKeys, setApiKeys] = useState([
+    { id: 'key-1', name: 'Production Sentinel API', key: 'aegivex_live_sk_9f81a7...49f1', created: '2026-06-15' },
+    { id: 'key-2', name: 'Development Scanner Test', key: 'aegivex_test_sk_33b110...8e21', created: '2026-07-01' }
+  ]);
+  const [newKeyName, setNewKeyName] = useState('');
+
+  // Theme & Language State
+  const [selectedTheme, setSelectedTheme] = useState<'cyberDark' | 'slateDark' | 'light'>('cyberDark');
+  const [selectedLanguage, setSelectedLanguage] = useState('English (US)');
+
+  // Notification Preferences State
+  const [notifEmail, setNotifEmail] = useState(true);
+  const [notifBrowser, setNotifBrowser] = useState(true);
+  const [notifTelegram, setNotifTelegram] = useState(false);
+  const [notifDiscord, setNotifDiscord] = useState(true);
+
+  // Login History Data
+  const loginHistory = [
+    { ip: '192.168.1.104', browser: 'Chrome 126 (Windows)', time: '2026-07-25 23:45', location: 'Tokyo, Japan', status: 'ACTIVE SESSION' },
+    { ip: '172.56.21.90', browser: 'Safari Mobile (iOS)', time: '2026-07-24 14:12', location: 'Singapore', status: 'COMPLETED' },
+    { ip: '198.51.100.42', browser: 'Brave Browser (macOS)', time: '2026-07-22 09:30', location: 'London, UK', status: 'COMPLETED' }
+  ];
+
   useEffect(() => {
-    // Fetch profile info from API
     handleApiCall<any>(apiClient.get('/profile'), null).then((user: any) => {
       if (user) {
         if (user.name) setName(user.name);
@@ -30,24 +86,6 @@ export default function SettingsPage() {
       }
     });
   }, []);
-
-
-  // Password strength calculation
-  const getPasswordStrength = (pwd: string) => {
-    if (!pwd) return { score: 0, label: '', color: 'bg-slate-700' };
-    let score = 0;
-    if (pwd.length >= 8) score += 25;
-    if (/[A-Z]/.test(pwd)) score += 25;
-    if (/[0-9]/.test(pwd)) score += 25;
-    if (/[^A-Za-z0-9]/.test(pwd)) score += 25;
-
-    if (score <= 25) return { score, label: 'WEAK', color: 'bg-red-500' };
-    if (score <= 50) return { score, label: 'FAIR', color: 'bg-amber-500' };
-    if (score <= 75) return { score, label: 'GOOD', color: 'bg-cyan-500' };
-    return { score, label: 'SECURED', color: 'bg-emerald-500' };
-  };
-
-  const pwdStrength = getPasswordStrength(newPassword);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,198 +128,450 @@ export default function SettingsPage() {
     }
   };
 
+  const handleEnable2FA = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (twoFaCode.length >= 6) {
+      setIs2faEnabled(true);
+      setTwoFaSuccess(true);
+      setTimeout(() => setTwoFaSuccess(false), 3000);
+    }
+  };
+
+  const handleCreateApiKey = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newKeyName.trim()) return;
+    const newKey = {
+      id: `key-${Date.now()}`,
+      name: newKeyName,
+      key: `aegivex_live_sk_${Math.random().toString(36).substring(2, 10)}...${Math.random().toString(36).substring(2, 6)}`,
+      created: new Date().toISOString().split('T')[0]
+    };
+    setApiKeys([...apiKeys, newKey]);
+    setNewKeyName('');
+  };
+
+  const handleRevokeApiKey = (id: string) => {
+    setApiKeys(apiKeys.filter(k => k.id !== id));
+  };
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6">
+      
       {/* Top Banner */}
       <div className="glass-card p-6 rounded-3xl border border-slate-800 flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-black text-white flex items-center gap-2">
-            <Settings className="w-5 h-5 text-cyan-400" />
-            User Security & Profile Configurations
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">Manage account profile, update authentication passwords, and manage security settings.</p>
+          <h1 className="text-2xl font-black text-white flex items-center gap-2">
+            <Settings className="w-6 h-6 text-cyan-400" />
+            User Security & System Configurations
+          </h1>
+          <p className="text-xs text-slate-400 mt-1">
+            Configure profile settings, Two-Factor Authentication (2FA), connected Web3 wallets, API keys, and notification preferences.
+          </p>
         </div>
-
-        {saved && (
-          <span className="text-xs text-emerald-400 font-bold px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-1.5 animate-pulse">
-            <CheckCircle2 className="w-4 h-4" /> Profile Updated
-          </span>
-        )}
       </div>
 
-      {/* Account Profile Card */}
-      <form onSubmit={handleUpdateProfile} className="glass-card p-6 rounded-3xl border border-slate-800 space-y-4">
-        <h3 className="text-sm font-bold text-slate-300 flex items-center gap-2 border-b border-slate-800 pb-3">
-          <User className="w-4 h-4 text-blue-400" /> Account Profile Details
-        </h3>
+      {/* Tabs Bar */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2">
+        {[
+          { id: 'profile', label: 'Profile & Password', icon: User },
+          { id: '2fa', label: 'Two-Factor (2FA)', icon: Lock },
+          { id: 'history', label: 'Login History', icon: History },
+          { id: 'wallets', label: 'Connected Wallets', icon: Wallet },
+          { id: 'api', label: 'API Keys', icon: Key },
+          { id: 'theme', label: 'Theme & Language', icon: SunMoon },
+          { id: 'notifications', label: 'Notifications', icon: Bell },
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
 
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Full Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-xs focus:outline-none focus:border-cyan-500 transition"
-            />
-          </div>
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`px-3.5 py-2.5 rounded-xl text-xs font-bold font-mono flex items-center gap-2 transition shrink-0 cursor-pointer ${
+                isActive
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-glow-cyan'
+                  : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Registered Email Address (Read-Only)</label>
-            <input
-              type="email"
-              disabled
-              value={email}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800/60 text-slate-500 text-xs font-mono cursor-not-allowed"
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-end pt-2">
-          <button
-            type="submit"
-            className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-2 transition"
-          >
-            <Save className="w-4 h-4" /> Save Profile Info
-          </button>
-        </div>
-      </form>
-
-      {/* Security & Change Password Card */}
-      <form onSubmit={handleChangePassword} className="glass-card p-6 rounded-3xl border border-slate-800 space-y-4 relative overflow-hidden">
-        <h3 className="text-sm font-bold text-slate-300 flex items-center justify-between border-b border-slate-800 pb-3">
-          <span className="flex items-center gap-2">
-            <Lock className="w-4 h-4 text-cyan-400" />
-            Security & Change Password
-          </span>
-          <span className="text-[10px] text-cyan-400 font-mono bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
-            Database Encrypted
-          </span>
-        </h3>
-
-        {pwdMessage && (
-          <div className={`p-3 rounded-xl border text-xs font-semibold flex items-center gap-2 ${
-            pwdMessage.type === 'success' 
-              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' 
-              : 'bg-red-500/10 border-red-500/30 text-red-300'
-          }`}>
-            {pwdMessage.type === 'success' ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
-            <span>{pwdMessage.text}</span>
-          </div>
-        )}
-
-        <div className="space-y-4">
-          {/* Current Password */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Current Password</label>
-            <div className="relative">
-              <input
-                type={showCurrentPassword ? "text" : "password"}
-                required
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Enter your current password"
-                className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-xs focus:outline-none focus:border-cyan-500 transition placeholder:text-slate-600"
-              />
-              <button
-                type="button"
-                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200 transition"
-              >
-                {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            </div>
-          </div>
-
-          {/* New Password & Animated Strength Meter */}
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-slate-300">New Password</label>
-                {pwdStrength.label && (
-                  <span className={`text-[10px] font-extrabold px-1.5 py-0.2 rounded border ${
-                    pwdStrength.label === 'WEAK' ? 'bg-red-500/10 text-red-400 border-red-500/30' :
-                    pwdStrength.label === 'FAIR' ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' :
-                    pwdStrength.label === 'GOOD' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' :
-                    'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                  }`}>
-                    {pwdStrength.label}
-                  </span>
-                )}
-              </div>
-              <div className="relative">
+      {/* TAB 1: PROFILE & PASSWORD */}
+      {activeTab === 'profile' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <User className="w-5 h-5 text-cyan-400" />
+              Account Details
+            </h2>
+            <form onSubmit={handleUpdateProfile} className="space-y-4 text-left">
+              <div>
+                <label className="text-xs font-mono text-slate-400 block mb-1">Full Name</label>
                 <input
-                  type={showNewPassword ? "text" : "password"}
-                  required
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Enter new strong password"
-                  className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-xs focus:outline-none focus:border-cyan-500 transition placeholder:text-slate-600"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-cyan-500 transition"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200 transition"
-                >
-                  {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
               </div>
 
-              {/* Animated Progress Bar */}
-              {newPassword && (
-                <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${pwdStrength.score}%` }}
-                    transition={{ duration: 0.3 }}
-                    className={`h-full ${pwdStrength.color}`}
-                  />
+              <div>
+                <label className="text-xs font-mono text-slate-400 block mb-1">Email Address</label>
+                <input
+                  type="email"
+                  value={email}
+                  disabled
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-500 text-xs font-mono cursor-not-allowed"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="btn-futuristic-primary px-5 py-2.5 rounded-xl text-white font-bold text-xs flex items-center gap-2 cursor-pointer"
+              >
+                <Save className="w-4 h-4" />
+                {saved ? 'Saved Successfully!' : 'Save Profile Changes'}
+              </button>
+            </form>
+          </div>
+
+          <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Key className="w-5 h-5 text-cyan-400" />
+              Change Account Password
+            </h2>
+            <form onSubmit={handleChangePassword} className="space-y-3 text-left">
+              {pwdMessage && (
+                <div className={`p-3 rounded-xl border text-xs font-mono ${pwdMessage.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' : 'bg-red-500/10 border-red-500/30 text-red-300'}`}>
+                  {pwdMessage.text}
                 </div>
               )}
-            </div>
 
-            {/* Confirm New Password */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Confirm New Password</label>
-              <div className="relative">
+              <div>
+                <label className="text-xs font-mono text-slate-400 block mb-1">Current Password</label>
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  required
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-mono text-slate-400 block mb-1">New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-cyan-500 transition"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-mono text-slate-400 block mb-1">Confirm New Password</label>
+                <input
+                  type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Re-enter new password to confirm"
-                  className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-xs focus:outline-none focus:border-cyan-500 transition placeholder:text-slate-600"
+                  className="w-full px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-cyan-500 transition"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200 transition focus:outline-none"
-                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                >
-                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
               </div>
-            </div>
 
+              <button
+                type="submit"
+                disabled={pwdLoading}
+                className="btn-futuristic-primary px-5 py-2.5 rounded-xl text-white font-bold text-xs flex items-center gap-2 cursor-pointer"
+              >
+                <Lock className="w-4 h-4" />
+                {pwdLoading ? 'Updating Password...' : 'Update Password'}
+              </button>
+            </form>
           </div>
         </div>
+      )}
 
-        <div className="flex justify-end pt-2">
-          <button
-            type="submit"
-            disabled={pwdLoading}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-extrabold text-xs shadow-lg shadow-cyan-500/20 flex items-center gap-2 transition disabled:opacity-50 cursor-pointer"
-          >
-            {pwdLoading ? (
-              <span>Updating Password...</span>
-            ) : (
-              <>
-                <Shield className="w-4 h-4" /> Update Security Password
-              </>
+      {/* TAB 2: TWO-FACTOR AUTHENTICATION (2FA) */}
+      {activeTab === '2fa' && (
+        <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-5 max-w-2xl mx-auto">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <Lock className="w-5 h-5 text-cyan-400" />
+                Two-Factor Authentication (2FA)
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">Protect your account using TOTP Authenticator Apps (Google Authenticator, Authy).</p>
+            </div>
+            <span className={is2faEnabled ? 'badge-risk-safe' : 'badge-risk-warning'}>
+              {is2faEnabled ? '2FA ENABLED' : '2FA DISABLED'}
+            </span>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col md:flex-row items-center gap-6">
+            <div className="w-32 h-32 rounded-xl bg-white p-2 flex items-center justify-center shrink-0">
+              <QrCode className="w-28 h-28 text-slate-950" />
+            </div>
+
+            <div className="space-y-2 text-left">
+              <span className="text-xs font-mono text-cyan-300 font-bold block">TOTP Secret Key:</span>
+              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-200 font-bold tracking-wider">
+                AEGIVEX-2FA-7781-9942-SEC
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Scan the QR code with your authenticator app and enter the 6-digit verification code below to authorize 2FA protection.
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={handleEnable2FA} className="space-y-4 text-left">
+            {twoFaSuccess && (
+              <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4" />
+                Two-Factor Authentication activated successfully!
+              </div>
             )}
-          </button>
+
+            <div>
+              <label className="text-xs font-mono text-slate-400 block mb-1">6-Digit Authenticator Code</label>
+              <input
+                type="text"
+                value={twoFaCode}
+                onChange={(e) => setTwoFaCode(e.target.value)}
+                placeholder="123456"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono tracking-widest focus:outline-none focus:border-cyan-500 transition"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={twoFaCode.length < 6}
+              className="btn-futuristic-primary px-6 py-2.5 rounded-xl text-white font-bold text-xs flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            >
+              <Shield className="w-4 h-4" />
+              {is2faEnabled ? '2FA Active & Verified' : 'Verify & Enable 2FA'}
+            </button>
+          </form>
         </div>
-      </form>
+      )}
+
+      {/* TAB 3: LOGIN HISTORY */}
+      {activeTab === 'history' && (
+        <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <History className="w-5 h-5 text-cyan-400" />
+              Login Session Audit History
+            </h2>
+            <span className="text-xs font-mono text-slate-400">Total Active Sessions: 1</span>
+          </div>
+
+          <div className="space-y-2.5">
+            {loginHistory.map((item, idx) => (
+              <div key={idx} className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
+                <div className="space-y-0.5">
+                  <span className="font-bold text-white block">{item.browser}</span>
+                  <span className="text-slate-400 text-[11px]">IP: {item.ip} • Location: {item.location}</span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-400 text-[11px]">{item.time}</span>
+                  <span className={item.status === 'ACTIVE SESSION' ? 'badge-risk-safe' : 'badge-risk-warning'}>
+                    {item.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: CONNECTED WALLETS */}
+      {activeTab === 'wallets' && (
+        <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Wallet className="w-5 h-5 text-cyan-400" />
+              Connected Web3 Wallets Manager
+            </h2>
+            <button className="btn-futuristic-primary px-3.5 py-1.5 rounded-xl text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer">
+              <Plus className="w-4 h-4" />
+              Connect New Wallet
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {wallets.map((w, idx) => (
+              <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
+                <div className="flex items-center gap-3">
+                  <Wallet className="w-5 h-5 text-cyan-400 shrink-0" />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-white">{w.name}</span>
+                      {w.primary && <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">PRIMARY</span>}
+                    </div>
+                    <span className="text-[11px] text-slate-400">{w.address} ({w.network})</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="badge-risk-safe">VERIFIED</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 5: API KEY MANAGEMENT */}
+      {activeTab === 'api' && (
+        <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-6">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Key className="w-5 h-5 text-cyan-400" />
+              Developer API Key Management
+            </h2>
+            <span className="text-xs font-mono text-cyan-300">Rate Limit: 10,000 req/min</span>
+          </div>
+
+          <form onSubmit={handleCreateApiKey} className="flex flex-col sm:flex-row items-center gap-3">
+            <input
+              type="text"
+              value={newKeyName}
+              onChange={(e) => setNewKeyName(e.target.value)}
+              placeholder="Enter new API key descriptor name..."
+              className="flex-1 w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-cyan-500 transition"
+            />
+            <button
+              type="submit"
+              disabled={!newKeyName.trim()}
+              className="btn-futuristic-primary px-5 py-2.5 rounded-xl text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              Generate API Secret Key
+            </button>
+          </form>
+
+          <div className="space-y-3">
+            {apiKeys.map((key) => (
+              <div key={key.id} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
+                <div>
+                  <span className="font-bold text-white block mb-0.5">{key.name}</span>
+                  <span className="text-slate-400 text-[11px]">Key: {key.key} • Created: {key.created}</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => handleRevokeApiKey(key.id)}
+                    className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 transition cursor-pointer"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 6: THEME & LANGUAGE */}
+      {activeTab === 'theme' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <SunMoon className="w-5 h-5 text-cyan-400" />
+              Theme Switcher
+            </h2>
+            <div className="space-y-3">
+              {[
+                { id: 'cyberDark', name: 'Cyber Obsidian Dark (Default)', desc: 'High-contrast dark mode with cyan/purple neon accents.' },
+                { id: 'slateDark', name: 'Slate Midnight Dark', desc: 'Subtle dark blue theme tailored for low-light environments.' },
+                { id: 'light', name: 'Clean Light Mode', desc: 'High visibility daylight theme.' },
+              ].map((theme) => (
+                <button
+                  key={theme.id}
+                  onClick={() => setSelectedTheme(theme.id as any)}
+                  className={`w-full p-3.5 rounded-2xl border text-left transition ${
+                    selectedTheme === theme.id 
+                      ? 'bg-cyan-500/20 border-cyan-500/50 text-white shadow-glow-cyan' 
+                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between font-bold text-xs mb-1">
+                    <span>{theme.name}</span>
+                    {selectedTheme === theme.id && <Check className="w-4 h-4 text-cyan-400" />}
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-relaxed font-mono">{theme.desc}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Globe className="w-5 h-5 text-cyan-400" />
+              Language Selector
+            </h2>
+            <div className="space-y-2">
+              {['English (US)', 'Spanish (Español)', 'Chinese (中文)', 'Japanese (日本語)', 'German (Deutsch)'].map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => setSelectedLanguage(lang)}
+                  className={`w-full p-3 rounded-xl border text-left font-mono text-xs flex items-center justify-between transition ${
+                    selectedLanguage === lang 
+                      ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300 font-bold' 
+                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span>{lang}</span>
+                  {selectedLanguage === lang && <Check className="w-4 h-4 text-cyan-400" />}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 7: NOTIFICATION PREFERENCES */}
+      {activeTab === 'notifications' && (
+        <div className="glass-card-premium p-6 rounded-3xl border border-slate-800 space-y-5 max-w-2xl mx-auto">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+            <Bell className="w-5 h-5 text-cyan-400" />
+            Threat Alert Notification Channels
+          </h2>
+
+          <div className="space-y-3">
+            {[
+              { label: 'Email Threat Reports', state: notifEmail, setState: setNotifEmail, desc: 'Receive critical honeypot and vulnerability digests via email.' },
+              { label: 'Browser Push Notifications', state: notifBrowser, setState: setNotifBrowser, desc: 'Real-time popups when high-risk transactions are detected.' },
+              { label: 'Telegram Bot Webhooks', state: notifTelegram, setState: setNotifTelegram, desc: 'Stream live alerts to your personal Telegram channel.' },
+              { label: 'Discord Server Webhooks', state: notifDiscord, setState: setNotifDiscord, desc: 'Post automated threat intelligence into Discord security channels.' }
+            ].map((n, idx) => (
+              <div key={idx} className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between gap-4 text-left">
+                <div>
+                  <h4 className="font-bold text-xs text-white">{n.label}</h4>
+                  <p className="text-[11px] text-slate-400 font-mono mt-0.5">{n.desc}</p>
+                </div>
+
+                <button
+                  onClick={() => n.setState(!n.state)}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 cursor-pointer shrink-0 ${
+                    n.state ? 'bg-cyan-500' : 'bg-slate-800'
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded-full bg-white transition-transform duration-300 ${
+                    n.state ? 'translate-x-6' : 'translate-x-0'
+                  }`} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

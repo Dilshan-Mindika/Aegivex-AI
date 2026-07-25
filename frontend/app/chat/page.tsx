@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Send, User, Sparkles, ShieldCheck, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Bot, Send, User, Sparkles, ShieldCheck, RefreshCw, AlertTriangle, Volume2, VolumeX } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';
 
 interface Message {
@@ -25,7 +25,18 @@ export default function AIChatPage() {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const speakText = (text: string) => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
   const suggestedPrompts = [
     "Is wallet address 0x71C7656EC7ab88b098defB751B7401B5f6d8976F safe?",
@@ -68,10 +79,12 @@ export default function AIChatPage() {
       fallbackResponse
     );
 
+    const replyText = data.response || fallbackResponse.response;
+
     const aiMsg: Message = {
       id: (Date.now() + 1).toString(),
       sender: 'ai',
-      text: data.response || fallbackResponse.response,
+      text: replyText,
       riskScore: data.risk_score || 15,
       confidence: data.confidence || 96,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -79,6 +92,10 @@ export default function AIChatPage() {
 
     setMessages((prev) => [...prev, aiMsg]);
     setLoading(false);
+
+    if (isVoiceEnabled) {
+      speakText(replyText);
+    }
   };
 
   return (
@@ -98,13 +115,34 @@ export default function AIChatPage() {
           </div>
         </div>
 
-        <button
-          onClick={() => setMessages([messages[0]])}
-          className="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 flex items-center gap-1.5"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          Clear Chat
-        </button>
+        <div className="flex items-center gap-2">
+          {/* AI Voice Toggle */}
+          <button
+            onClick={() => {
+              const nextState = !isVoiceEnabled;
+              setIsVoiceEnabled(nextState);
+              if (!nextState && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+              }
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono flex items-center gap-1.5 transition cursor-pointer border ${
+              isVoiceEnabled 
+                ? 'bg-purple-500/20 text-purple-300 border-purple-500/40 shadow-glow-purple' 
+                : 'bg-slate-900 text-slate-400 hover:text-white border-slate-800'
+            }`}
+          >
+            {isVoiceEnabled ? <Volume2 className="w-3.5 h-3.5 text-purple-400 animate-pulse" /> : <VolumeX className="w-3.5 h-3.5" />}
+            <span>Voice {isVoiceEnabled ? 'ON' : 'OFF'}</span>
+          </button>
+
+          <button
+            onClick={() => setMessages([messages[0]])}
+            className="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 flex items-center gap-1.5"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Clear Chat
+          </button>
+        </div>
       </div>
 
       {/* Message Area */}

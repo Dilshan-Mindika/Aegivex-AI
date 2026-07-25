@@ -15,17 +15,21 @@ import {
   History, 
   Settings, 
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Bell,
+  Gift
 } from 'lucide-react';
 
 export const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { name: 'AI Security Chat', path: '/chat', icon: Bot, highlight: true },
+  { name: 'NFT & Airdrop Scanner', path: '/scanners/nft-airdrop', icon: Gift },
   { name: 'Wallet Risk Scanner', path: '/scanners/wallet', icon: Wallet },
   { name: 'Token Risk Analyzer', path: '/scanners/token', icon: Coins },
   { name: 'Contract Analyzer', path: '/scanners/contract', icon: FileCode2 },
   { name: 'Website Scanner', path: '/scanners/website', icon: Globe },
   { name: 'Transaction Explainer', path: '/scanners/transaction', icon: Receipt },
+  { name: 'Alerts & Intelligence', path: '/alerts', icon: Bell },
   { name: 'Scan History', path: '/history', icon: History },
   { name: 'Settings', path: '/settings', icon: Settings },
 ];
