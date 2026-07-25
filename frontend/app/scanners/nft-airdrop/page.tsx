@@ -13,7 +13,6 @@ import {
   Zap, 
   FileText, 
   Camera, 
-  Sparkles, 
   Flame, 
   Copy, 
   Check, 
@@ -330,7 +329,7 @@ export default function NftAirdropScannerPage() {
 
           <div className="flex items-center justify-between gap-3 pt-2">
             <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-              <Sparkles className="w-4 h-4 text-purple-400" />
+              <Zap className="w-4 h-4 text-purple-400" />
               <span>Multi-Vector AI Neural Telemetry Active</span>
             </div>
 

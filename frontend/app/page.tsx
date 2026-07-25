@@ -14,7 +14,6 @@ import {
   Globe, 
   Receipt, 
   ArrowRight, 
-  Sparkles, 
   Zap,
   CheckCircle2,
   AlertTriangle,

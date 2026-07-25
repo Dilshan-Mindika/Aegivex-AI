@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Send, User, Sparkles, ShieldCheck, RefreshCw, AlertTriangle, Volume2, VolumeX, Download } from 'lucide-react';
+import { Bot, Send, User, Zap, ShieldCheck, RefreshCw, AlertTriangle, Volume2, VolumeX, Download } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';
 
 interface Message {
@@ -119,7 +119,7 @@ export default function AIChatPage() {
           <div>
             <h2 className="text-base font-bold text-white flex items-center gap-2">
               AI Security Copilot Chat
-              <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
+              <Zap className="w-4 h-4 text-purple-400 animate-pulse" />
             </h2>
             <p className="text-xs text-slate-400">Model: Aegivex-SecCopilot-v1 (LangChain Engine)</p>
           </div>
@@ -209,7 +209,7 @@ export default function AIChatPage() {
               <Bot className="w-4 h-4 animate-spin" />
             </div>
             <div className="bg-slate-900 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-purple-300 flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+              <Zap className="w-3.5 h-3.5 animate-pulse" />
               AI Copilot is analyzing Web3 security parameters...
             </div>
           </div>

@@ -10,7 +10,6 @@ import {
   CheckCircle2, 
   AlertTriangle, 
   Download, 
-  Sparkles, 
   Lock,
   Layers
 } from 'lucide-react';
@@ -102,7 +101,7 @@ export default function MultisigAuditorPage() {
 
           <div className="flex items-center justify-between pt-2">
             <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-              <Sparkles className="w-4 h-4 text-purple-400" />
+              <Zap className="w-4 h-4 text-purple-400" />
               <span>Governance Audit Engine Active</span>
             </div>
 

@@ -22,7 +22,7 @@ import {
   Copy,
   Trash2,
   Plus,
-  Sparkles,
+  Zap,
   Check
 } from 'lucide-react';
 import { apiClient, handleApiCall } from '../../services/api';

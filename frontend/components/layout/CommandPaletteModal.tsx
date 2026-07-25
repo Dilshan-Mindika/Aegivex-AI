@@ -18,7 +18,7 @@ import {
   Settings, 
   ShieldCheck, 
   ArrowRight,
-  Sparkles,
+  Zap,
   Command,
   Play,
   Bug,
@@ -157,7 +157,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({ isOpen
             {/* Modal Footer */}
             <div className="p-3 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-400 px-4">
               <span className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                <Zap className="w-3.5 h-3.5 text-purple-400" />
                 Aegivex All-In-One Web3 Command Center
               </span>
               <span>Use <kbd className="text-cyan-300 font-bold">↑</kbd> <kbd className="text-cyan-300 font-bold">↓</kbd> to navigate</span>

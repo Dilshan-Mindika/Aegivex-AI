@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, Headset, Sparkles, HelpCircle } from 'lucide-react';
+import { MessageSquare, X, Send, Headset, HelpCircle } from 'lucide-react';
 import { faqKnowledgeBase, findMatchingFAQ } from '../data/faqData';
 
 interface ChatMessage {
