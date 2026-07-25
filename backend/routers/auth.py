@@ -20,7 +20,8 @@ class ResetPasswordRequest(BaseModel):
 
 @router.post("/register", response_model=TokenResponse)
 def register(user_in: UserRegisterRequest, request: Request, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(User.email == user_in.email).first()
+    email_clean = user_in.email.strip().lower()
+    existing_user = db.query(User).filter(User.email == email_clean).first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -30,7 +31,7 @@ def register(user_in: UserRegisterRequest, request: Request, db: Session = Depen
     hashed_pwd = get_password_hash(user_in.password)
     user = User(
         name=user_in.name,
-        email=user_in.email,
+        email=email_clean,
         password_hash=hashed_pwd,
         role="User"
     )
@@ -58,7 +59,8 @@ def register(user_in: UserRegisterRequest, request: Request, db: Session = Depen
 
 @router.post("/login", response_model=TokenResponse)
 def login(login_in: UserLoginRequest, request: Request, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == login_in.email).first()
+    email_clean = login_in.email.strip().lower()
+    user = db.query(User).filter(User.email == email_clean).first()
     if not user or not verify_password(login_in.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   ShieldCheck, 
@@ -15,6 +16,7 @@ import {
   RefreshCw, 
   Send, 
   Search, 
+  Filter,
   Terminal, 
   AlertTriangle, 
   CheckCircle2, 
@@ -26,6 +28,7 @@ import { apiClient, handleApiCall } from '../../../services/api';
 import LiveSupportChat from '@/components/LiveSupportChat';
 
 export default function AdminDashboardPage() {
+  const router = useRouter();
   const [stats, setStats] = useState<any>({
     total_users: 0,
     admin_count: 0,
@@ -38,6 +41,8 @@ export default function AdminDashboardPage() {
   });
 
   const [users, setUsers] = useState<any[]>([]);
+  const [userSearchQuery, setUserSearchQuery] = useState('');
+  const [userRoleFilter, setUserRoleFilter] = useState<'all' | 'admin' | 'user'>('all');
   const [conversations, setConversations] = useState<any[]>([]);
   const [selectedUserChat, setSelectedUserChat] = useState<any>(null);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
@@ -71,6 +76,25 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUserStr = localStorage.getItem('aegivex_user');
+      if (storedUserStr) {
+        try {
+          const u = JSON.parse(storedUserStr);
+          if (u.role !== 'Admin' && u.email !== 'admin@aegivex.ai') {
+            router.push('/dashboard');
+            return;
+          }
+        } catch (e) {
+          router.push('/dashboard');
+          return;
+        }
+      } else {
+        router.push('/login');
+        return;
+      }
+    }
+
     fetchAllAdminData();
 
     // Realtime background polling every 5 seconds
@@ -80,6 +104,19 @@ export default function AdminDashboardPage() {
 
     return () => clearInterval(interval);
   }, []);
+
+  const filteredUsers = users.filter((u) => {
+    const query = userSearchQuery.toLowerCase().trim();
+    const matchesSearch = !query || 
+      (u.name && u.name.toLowerCase().includes(query)) || 
+      (u.email && u.email.toLowerCase().includes(query));
+    
+    const matchesRole = userRoleFilter === 'all' || 
+      (userRoleFilter === 'admin' && u.role === 'Admin') || 
+      (userRoleFilter === 'user' && u.role !== 'Admin');
+
+    return matchesSearch && matchesRole;
+  });
 
   const handleSelectUserChat = async (conv: any) => {
     setSelectedUserChat(conv);
@@ -336,18 +373,48 @@ export default function AdminDashboardPage() {
       </section>
 
       {/* User Role-Based Access Control (RBAC) Table */}
-      <section className="glass-card-premium p-4 sm:p-6 rounded-3xl border border-slate-800 relative overflow-hidden">
-        <div className="flex items-center justify-between mb-5 pb-4 border-b border-slate-800 flex-wrap gap-2">
+      <section className="glass-card-premium p-4 sm:p-6 rounded-3xl border border-slate-800 relative overflow-hidden space-y-4">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-800 flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40">
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">User Accounts & Role Permissions</h2>
-              <p className="text-xs text-slate-400 font-mono">Manage User vs Admin privileges and security access levels</p>
+              <h2 className="text-lg font-bold text-white">User Accounts & Access Management</h2>
+              <p className="text-xs text-slate-400 font-mono">Control user permissions, role elevation, and security status</p>
             </div>
           </div>
-          <span className="text-xs text-slate-400 font-mono font-bold">Total {users.length} Managed Accounts</span>
+          <span className="text-xs text-slate-400 font-mono font-bold">
+            Showing {filteredUsers.length} of {users.length} Managed Accounts
+          </span>
+        </div>
+
+        {/* User Search & Filter Controls */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search users by name or email..."
+              value={userSearchQuery}
+              onChange={(e) => setUserSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+            />
+          </div>
+
+          <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-slate-300">
+            <Filter className="w-4 h-4 text-purple-400 shrink-0" />
+            <span className="text-slate-500 shrink-0">Role Filter:</span>
+            <select
+              value={userRoleFilter}
+              onChange={(e) => setUserRoleFilter(e.target.value as any)}
+              className="bg-transparent text-white focus:outline-none w-full cursor-pointer"
+            >
+              <option value="all" className="bg-slate-950 text-white">All User Roles ({users.length})</option>
+              <option value="admin" className="bg-slate-950 text-purple-300">Admins Only ({users.filter(u => u.role === 'Admin').length})</option>
+              <option value="user" className="bg-slate-950 text-cyan-300">Regular Users Only ({users.filter(u => u.role !== 'Admin').length})</option>
+            </select>
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -362,8 +429,8 @@ export default function AdminDashboardPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
-              {users.length > 0 ? (
-                users.map((u) => (
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((u) => (
                   <tr key={u.id} className="hover:bg-slate-900/50 transition">
                     <td className="py-3.5 px-4 font-bold text-white flex items-center gap-2">
                       <UserCheck className="w-4 h-4 text-cyan-400 shrink-0" />
@@ -373,8 +440,8 @@ export default function AdminDashboardPage() {
                     <td className="py-3.5 px-4">
                       <span className={`px-2.5 py-0.5 rounded-full font-bold border ${
                         u.role === 'Admin'
-                          ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-                          : 'bg-slate-800 text-slate-300 border-slate-700'
+                          ? 'bg-purple-500/20 text-purple-300 border-purple-500/40 shadow-glow-purple'
+                          : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30'
                       }`}>
                         {u.role}
                       </span>
@@ -387,7 +454,7 @@ export default function AdminDashboardPage() {
                     <td className="py-3.5 px-4 text-right">
                       <button
                         onClick={() => handleToggleUserRole(u.id, u.role)}
-                        className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white transition cursor-pointer"
+                        className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white transition cursor-pointer text-xs font-bold"
                       >
                         Set as {u.role === 'Admin' ? 'User' : 'Admin'}
                       </button>
@@ -397,7 +464,7 @@ export default function AdminDashboardPage() {
               ) : (
                 <tr>
                   <td colSpan={5} className="py-8 text-center text-slate-500 text-xs italic font-mono">
-                    No registered user accounts found in database.
+                    No matching user accounts found in database.
                   </td>
                 </tr>
               )}

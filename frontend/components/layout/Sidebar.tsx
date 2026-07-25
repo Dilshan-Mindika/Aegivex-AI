@@ -45,6 +45,33 @@ export const navItems = [
 
 export const Sidebar: React.FC = () => {
   const pathname = usePathname();
+  const [isAdmin, setIsAdmin] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkRole = () => {
+      if (typeof window !== 'undefined') {
+        const storedUserStr = localStorage.getItem('aegivex_user');
+        if (storedUserStr) {
+          try {
+            const u = JSON.parse(storedUserStr);
+            if (u.role === 'Admin' || u.email === 'admin@aegivex.ai') {
+              setIsAdmin(true);
+              return;
+            }
+          } catch (e) {}
+        }
+      }
+      setIsAdmin(false);
+    };
+
+    checkRole();
+    window.addEventListener('aegivex_user_updated', checkRole);
+    window.addEventListener('storage', checkRole);
+    return () => {
+      window.removeEventListener('aegivex_user_updated', checkRole);
+      window.removeEventListener('storage', checkRole);
+    };
+  }, []);
 
   // Hide sidebar on public landing page and auth pages for a full-screen layout
   if (pathname === '/' || pathname === '/login' || pathname === '/register') return null;
@@ -77,6 +104,7 @@ export const Sidebar: React.FC = () => {
         {/* Navigation Items */}
         <nav className="p-3 space-y-1 mt-2">
           {navItems.map((item) => {
+            if (item.path === '/admin/dashboard' && !isAdmin) return null;
             const Icon = item.icon;
             const isActive = pathname === item.path;
 
