@@ -17,12 +17,16 @@ import {
   ShieldCheck,
   Sparkles,
   Bell,
-  Gift
+  Gift,
+  Play,
+  Bug
 } from 'lucide-react';
 
 export const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { name: 'AI Security Chat', path: '/chat', icon: Bot, highlight: true },
+  { name: 'Tx Simulator', path: '/simulation', icon: Play },
+  { name: 'Static Auditor', path: '/scanners/static-analysis', icon: Bug },
   { name: 'NFT & Airdrop Scanner', path: '/scanners/nft-airdrop', icon: Gift },
   { name: 'Wallet Risk Scanner', path: '/scanners/wallet', icon: Wallet },
   { name: 'Token Risk Analyzer', path: '/scanners/token', icon: Coins },
