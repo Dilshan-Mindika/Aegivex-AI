@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, Headset, HelpCircle } from 'lucide-react';
 import { faqKnowledgeBase, findMatchingFAQ } from '../data/faqData';
 
+import { apiClient, handleApiCall } from '../services/api';
+
 interface ChatMessage {
   id: string;
   sender_name: string;
@@ -17,6 +19,7 @@ interface ChatMessage {
 export default function LiveSupportChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [showPopBubble, setShowPopBubble] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'demo-1',
@@ -31,14 +34,38 @@ export default function LiveSupportChat() {
   const [isSending, setIsSending] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  const checkAdminStatus = () => {
+    const storedUserStr = localStorage.getItem('aegivex_user');
+    if (storedUserStr) {
+      try {
+        const u = JSON.parse(storedUserStr);
+        if (u.role === 'Admin' || u.email === 'admin@aegivex.ai') {
+          setIsAdmin(true);
+          return;
+        }
+      } catch (e) {}
+    }
+    setIsAdmin(false);
+  };
+
   useEffect(() => {
-    if (isOpen) {
+    checkAdminStatus();
+    window.addEventListener('aegivex_user_updated', checkAdminStatus);
+    window.addEventListener('storage', checkAdminStatus);
+    return () => {
+      window.removeEventListener('aegivex_user_updated', checkAdminStatus);
+      window.removeEventListener('storage', checkAdminStatus);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && !isAdmin) {
       setShowPopBubble(false);
       fetchLiveMessages();
       const interval = setInterval(fetchLiveMessages, 4000);
       return () => clearInterval(interval);
     }
-  }, [isOpen]);
+  }, [isOpen, isAdmin]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -46,15 +73,9 @@ export default function LiveSupportChat() {
 
   const fetchLiveMessages = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:8000/api/v1/chat/live/messages', {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setMessages(data);
-        }
+      const data = await handleApiCall(apiClient.get('/chat/live/messages'), []);
+      if (Array.isArray(data) && data.length > 0) {
+        setMessages(data);
       }
     } catch (err) {}
   };
@@ -126,6 +147,8 @@ export default function LiveSupportChat() {
   const handleQuickFaqClick = (faq: typeof faqKnowledgeBase[0]) => {
     handleSendMessage(faq.question);
   };
+
+  if (isAdmin) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans pointer-events-auto flex flex-col items-end">

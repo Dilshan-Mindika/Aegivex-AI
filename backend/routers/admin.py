@@ -7,6 +7,8 @@ from database.database import get_db
 from models.models import User, WalletScan, TokenScan, ContractScan, WebsiteScan, TransactionScan, AuditLog, ScanHistory
 from services.auth import get_current_user
 
+from utils.cache import fast_cache
+
 router = APIRouter(prefix="/admin", tags=["Admin Management"])
 
 class RoleUpdateRequest(BaseModel):
@@ -19,6 +21,10 @@ def get_admin_dashboard_stats(
 ):
     if current_user.role.lower() != "admin":
         raise HTTPException(status_code=403, detail="Admin access privilege required.")
+
+    cached_stats = fast_cache.get("admin_stats")
+    if cached_stats is not None:
+        return cached_stats
 
     total_users = db.query(User).count()
     admin_users = db.query(User).filter(User.role == "Admin").count()
@@ -39,7 +45,7 @@ def get_admin_dashboard_stats(
 
     audit_logs_count = db.query(AuditLog).count()
 
-    return {
+    res = {
         "total_users": total_users,
         "admin_count": admin_users,
         "regular_user_count": regular_users,
@@ -49,6 +55,8 @@ def get_admin_dashboard_stats(
         "system_status": "OPERATIONAL",
         "neural_engine_health": "99.98%"
     }
+    fast_cache.set("admin_stats", res, ttl=5)
+    return res
 
 
 @router.get("/users", response_model=dict)
@@ -93,6 +101,8 @@ def update_user_role(
 
     target_user.role = req.role.capitalize()
     db.commit()
+
+    fast_cache.invalidate("admin")
 
     # Log audit event
     audit = AuditLog(

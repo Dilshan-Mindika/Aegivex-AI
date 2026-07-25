@@ -5,6 +5,7 @@ import urllib.request
 from typing import Dict, Any, Tuple
 from config import settings
 from services.etherscan_service import etherscan_service
+from utils.cache import fast_cache
 
 class AISecurityEngine:
     """
@@ -16,13 +17,20 @@ class AISecurityEngine:
     @staticmethod
     def analyze_wallet(wallet_address: str) -> Dict[str, Any]:
         address_clean = wallet_address.strip().lower()
+        cache_key = f"ai_wallet_{address_clean}"
+        cached = fast_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
         if not address_clean.startswith("0x") or len(address_clean) != 42:
-            return {
+            res = {
                 "risk_score": 85,
                 "risk_level": "High",
                 "summary": "Malformed or non-standard EVM wallet address format detected.",
                 "recommendation": "Do not execute transactions or transfer funds to non-standard wallet addresses."
             }
+            fast_cache.set(cache_key, res, ttl=60)
+            return res
 
         # Fetch Real-Time Etherscan V2 Ledger Telemetry
         eth_balance = etherscan_service.get_address_balance(address_clean)
@@ -44,12 +52,14 @@ class AISecurityEngine:
             recommendation = "Safe to interact with standard verification."
 
         risk_level = "Low" if risk_score < 30 else ("Medium" if risk_score < 70 else "High")
-        return {
+        res = {
             "risk_score": risk_score,
             "risk_level": risk_level,
             "summary": summary,
             "recommendation": recommendation
         }
+        fast_cache.set(cache_key, res, ttl=60)
+        return res
 
     @staticmethod
     def analyze_token(contract_address: str) -> Dict[str, Any]:
