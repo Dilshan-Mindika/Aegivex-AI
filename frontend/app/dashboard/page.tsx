@@ -46,7 +46,7 @@ export default function DashboardPage() {
     const data = await handleApiCall(apiClient.get('/dashboard'), stats);
     if (data) setStats(data);
 
-    const historyData = await handleApiCall(apiClient.get('/history'), []);
+    const historyData: any = await handleApiCall(apiClient.get('/history'), []);
     if (Array.isArray(historyData)) {
       setRecentScans(historyData.slice(0, 5));
     } else if (historyData && Array.isArray(historyData.history)) {
@@ -198,7 +198,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full min-w-[480px] text-left text-xs">
               <thead>
                 <tr className="border-b border-slate-800 text-slate-400">
                   <th className="pb-2 font-semibold">Target</th>

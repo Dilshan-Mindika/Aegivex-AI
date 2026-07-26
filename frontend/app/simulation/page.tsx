@@ -96,18 +96,18 @@ export default function SimulationPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 w-full md:w-auto">
           <button
             type="button"
             onClick={() => handlePresetSimulation('drainer')}
-            className="px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 font-mono text-xs font-bold transition cursor-pointer"
+            className="px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 font-mono text-xs font-bold transition cursor-pointer text-center"
           >
             Load Drainer Trap Test
           </button>
           <button
             type="button"
             onClick={() => handlePresetSimulation('safe')}
-            className="px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-mono text-xs font-bold transition cursor-pointer"
+            className="px-3 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-mono text-xs font-bold transition cursor-pointer text-center"
           >
             Load Uniswap Swap Test
           </button>
@@ -201,7 +201,7 @@ export default function SimulationPage() {
               {simulationResult.assetChanges.map((change: any, idx: number) => (
                 <div 
                   key={idx} 
-                  className={`p-3.5 rounded-2xl border flex items-center justify-between text-xs font-mono ${
+                  className={`p-3.5 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono ${
                     change.isDanger 
                       ? 'bg-red-500/10 border-red-500/40 text-red-300' 
                       : change.type === 'OUT' 
@@ -209,21 +209,21 @@ export default function SimulationPage() {
                       : 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`p-1.5 rounded-lg border ${
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className={`p-1.5 rounded-lg border shrink-0 ${
                       change.type === 'OUT' ? 'bg-red-500/20 border-red-500/40 text-red-400' : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
                     }`}>
                       {change.type === 'OUT' ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownLeft className="w-4 h-4" />}
                     </div>
-                    <div>
-                      <span className="font-bold text-white block">{change.name}</span>
-                      <span className="text-[11px] text-slate-400">{change.type === 'OUT' ? 'Transferred Out / Permit Granted' : 'Received into Wallet'}</span>
+                    <div className="min-w-0">
+                      <span className="font-bold text-white block truncate">{change.name}</span>
+                      <span className="text-[11px] text-slate-400 block truncate">{change.type === 'OUT' ? 'Transferred Out / Permit Granted' : 'Received into Wallet'}</span>
                     </div>
                   </div>
 
-                  <div className="text-right">
-                    <span className="font-extrabold text-sm block">{change.amount}</span>
-                    <span className="text-[10px] text-slate-400 font-mono">{change.usd}</span>
+                  <div className="text-left sm:text-right shrink-0">
+                    <span className="font-extrabold text-sm block break-all">{change.amount}</span>
+                    <span className="text-[10px] text-slate-400 font-mono block">{change.usd}</span>
                   </div>
                 </div>
               ))}
@@ -237,9 +237,9 @@ export default function SimulationPage() {
             </span>
             <div className="space-y-1.5">
               {simulationResult.logs.map((log: any, idx: number) => (
-                <div key={idx} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono flex items-center justify-between">
-                  <span className="text-slate-300">Log [{log.index}]: <strong className="text-white">{log.event}</strong></span>
-                  <span className={log.status === 'CRITICAL RISK' ? 'badge-risk-critical' : 'badge-risk-safe'}>{log.status}</span>
+                <div key={idx} className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                  <span className="text-slate-300 break-all">Log [{log.index}]: <strong className="text-white">{log.event}</strong></span>
+                  <span className={log.status === 'CRITICAL RISK' ? 'badge-risk-critical shrink-0' : 'badge-risk-safe shrink-0'}>{log.status}</span>
                 </div>
               ))}
             </div>

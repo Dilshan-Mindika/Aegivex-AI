@@ -179,12 +179,12 @@ export default function StaticAnalysisPage() {
 
             {auditResult.issues.map((issue: any, idx: number) => (
               <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 font-mono text-xs">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold border border-red-500/40">{issue.id}</span>
-                    <span className="font-bold text-white">{issue.title}</span>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 flex-wrap min-w-0">
+                    <span className="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-bold border border-red-500/40 shrink-0">{issue.id}</span>
+                    <span className="font-bold text-white break-all">{issue.title}</span>
                   </div>
-                  <span className="text-slate-400 text-[11px]">{issue.line}</span>
+                  <span className="text-slate-400 text-[11px] shrink-0">{issue.line}</span>
                 </div>
 
                 <p className="text-slate-300 text-[11px] leading-relaxed font-sans">{issue.description}</p>
