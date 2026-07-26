@@ -151,7 +151,7 @@ export default function LiveSupportChat() {
   if (isAdmin) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-sans pointer-events-auto flex flex-col items-end">
+    <div className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-50 font-sans pointer-events-auto flex flex-col items-end max-w-[calc(100vw-24px)]">
       
       {/* Auto Pop-Up Greeting Speech Bubble */}
       <AnimatePresence>
@@ -161,7 +161,7 @@ export default function LiveSupportChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.9 }}
             transition={{ duration: 0.4 }}
-            className="mb-3 max-w-[260px] p-3.5 rounded-2xl bg-slate-950/95 border border-cyan-400/50 shadow-glow-cyan backdrop-blur-2xl text-left relative cursor-pointer group"
+            className="mb-2 sm:mb-3 max-w-[210px] xs:max-w-[260px] p-3 sm:p-3.5 rounded-2xl bg-slate-950/95 border border-cyan-400/50 shadow-glow-cyan backdrop-blur-2xl text-left relative cursor-pointer group"
             onClick={() => setIsOpen(true)}
           >
             <button

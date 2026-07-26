@@ -328,24 +328,24 @@ export default function LandingPage() {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className={`px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-2xl border transition-all duration-300 flex items-center justify-between ${
+          className={`px-2.5 sm:px-5 py-2 sm:py-3 rounded-2xl border transition-all duration-300 flex items-center justify-between ${
             isScrolled 
               ? 'bg-slate-950/95 border-cyan-400/50 shadow-glow-cyan backdrop-blur-2xl scale-[0.99]' 
               : 'bg-slate-950/85 border-cyan-500/30 shadow-glow-cyan backdrop-blur-xl'
           }`}
         >
           {/* Brand Header */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
-              <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl p-[2px] border-running-glow shadow-glow-cyan group-hover:scale-105 transition duration-300 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+              <div className="relative w-8 h-8 sm:w-11 sm:h-11 rounded-xl p-[2px] border-running-glow shadow-glow-cyan group-hover:scale-105 transition duration-300 shrink-0">
                 <div className="w-full h-full rounded-[10px] bg-slate-950 flex items-center justify-center p-1 sm:p-1.5 relative z-10">
-                  <Image src="/logo.png" alt="Aegivex AI Official Logo" width={30} height={30} className="object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.9)]" />
+                  <Image src="/logo.png" alt="Aegivex AI Official Logo" width={28} height={28} className="object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.9)]" />
                 </div>
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-black text-base sm:text-xl tracking-tight text-white group-hover:text-cyan-300 transition">AEGIVEX</span>
-                  <span className="text-[9px] sm:text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 font-mono">AI</span>
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <span className="font-black text-sm sm:text-xl tracking-tight text-white group-hover:text-cyan-300 transition">AEGIVEX</span>
+                  <span className="text-[8px] sm:text-[10px] px-1 sm:px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 font-mono">AI</span>
                 </div>
                 <span className="text-[9px] sm:text-[10px] text-slate-400 font-mono tracking-wider font-semibold hidden md:block">Web3 AI Security Intelligence Copilot</span>
               </div>
@@ -353,7 +353,7 @@ export default function LandingPage() {
           </div>
 
           {/* Action Buttons: Sign In, Sign Up & Try Now */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
             <LanguageSwitcher />
             <Link
               href="/login"
@@ -363,13 +363,13 @@ export default function LandingPage() {
             </Link>
             <Link 
               href="/login"
-              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-cyan-400/60 text-slate-200 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-cyan-400/60 text-slate-200 hover:text-white text-xs font-bold transition items-center gap-1.5 cursor-pointer shadow-md hidden sm:inline-flex"
             >
               Sign Up
             </Link>
             <Link
               href="/register"
-              className="btn-futuristic-primary text-xs font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-white flex items-center gap-1.5 sm:gap-2 transition shrink-0 cursor-pointer"
+              className="btn-futuristic-primary text-[11px] sm:text-xs font-bold px-2.5 xs:px-3.5 sm:px-5 py-1.5 sm:py-2.5 rounded-xl text-white flex items-center gap-1 sm:gap-2 transition shrink-0 cursor-pointer"
             >
               Try Now
               <ArrowRight className="w-3.5 h-3.5" />
@@ -382,27 +382,27 @@ export default function LandingPage() {
       {/* SECTION 1: HERO & INSTANT SCANNER BAR */}
       <section className="relative px-3 sm:px-6 pt-20 pb-12 sm:pt-32 sm:pb-24 max-w-7xl mx-auto text-center z-10 w-full overflow-x-hidden">
         
-        {/* Real-Time Threat Incident Live Ticker Bar (CertiK Skynet & De.Fi Radar Style) */}
+        {/* Real-Time Threat Incident Live Ticker Bar */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="mb-8 max-w-5xl mx-auto overflow-hidden rounded-2xl border border-cyan-500/30 bg-slate-950/90 p-2 backdrop-blur-xl relative shadow-glow-cyan"
         >
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-cyan-950/80 rounded-xl border border-cyan-500/40 shrink-0 absolute left-2 top-2 bottom-2 z-20 shadow-md">
+          <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-cyan-950/80 rounded-xl border border-cyan-500/40 shrink-0 absolute left-2 top-2 bottom-2 z-20 shadow-md">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
             </span>
-            <span className="text-[10px] sm:text-xs font-mono font-bold text-cyan-300 tracking-wider whitespace-nowrap hidden xs:inline-block">
+            <span className="text-[10px] sm:text-xs font-mono font-bold text-cyan-300 tracking-wider whitespace-nowrap hidden sm:inline-block">
               SKYNET LIVE THREAT FEED
             </span>
-            <span className="text-[10px] font-mono font-bold text-cyan-300 tracking-wider whitespace-nowrap xs:hidden">
+            <span className="text-[10px] font-mono font-bold text-cyan-300 tracking-wider whitespace-nowrap sm:hidden">
               LIVE FEED
             </span>
           </div>
 
-          <div className="overflow-hidden pl-32 xs:pl-48">
+          <div className="overflow-hidden pl-24 xs:pl-28 sm:pl-48">
             <div className="animate-threat-marquee flex items-center gap-4">
               {[...liveIncidentFeed, ...liveIncidentFeed].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] font-mono shrink-0 whitespace-nowrap shadow-sm">
