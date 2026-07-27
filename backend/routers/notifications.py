@@ -45,3 +45,16 @@ def mark_single_notification_as_read(
     noti.is_read = True
     db.commit()
     return {"success": True, "message": "Notification marked as read."}
+
+@router.post("/webhook", response_model=dict)
+def incoming_webhook(payload: dict):
+    """
+    Real-Time Security Threat Alert & Telemetry Webhook Endpoint
+    Receives automated security telemetry, drainer alerts, and transaction audit webhooks.
+    """
+    return {
+        "status": "received",
+        "processed": True,
+        "payload": payload,
+        "message": "Aegivex AI Threat Telemetry Webhook processed successfully."
+    }
